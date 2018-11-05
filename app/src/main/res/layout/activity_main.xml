@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,16 +16,16 @@
        android:layout_weight="1"
        />
 
-   <!-- <fragment
+   &lt;!&ndash; <fragment
         android:id="@+id/right_frag"
 
         android:layout_width="0dp"
         android:name="space.cc.com.fragmenttest.RightFragment"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        />-->
+        />&ndash;&gt;
 
-    <!-- 可以动态替换碎片布局的内容 -->
+    &lt;!&ndash; 可以动态替换碎片布局的内容 &ndash;&gt;
     <FrameLayout
         android:id="@+id/right_layout"
         android:layout_width="0dp"
@@ -32,4 +33,20 @@
         android:layout_weight="1"
         />
 
-</LinearLayout>
+</LinearLayout>-->
+
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/news_title_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<!--  单页模式下只加载一个新闻标题碎片布局-->
+    <fragment
+        android:id="@+id/news_title_fragment"
+        android:name="space.cc.com.fragmenttest.NewsTitleFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</FrameLayout>

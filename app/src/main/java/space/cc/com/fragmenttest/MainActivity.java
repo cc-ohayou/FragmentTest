@@ -14,9 +14,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button but01 = findViewById(R.id.but01);
-        but01.setOnClickListener(this);
-        replaceFragment(new RightFragment());
+//        Button but01 = findViewById(R.id.but01);
+//        but01.setOnClickListener(this);
+//        replaceFragment(new RightFragment());
 
     }
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //2、开启事务
         FragmentTransaction transaction=manager.beginTransaction();
         //3、替换右边的布局内容为新的fragment布局
-        transaction.replace(R.id.right_layout,fragment);
+//        transaction.replace(R.id.right_layout,fragment);
         //将被替换的fragment加入到返回栈中 这样点击返回不会直接退出
         transaction.addToBackStack(null);
         //4、提交事务
