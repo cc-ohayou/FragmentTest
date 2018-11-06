@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="space.cc.com.fragmenttest">
 
+    <!--
+    网络权限请求  安卓系统为了保护用户设备安全和隐私
+    程序要进行一些敏感操作就必须配置中声明权限
+    -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 声明获取 监听系统开机广播的权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,15 +17,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".NewsContentActivity" />
+        <activity
+            android:name=".broadcast.BroadcastTestActivity"
+            android:label="broadcast test">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewsContentActivity"></activity>
-    </application>
+        静态广播接收器 必须此处进行配置注册
+        exported表示是否允许接收其他程序的广播
+        anabled表示是否启用
+        <receiver
+            android:name=".broadcast.BootCompleteReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".broadcast.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
 
+            <intent-filter>
+                <action android:name="com.cc.ccspace.MY_BROADCAST" />
+            </intent-filter>
+        </receiver>
+    </application>
 
 </manifest>
