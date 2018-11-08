@@ -10,6 +10,11 @@
     <!-- 声明获取 监听系统开机广播的权限 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,15 +27,12 @@
         <activity
             android:name=".broadcast.BroadcastTestActivity"
             android:label="broadcast test">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         静态广播接收器 必须此处进行配置注册
         exported表示是否允许接收其他程序的广播
         anabled表示是否启用
+        <!--
         <receiver
             android:name=".broadcast.BootCompleteReceiver"
             android:enabled="true"
@@ -39,15 +41,29 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        -->
+        <!--
         <receiver
             android:name=".broadcast.MyBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
 
             <intent-filter>
-                <action android:name="com.cc.ccspace.MY_BROADCAST" />
+                <action android:name="space.cc.com.fragmenttest.broadcast.MyBroadCast" />
             </intent-filter>
         </receiver>
+        -->
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
