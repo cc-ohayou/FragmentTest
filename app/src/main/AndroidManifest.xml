@@ -26,9 +26,7 @@
         <activity android:name=".NewsContentActivity" />
         <activity
             android:name=".broadcast.BroadcastTestActivity"
-            android:label="broadcast test">
-
-        </activity>
+            android:label="broadcast test"></activity>
         静态广播接收器 必须此处进行配置注册
         exported表示是否允许接收其他程序的广播
         anabled表示是否启用
@@ -56,12 +54,14 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity android:name=".activity.FileTestActivity">
 
         </activity>
     </application>

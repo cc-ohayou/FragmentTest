@@ -3,22 +3,21 @@ package space.cc.com.fragmenttest.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,6 +26,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -36,6 +36,7 @@ import java.util.Map;
 
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.broadcast.BroadcastTestActivity;
+import space.cc.com.fragmenttest.domain.LoginConstants;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -67,15 +68,27 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private View mProgressView;
     private View mLoginFormView;
 
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private CheckBox rememberPass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //获取存储对象
+        pref= PreferenceManager.getDefaultSharedPreferences(this);
+        rememberPass = findViewById(R.id.remember_pass);
+
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
         mPasswordView = (EditText) findViewById(R.id.password);
+        //如果设置过记住密码的则进行账号密码信息的填充 正式的肯定要加密处理
+        ifRememberPassSetAccountInfo();
+
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -99,6 +112,21 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
+  /**
+     * @description 判断是否设置过记住密码 是则填充上次登录的信息
+     * @author CF
+     * created at 2018/11/11/011  18:28
+     */
+    private void ifRememberPassSetAccountInfo() {
+        boolean isRemember=pref.getBoolean(LoginConstants.REM_PASS,false);
+        if(isRemember){
+            mEmailView.setText(pref.getString(LoginConstants.ACCOUNT,""));
+            mPasswordView.setText(pref.getString(LoginConstants.PASS,""));
+            rememberPass.setChecked(true);
+        }
+    }
+
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -182,6 +210,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             focusView = mEmailView;
             cancel = true;
         }
+
+
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -315,8 +345,20 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // TODO: attempt authentication against a network service.
 
             try {
+
                 // Simulate network access.
-                Thread.sleep(2000);
+                afterLoginSuccc();
+                //后台登录校验通过后
+                editor=pref.edit();
+                if(rememberPass.isChecked()){
+                    editor.putBoolean(LoginConstants.REM_PASS,true);
+                    editor.putString(LoginConstants.ACCOUNT,mEmail);
+                    editor.putString(LoginConstants.PASS,mPassword);
+                }else{
+                    editor.clear();
+                }
+                //提交修改到本地存储中
+                editor.apply();
             } catch (InterruptedException e) {
                 return false;
             }
@@ -331,6 +373,10 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
             // TODO: register the new account here.
             return true;
+        }
+
+        private void afterLoginSuccc() throws InterruptedException {
+            Thread.sleep(2000);
         }
 
         @Override

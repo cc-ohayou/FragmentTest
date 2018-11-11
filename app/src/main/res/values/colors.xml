@@ -3,4 +3,70 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <!-- 全透明 -->
+    <color name="C100">#00000000</color>
+    <!--80%透明-->
+    <color name="C80">#cc000000</color>
+    <!--50%透明-->
+    <color name="C50">#7f000000</color>
+
+    <color name="tab">#b6b6bb</color>
+
+    <color name="button_orange">#ff7444</color>
+    <color name="button_orange_press">#d9633a</color>
+    <!-- 黄色-->
+    <color name="app_yellow">#ffc100</color>
+    <color name="app_red">#ff0000</color>
+    <color name="app_orange">#fb754b</color>
+    <color name="app_orange_99">#99fb754b</color>
+    <color name="app_orange_ripple">#737373</color>
+    <color name="app_gray">#737373</color>
+    <color name="tab_red">#db0607</color>
+    <color name="tab_gray">#b6b6bb</color>
+    <!--股票价格-->
+    <color name="text_blue">#4cd1cf</color>
+    <color name="text_green">#4ca92a</color>
+    <color name="text_red">#ff4242</color>
+    <color name="text_red_99">#99ff4242</color>
+    <color name="home_gray">#6c6c6c</color>
+
+    <color name="line_red">#fb4b18</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+
+    <!-- 新巨牛赢家 -->
+
+    /* app规范颜色*/
+    <!--主背景色-->
+    <color name="gray_main">#f0f0f0</color>
+    <color name="blue_007b">#1CAEEA</color>
+    <color name="black_22252B">#22252B</color>
+    <color name="background">#ffffff</color>
+    <color name="main_theme">#ffffff</color>
+    <color name="main_theme2">#F6F6F6</color>
+    <color name="light_line">#F6F6F6</color>
+    <color name="line">#f6f6f6</color>
+    <color name="red">#fa3e3e</color>
+    <color name="orange">#ff8308</color>
+    <color name="blue">#03aaf3</color>
+    <color name="green">#4ca92a</color><!--4fd86c-->
+
+    <color name="helf_white">#88ffffff</color>
+    <color name="first_text_color">#333333</color>
+    <color name="second_text_color">#aaaaaa</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_66">#666666</color>
+    <color name="color_99">#999999</color>
+    <color name="btn_color">#00a1e6</color>
+    <color name="btn_color_s">#cc00a1e6</color>
+    <color name="btn_color_e">#cccccc</color>
+    <color name="bg_gray">#F6F6F6</color>
+
+    <color name="red_liushui">#F52F28</color>
+    <color name="green_liushui">#62C915</color>
+    /* app规范颜色*/
+
 </resources>

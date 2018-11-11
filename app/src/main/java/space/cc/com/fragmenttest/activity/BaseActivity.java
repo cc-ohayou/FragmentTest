@@ -8,19 +8,27 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
-import space.cc.com.fragmenttest.util.ActivityCollector;
+import space.cc.com.fragmenttest.domain.util.ActivityCollector;
+import space.cc.com.fragmenttest.domain.util.CloseUtils;
+import space.cc.com.fragmenttest.domain.util.StringUtil;
 
-public  class BaseActivity extends AppCompatActivity{
+public  class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
-     static final Map EMPTY_MAP =new HashMap();
-     private ForceOffLineReceiver receiver;
+    static final Map EMPTY_MAP = new HashMap();
+    private ForceOffLineReceiver receiver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +36,7 @@ public  class BaseActivity extends AppCompatActivity{
         Log.i(TAG, "taskId is: " + getTaskId());
         Log.d(TAG, "create and add to collector activity is " + getClass().getSimpleName());
         ActivityCollector.addActivity(this);
+
     }
 
     @Override
@@ -41,21 +50,20 @@ public  class BaseActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume:fdgdf ");
-        IntentFilter intentFilter=new IntentFilter();
+        IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MyBroadCast.OFFLINE_BROADCAST);
         receiver = new ForceOffLineReceiver();
-        registerReceiver(receiver,intentFilter);
+        registerReceiver(receiver, intentFilter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(receiver!=null){
+        if (receiver != null) {
             unregisterReceiver(receiver);
-            receiver=null;
+            receiver = null;
         }
     }
-
 
 
     /**
@@ -79,15 +87,60 @@ public  class BaseActivity extends AppCompatActivity{
         return map != null && !map.isEmpty();
     }
 
-/**
- *
- *@author CF
- *created at 2018/10/21/021  21:42
- */
-    public   void startAction(Context context,String bundlKkey, Bundle bundle){
-        Intent intent=new Intent(context,this.getClass());
-        intent.putExtra(bundlKkey,bundle);
+    /**
+     * @author CF
+     * created at 2018/10/21/021  21:42
+     */
+    public void startAction(Context context, String bundlKkey, Bundle bundle) {
+        Intent intent = new Intent(context, this.getClass());
+        intent.putExtra(bundlKkey, bundle);
         context.startActivity(intent);
-        }
     }
+
+    void save(String inputText, String file) {
+        if (!StringUtil.isEmpty(inputText)) {
+
+        }
+        FileOutputStream out = null;
+        BufferedWriter writer = null;
+        try {
+            //写入文件默认目录  Android/Data/应用包名/files
+            // Context.MODE_PRIVATE) 源文件存在则覆盖原文件模式
+            // Context.MODE_APPEND) 源文件存在则追加内容到原文件模式
+            out = openFileOutput(file, Context.MODE_PRIVATE);
+            //字节流转换为字符流
+            writer = new BufferedWriter(new OutputStreamWriter(out));
+            writer.write(inputText);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtils.closeIO(writer);
+        }
+
+    }
+
+
+    String load(String file) {
+        FileInputStream in = null;
+        BufferedReader bufferReader = null;
+        StringBuilder content = new StringBuilder();
+        try {
+            in=openFileInput(file);
+            bufferReader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = bufferReader.readLine()) != null) {
+                content.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtils.closeIO(bufferReader);
+        }
+        return content.toString();
+    }
+
+
+
+
+}
 

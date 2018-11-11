@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 
 import space.cc.com.fragmenttest.activity.LoginActivity;
-import space.cc.com.fragmenttest.util.ActivityCollector;
+import space.cc.com.fragmenttest.domain.util.ActivityCollector;
 
 public class ForceOffLineReceiver extends BroadcastReceiver {
     @Override
