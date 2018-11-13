@@ -9,16 +9,35 @@
 
     <Button
         android:id="@+id/create_db_but"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="create db"
         />
 
     <Button
         android:id="@+id/add_but"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="addData"
         />
 
+    <Button
+        android:id="@+id/update_but"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UpdateData"
+        />
+    <Button
+        android:id="@+id/del_but"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DelData"
+        />
+
+    <Button
+        android:id="@+id/query_but"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查询"
+        />
 </LinearLayout>

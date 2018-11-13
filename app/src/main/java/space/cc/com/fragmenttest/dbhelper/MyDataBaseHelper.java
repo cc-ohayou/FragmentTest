@@ -8,19 +8,22 @@ import android.widget.Toast;
 
 
 public class MyDataBaseHelper extends SQLiteOpenHelper {
+
+    public static String  TABLE_BOOK="Book";
+    public static String  TABLE_CATEGORY="Category";
     private static final String TAG = "MyDataBaseHelper";
     /**
      * real  对应double类型  浮点类型
      * text 字符
      */
-    public static final String CREATE_SQL="create table Book ("
+    public static final String CREATE_SQL="create table "+TABLE_BOOK+" ("
             +"id integer primary key autoincrement, "
             +" author text,"
             +" price real,"
             +" pages integer,"
             +" name text)";
 
-    public static final String CREATE_CATEGORY="create table Category ("
+    public static final String CREATE_CATEGORY="create table  "+TABLE_CATEGORY+" ("
             +"id integer primary key autoincrement, "
             +" category_name text,"
             +" category_code integer)";
@@ -46,8 +49,8 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "DB onUpgrade: exec");
-           db.execSQL("drop table if exists Book");
-           db.execSQL("drop table if exists Category");
+           db.execSQL("drop table if exists "+TABLE_BOOK);
+           db.execSQL("drop table if exists "+TABLE_CATEGORY);
            onCreate(db);
     }
 }
