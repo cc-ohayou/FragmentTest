@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -65,5 +66,18 @@
             </intent-filter>
         </activity>
     </application>
+   <!--
+    有了自定义的应用时 在应用里面记得初始化Litepal的使用 如下
+    public class MyOwnApplication extends Application {
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        LitePal.initialize(this);
+    }
+    ...
+}
+    <application
+        android:name="org.litepal.LitePalApplication">
+   </application>-->
 </manifest>

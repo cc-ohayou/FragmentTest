@@ -34,6 +34,9 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
 
         setOnclickListenerByRid(R.id.create_db_but);
         setOnclickListenerByRid(R.id.add_but);
+        setOnclickListenerByRid(R.id.del_but);
+        setOnclickListenerByRid(R.id.update_but);
+        setOnclickListenerByRid(R.id.query_but);
 
     }
 
@@ -50,11 +53,12 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
                 addSingleBookRecord(db,"The Da Vinci Code","Dan Brown",600,16.96);
                 addSingleBookRecord(db,"lalala","hahaha",430,16.96);
                 addSingleBookRecord(db,"ccccc","cc",546,16.96);
-
+                break;
             case R.id.create_db_but:
                 //第一次检测到没有数据库 调用MyDataBaseHelper的onCreate方法
                 //表也随即被创建了出来
                 dbHelper.getWritableDatabase();
+                break;
             case R.id.update_but:
                 SQLiteDatabase db2=dbHelper.getWritableDatabase();
                 ContentValues params=new ContentValues();
@@ -63,10 +67,12 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
                 int result=db2.update("Book",params,"name=?",
                         new String[]{"The Da Vinci Code"});
                 Log.d(TAG, "updateData: result cou="+result);
+                break;
             case R.id.del_but:
                 SQLiteDatabase db3=dbHelper.getWritableDatabase();
                 int cou=db3.delete(MyDataBaseHelper.TABLE_BOOK,"pages>?",new String[]{"500"});
                 Log.d(TAG, "delData: result cou="+cou);
+                break;
             case R.id.query_but:
                 SQLiteDatabase queryDb=dbHelper.getWritableDatabase();
                 //查询book中所有数据
@@ -78,7 +84,7 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
                         null,
                         null
                         );
-                do{
+                while(cursor.moveToNext()){
                   String name=getDbStringProperty(cursor,"name");
                   String author=getDbStringProperty(cursor,"author");
                   int pages=getDbIntProperty(cursor,"pages");
@@ -89,9 +95,10 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
                   book.put("pages",pages);
                   book.put("price",price);
                   list.add(book);
-                }while(cursor.moveToNext());
+                }
                 cursor.close();
                 Toast.makeText(this,list.toString(),Toast.LENGTH_LONG).show();
+                break;
             default:
                 break;
         }
@@ -113,6 +120,12 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
         values.put("author","Dan Brown");
         values.put("pages",454);
         values.put("price",16.96);
+        //喜欢使用sql的 可以直接使用sql实现插入
+        //update delete同理
+        /* db.execSQL("insert into Book(name,author,pages,price) values(? ,?,?,?)",
+                 new String[]{"The Da Vinci Code","Dan Brown","454","16.96"});*/
+        //注意只有查询是不一样的 rawQuery
+//        db.rawQuery("select * from Book",null);
         long cou=db.insert(MyDataBaseHelper.TABLE_BOOK,null,values);
         Log.d(TAG, "addData: over cou="+cou);
     }
