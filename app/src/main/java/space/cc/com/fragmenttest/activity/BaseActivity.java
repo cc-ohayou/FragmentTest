@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -139,7 +141,15 @@ public  class BaseActivity extends AppCompatActivity {
         return content.toString();
     }
 
-
+  /**
+     * @description
+     * @author CF
+     * created at 2018/11/18/018  15:12
+     */
+    public  void setButOnclickListenerByRid(int id, View.OnClickListener listener) {
+        Button addBut=findViewById(id);
+        addBut.setOnClickListener(listener);
+    }
 
 
 }

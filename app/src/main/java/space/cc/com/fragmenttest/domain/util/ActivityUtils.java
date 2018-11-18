@@ -12,7 +12,9 @@ import android.support.annotation.AnimRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class ActivityUtils {
     private ActivityUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
+
+
 
     /**
      * 判断Activity是否存在
@@ -1109,4 +1113,23 @@ public class ActivityUtils {
         return ActivityOptionsCompat.makeSceneTransitionAnimation(activity, null, null).toBundle();
     }
 
+
+    public int getViewIemWidth(int divide,Context context) {
+        //获取屏幕高度
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(dm);
+        //屏幕宽度
+        int mScreenWidth = dm.widthPixels;
+        return (mScreenWidth)/divide;
+    }
+
+    public int getViewIemHeight(int divide ,Context context) {
+        //获取屏幕高度
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(dm);
+        int mScreenHeight = dm.heightPixels;//屏幕高度
+        return (mScreenHeight)/divide;
+    }
 }

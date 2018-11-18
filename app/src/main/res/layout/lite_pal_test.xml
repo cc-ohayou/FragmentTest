@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/image04"
+    tools:context=".activity.LitePalTestActivity">
+
+    <Button
+        android:id="@+id/create_db_litePal"
+        android:text="create db"
+        style="@style/but_orange_bk_c80_hw_wm"
+        />
+
+    <Button
+        android:id="@+id/add_but_litePal"
+        android:text="addData"
+        style="@style/but_orange_bk_c80_hw_wm"
+        />
+
+    <EditText
+        android:id="@+id/condition_price"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:inputType="number|numberDecimal"
+        android:textSize="20sp"
+        android:hint="please input price"
+        android:autofillHints="0" />
+    <CheckBox
+        android:id="@+id/update_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="select use bigger than"
+        />
+    <Switch
+        android:id="@+id/switch_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+
+    <Button
+        android:id="@+id/update_but_litePal"
+        android:text="UpdateData"
+        style="@style/but_orange_bk_c80_hw_wm"
+
+        />
+    <Button
+        android:id="@+id/del_but_litePal"
+
+        android:text="DelData"
+        style="@style/but_orange_bk_c80_hw_wm"
+
+        />
+
+    <Button
+        android:id="@+id/query_but_litePal"
+
+        android:text="查询"
+        style="@style/but_orange_bk_c80_hw_wm"
+
+        />
+</LinearLayout>

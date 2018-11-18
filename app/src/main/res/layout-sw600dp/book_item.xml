@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    >
+
+
+<!-- 将图片 文字都设置为水平居中 layout_marginTop使文字和图片保持一定间距 垂直排列布局下 -->
+    <TextView
+        android:id="@+id/book_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="1"
+        />
+
+    <!--        android:layout_weight="3"
+-->
+
+
+
+    <TextView
+        android:id="@+id/book_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="1"
+        />
+    <TextView
+        android:id="@+id/book_pages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="1"
+        />
+    <view
+        android:id="@+id/book_id"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
+    <TextView
+        android:id="@+id/book_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="1"
+        />
+
+
+</LinearLayout>

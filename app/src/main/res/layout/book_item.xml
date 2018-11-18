@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/leg"
+    android:layout_margin="5dp"
+    >
+    <TextView
+        android:id="@+id/book_id"
+        style="@style/book_list_item_back" />
+
+    <TextView
+        android:id="@+id/book_name"
+        style="@style/book_list_item_back" />
+    <TextView
+        android:id="@+id/book_author"
+        style="@style/book_list_item_back" />
+    <TextView
+        android:id="@+id/book_pages"
+        style="@style/book_list_item_back" />
+    <TextView
+        android:id="@+id/book_price"
+        style="@style/book_list_item_back" />
+
+
+</LinearLayout>

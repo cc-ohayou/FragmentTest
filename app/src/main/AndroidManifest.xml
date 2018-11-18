@@ -15,12 +15,27 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!--
+    有了自定义的应用时 在应用里面记得初始化Litepal的使用 如下
+    public class MyOwnApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        LitePal.initialize(this);
+    }
+    ...
+}
+    <application
+        android:name="org.litepal.LitePalApplication">
+   </application>
+    -->
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
@@ -54,30 +69,17 @@
         -->
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login">
-
-        </activity>
-        <activity android:name=".activity.FileTestActivity"></activity>
-        <activity android:name=".activity.DBTestActivity">
+            android:label="@string/title_activity_login" />
+        <activity android:name=".activity.FileTestActivity" />
+        <activity android:name=".activity.DBTestActivity"></activity>
+        <activity android:name=".activity.LitePalTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.ShowBooksActivity"></activity>
     </application>
-   <!--
-    有了自定义的应用时 在应用里面记得初始化Litepal的使用 如下
-    public class MyOwnApplication extends Application {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        LitePal.initialize(this);
-    }
-    ...
-}
-    <application
-        android:name="org.litepal.LitePalApplication">
-   </application>-->
 </manifest>

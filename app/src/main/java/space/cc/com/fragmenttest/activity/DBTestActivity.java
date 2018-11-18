@@ -70,7 +70,7 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.del_but:
                 SQLiteDatabase db3=dbHelper.getWritableDatabase();
-                int cou=db3.delete(MyDataBaseHelper.TABLE_BOOK,"pages>?",new String[]{"500"});
+                int cou=db3.delete(MyDataBaseHelper.TABLE_BOOK,"pages>?",new String[]{"400"});
                 Log.d(TAG, "delData: result cou="+cou);
                 break;
             case R.id.query_but:
@@ -116,10 +116,10 @@ public class DBTestActivity extends AppCompatActivity implements View.OnClickLis
 
     private void addSingleBookRecord(SQLiteDatabase db,String name,String author,int pages,Double price) {
         ContentValues values=new ContentValues();
-        values.put("name","The Da Vinci Code");
-        values.put("author","Dan Brown");
-        values.put("pages",454);
-        values.put("price",16.96);
+        values.put("name",name);
+        values.put("author",author);
+        values.put("pages",pages);
+        values.put("price",price);
         //喜欢使用sql的 可以直接使用sql实现插入
         //update delete同理
         /* db.execSQL("insert into Book(name,author,pages,price) values(? ,?,?,?)",

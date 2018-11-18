@@ -45,6 +45,8 @@
     <list>
         <mapping class="space.cc.com.fragmenttest.litepals.Album" />
         <mapping class="space.cc.com.fragmenttest.litepals.Song" />
+        <mapping class="space.cc.com.fragmenttest.litepals.Book" />
+        <mapping class="space.cc.com.fragmenttest.litepals.Category" />
     </list>
 
     <!--

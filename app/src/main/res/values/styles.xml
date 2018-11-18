@@ -8,4 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="but_orange_bk_c80_hw_wm" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/button_orange</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@color/C80</item>
+        <item name="android:layout_marginTop">1dp</item>
+    </style>
+
+    <style name="book_list_item_back" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@color/C80</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">left</item>
+    </style>
+
 </resources>
