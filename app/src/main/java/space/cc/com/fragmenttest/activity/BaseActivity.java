@@ -6,9 +6,12 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,7 +30,7 @@ import space.cc.com.fragmenttest.domain.util.ActivityCollector;
 import space.cc.com.fragmenttest.domain.util.CloseUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
 
-public  class BaseActivity extends AppCompatActivity {
+public  abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     static final Map EMPTY_MAP = new HashMap();
     private ForceOffLineReceiver receiver;
@@ -151,6 +154,27 @@ public  class BaseActivity extends AppCompatActivity {
         addBut.setOnClickListener(listener);
     }
 
+     int getViewIemWidth(int divide,Context context) {
+        //获取屏幕高度
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(dm);
+        //屏幕宽度
+        int mScreenWidth = dm.widthPixels;
+        return (mScreenWidth)/divide;
+    }
 
+     int getViewIemHeight(int divide ,Context context) {
+        //获取屏幕高度
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(dm);
+        int mScreenHeight = dm.heightPixels;//屏幕高度
+        return (mScreenHeight)/divide;
+    }
+
+    void toastSimple(String msg) {
+        Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+    }
 }
 

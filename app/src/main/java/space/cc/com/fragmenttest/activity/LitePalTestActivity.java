@@ -91,9 +91,7 @@ public class LitePalTestActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void toastSimple(String msg) {
-        Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
-    }
+
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

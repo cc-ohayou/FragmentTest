@@ -30,12 +30,12 @@ public class ShowBooksActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);;
         recyclerView.setLayoutManager(layoutManager);
         //由于图片不规则统一造成展示不规则的原因 此处将item的宽高都根据屏幕自适应调整
-//        int standardHeight=getViewIemHeight(3);
+        int standardHeight=getViewIemHeight(4,ShowBooksActivity.this);
 //        int itemWidth=getViewIemWidth(5);
         //传输数据到适配器
 //        RecyclerFruitAdapter adapter=new RecyclerFruitAdapter(fruits,standardHeight,itemWidth);
         //瀑布流时垂直布局尽量不指定高度 水平布局尽量不指定宽度 不然不大容易看出布局特性
-        BookAdapter adapter=new BookAdapter(books);
+        BookAdapter adapter=new BookAdapter(books,standardHeight);
         //设置view的适配器从而获取到转化过后可使用的数据
         recyclerView.setAdapter(adapter);
     }
