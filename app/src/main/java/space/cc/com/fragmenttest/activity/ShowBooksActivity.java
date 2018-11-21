@@ -43,6 +43,7 @@ public class ShowBooksActivity extends BaseActivity {
     private void initData() {
                 books= LitePal.findAll(Book.class);
 
+
        /*
        太笨拙不建议使用
        Cursor cursor=LitePal.findBySQL("select * from book where price>? order by pages desc","10");

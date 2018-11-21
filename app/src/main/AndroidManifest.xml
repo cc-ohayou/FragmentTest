@@ -13,8 +13,9 @@
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
+    <!-- 申请获取联系人权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-<!-- android6.0以前申请打电话 只需要此处进行配置 但是后面版本改为只能使用运行时权限  否则报错 Permission Denial -->
+    <!-- android6.0以前申请打电话 只需要此处进行配置 但是后面版本改为只能使用运行时权限  否则报错 Permission Denial -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <!--
@@ -74,20 +75,22 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".activity.FileTestActivity" />
         <activity android:name=".activity.DBTestActivity" />
-        <activity android:name=".activity.LitePalTestActivity">
-
-        </activity>
+        <activity android:name=".activity.LitePalTestActivity" />
         <activity android:name=".activity.ShowBooksActivity" />
-
-        <activity android:name=".activity.RuntimePermmissionTestActivity"
-            android:background="@drawable/image04">
+        <activity android:name=".activity.RuntimePermmissionTestActivity"></activity>
+        <activity android:name=".activity.VisitOtherProgramDataTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+
+        <provider
+            android:name=".provider.MyContentProvider"
+            android:authorities="cc.com.databasetest.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>
