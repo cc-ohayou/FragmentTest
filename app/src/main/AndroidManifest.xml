@@ -75,15 +75,20 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".activity.FileTestActivity" />
         <activity android:name=".activity.DBTestActivity" />
-        <activity android:name=".activity.LitePalTestActivity" />
-        <activity android:name=".activity.ShowBooksActivity" />
-        <activity android:name=".activity.RuntimePermmissionTestActivity"></activity>
-        <activity android:name=".activity.VisitOtherProgramDataTestActivity">
+        <activity android:name=".activity.LitePalTestActivity" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.ShowBooksActivity" >
+
+        </activity>
+        <activity android:name=".activity.RuntimePermmissionTestActivity"></activity>
+        <activity android:name=".activity.VisitOtherProgramDataTestActivity">
+
         </activity>
 
         <provider

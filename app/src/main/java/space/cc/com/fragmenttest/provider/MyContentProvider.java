@@ -12,7 +12,6 @@ import org.litepal.LitePal;
 import org.litepal.tablemanager.Connector;
 
 public class MyContentProvider extends ContentProvider {
-
     private static final String TAG = "MyContentProvider";
     //dir对应 根据条件查询某表中复合条件的所有数据
     //item根据条件获取表中单条数据
@@ -39,21 +38,61 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase db=LitePal.getDatabase();
+        int deleteRows=0;
+        switch(uriMatcher.match(uri)){
+            case BOOK_DIR:
+                deleteRows=db.delete(TABLE_BOOK,selection,selectionArgs);
+                break;
+            case BOOK_ITEM:
+                String bookId=uri.getPathSegments().get(1);
+                deleteRows=db.delete(TABLE_BOOK,"id=?",new String[]{bookId});
+                break;
+            case CATEGORY_DIR:
+                deleteRows=db.delete(TABLE_CATEGORY,selection,selectionArgs);
+                break;
+            case CATEGORY_ITEM:
+                String categoryId=uri.getPathSegments().get(1);
+                deleteRows=db.delete(TABLE_CATEGORY,"id=?",new String[]{categoryId});
+                break;
+        }
+        return deleteRows;
     }
 
     @Override
     public String getType(Uri uri) {
-        // TODO: Implement this to handle requests for the MIME type of the data
-        // at the given URI.
-        throw new UnsupportedOperationException("Not yet implemented");
+        switch(uriMatcher.match(uri)){
+            case BOOK_DIR:
+                return "vnd.android.cursor.dir/vnd.cc.com.databasetest.provider.book";
+            case BOOK_ITEM:
+                return "vnd.android.cursor.item/vnd.cc.com.databasetest.provider.book";
+            case CATEGORY_DIR:
+                return "vnd.android.cursor.dir/vnd.cc.com.databasetest.provider.category";
+            case CATEGORY_ITEM:
+                return "vnd.android.cursor.item/vnd.cc.com.databasetest.provider.category";
+        }
+        return  null;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase db=LitePal.getDatabase();
+        Uri  uriReturn=null;
+        switch(uriMatcher.match(uri)){
+            case BOOK_DIR:
+            case BOOK_ITEM:
+                long newBookId=db.insert(TABLE_BOOK,null,values);
+                uriReturn =Uri.parse("content://"+AUTHORITY+"/book/"+newBookId);
+                break;
+            case CATEGORY_DIR:
+            case CATEGORY_ITEM:
+                long newCategoryId=db.insert(TABLE_CATEGORY,null,values);
+                uriReturn =Uri.parse("content://"+AUTHORITY+"/category/"+newCategoryId);
+                break;
+            default:
+                break;
+        }
+        return uriReturn;
     }
 
     @Override
@@ -87,23 +126,48 @@ public class MyContentProvider extends ContentProvider {
          return  cursor;
     }
 
+    @Override
+    public int update(Uri uri, ContentValues values, String selection,
+                      String[] selectionArgs) {
+        SQLiteDatabase db=LitePal.getDatabase();
+        int updateRows=0;
+        switch(uriMatcher.match(uri)){
+            case BOOK_DIR:
+                updateRows=db.update(TABLE_BOOK,values,selection,selectionArgs);
+                break;
+            case BOOK_ITEM:
+                String bookId=uri.getPathSegments().get(1);
+                updateRows=db.update(TABLE_BOOK,values,"id=?",new String[]{bookId});
+                break;
+            case CATEGORY_DIR:
+                updateRows=db.update(TABLE_CATEGORY,values,selection,selectionArgs);
+                break;
+            case CATEGORY_ITEM:
+                String categoryId=uri.getPathSegments().get(1);
+                updateRows=db.update(TABLE_CATEGORY,values,"id=?",new String[]{categoryId});
+                break;
+        }
+        return updateRows;
+    }
+  /**
+     * @description
+     * @author CF
+     * created at 2018/11/22/022  22:09
+     */
     private Cursor getDirQueryCursor(String[] projection, String selection, String[] selectionArgs,
                                      String sortOrder, SQLiteDatabase db,String tableName) {
         return db.query(tableName,projection,selection,selectionArgs,
                 null,null,sortOrder);
     }
-
+  /**
+     * @description
+     * @author CF
+     * created at 2018/11/22/022  22:09
+     */
     private Cursor getCursor(Uri uri, String[] projection, String sortOrder,
-                           SQLiteDatabase db,String tableName) {
+                             SQLiteDatabase db,String tableName) {
         String id=uri.getPathSegments().get(1);
         return db.query(tableName,projection,"id=?",
                 new String[]{id},null,null,sortOrder);
-    }
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
