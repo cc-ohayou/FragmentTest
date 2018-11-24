@@ -173,7 +173,9 @@ public  abstract class BaseActivity extends AppCompatActivity {
         return (mScreenHeight)/divide;
     }
 
-    void toastSimple(String msg) {
+
+
+    public void toastSimple(String msg) {
         Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }
