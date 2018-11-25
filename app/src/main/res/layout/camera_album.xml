@@ -13,6 +13,14 @@
     android:layout_gravity="center_horizontal"
     style="@style/but_orange_bk_c80_hw_wm"
     />
+
+    <ImageButton
+        android:id="@+id/choose_from_album"
+        android:layout_width="wrap_content"
+        android:background="@color/C100"
+        android:layout_gravity="center_horizontal"
+        style="@style/but_orange_bk_c80_hw_wm"
+        />
     <ImageView
         android:id="@+id/my_pic"
         android:layout_width="wrap_content"
