@@ -39,7 +39,7 @@ public class NotificationTestActivity extends BaseActivity implements View.OnCli
 
                 NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-                Intent intent = new Intent(this, this.getClass());
+                Intent intent = new Intent(this, NotificationDisplayActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("notifyMsg", "this is msg from notify");
 //                intent.setAction(ACTION_BIG_PICTURE_STYLE);
@@ -60,7 +60,7 @@ public class NotificationTestActivity extends BaseActivity implements View.OnCli
                                 "test content" )
                         //时间用于排序
                         .setWhen(System.currentTimeMillis())
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.msg_32)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
                         //兼容sdk28 也即安卓8.0以后通知栏显示
                         // channelId非常重要，不设置通知栏不展示

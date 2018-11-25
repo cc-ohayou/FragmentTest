@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.media.CameraAlbumActivity">
+<ImageButton
+    android:id="@+id/take_photo"
+    android:layout_width="wrap_content"
+    android:background="@color/C100"
+    android:layout_gravity="center_horizontal"
+    style="@style/but_orange_bk_c80_hw_wm"
+    />
+    <ImageView
+        android:id="@+id/my_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>
