@@ -3,14 +3,21 @@ package space.cc.com.fragmenttest.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -24,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
@@ -154,6 +162,24 @@ public  abstract class BaseActivity extends AppCompatActivity {
         addBut.setOnClickListener(listener);
     }
 
+    public  void setImageButOnclickListenerByRid(int id, View.OnClickListener listener) {
+        ImageButton but=findViewById(id);
+        but.setOnClickListener(listener);
+    }
+  /**
+     * @description
+     * @author CF
+     * created at 2018/11/27/027  23:21
+     */
+    public  void setImageButOnTouchListener(int id, View.OnTouchListener listener) {
+        ImageButton but=findViewById(id);
+        but.setOnTouchListener(listener);
+    }
+    public  void setButOnTouchListener(int id, View.OnTouchListener listener) {
+        Button addBut=findViewById(id);
+        addBut.setOnTouchListener(listener);
+    }
+
      int getViewIemWidth(int divide,Context context) {
         //获取屏幕高度
         DisplayMetrics dm = new DisplayMetrics();
@@ -178,5 +204,24 @@ public  abstract class BaseActivity extends AppCompatActivity {
     public void toastSimple(String msg) {
         Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
     }
+
+
+    public boolean hasNoPermission(Context context, String permission) {
+        return ContextCompat.checkSelfPermission(context,permission )!= PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requirePermission(VideoTestActivity videoTestActivity, String ... permmissions) {
+        ActivityCompat.requestPermissions(videoTestActivity,permmissions,1);
+    }
+
+    public boolean grantSucc(@NonNull int[] grantResults) {
+        return grantResults.length>0&&grantResults[0]== PackageManager.PERMISSION_GRANTED;
+    }
+
+    public Uri getSystemDefultRingtoneUri() {
+        return RingtoneManager.getActualDefaultRingtoneUri(this,
+                RingtoneManager.TYPE_RINGTONE);
+    }
+
 }
 
