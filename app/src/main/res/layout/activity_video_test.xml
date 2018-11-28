@@ -31,7 +31,11 @@
         android:layout_gravity="center_horizontal"
         android:src="@drawable/stop"
         />
-
+<VideoView
+    android:id="@+id/videoView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    />
     <ImageButton
         android:layout_height="wrap_content"
         android:id="@+id/showDir"

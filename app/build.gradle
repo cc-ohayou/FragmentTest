@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "space.cc.com.fragmenttest"
-        minSdkVersion 27
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -40,5 +40,7 @@ dependencies {
 //    https://github.com/LitePalFramework/Litepal
     //开源数据库组件依赖 方便的实现数据库操作
     implementation 'org.litepal.android:java:3.0.0'
+    //jiaozi播放器依赖 支持最小版本 minSdkVersion 16
+    implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
 
 }
