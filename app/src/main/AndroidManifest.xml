@@ -36,7 +36,7 @@
    </application>
     -->
     <application
-        android:name="org.litepal.LitePalApplication"
+        android:name="space.cc.com.fragmenttest.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
