@@ -1,7 +1,7 @@
 package space.cc.com.fragmenttest;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.lzy.okgo.OkGo;
@@ -11,10 +11,9 @@ import com.lzy.okgo.model.HttpHeaders;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.Connector;
 
-import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.domain.util.Utils;
 
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
     private static final String TAG = "MyApplication";
 private static Context context;
     public static boolean canRequest=true;
@@ -26,11 +25,12 @@ private static Context context;
         context = getApplicationContext();
         initOkGo();
         Utils.init(this);
-        Log.e(TAG, "MyApplication onCreate ok ");
-        ToastUtils.showDisplay("MyApplication onCreate ok");
+        Log.d(TAG, "MyApplication onCreate ok ");
 //        LitePalApplication.initialize(context);
         LitePal.initialize(this);
+        //数据库初始化准备
         Connector.getDatabase();
+        Log.d(TAG, "LitePal.initialize( ok ");
     }
       /**
          * @description 提供一个全局的获取context的方法

@@ -8,6 +8,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 声明获取 监听系统开机广播的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -36,7 +38,7 @@
    </application>
     -->
     <application
-        android:name="space.cc.com.fragmenttest.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
@@ -77,7 +79,9 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".activity.FileTestActivity" />
         <activity android:name=".activity.DBTestActivity" />
-        <activity android:name=".activity.LitePalTestActivity" />
+        <activity android:name=".activity.LitePalTestActivity">
+
+        </activity>
         <activity android:name=".activity.ShowBooksActivity" />
         <activity android:name=".activity.RuntimePermmissionTestActivity" />
         <activity android:name=".activity.VisitOtherProgramDataTestActivity" />
@@ -99,11 +103,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activity.media.NotificationTestActivity"></activity>
+        <activity android:name=".activity.media.NotificationTestActivity" />
         <activity android:name=".activity.media.NotificationDisplayActivity" />
-        <activity android:name=".activity.media.CameraAlbumActivity">
-        </activity>
-        <activity android:name=".activity.media.VideoTestActivity">
+        <activity android:name=".activity.media.CameraAlbumActivity"></activity>
+        <activity android:name=".activity.media.VideoTestActivity"></activity>
+        <activity android:name=".activity.OkGoTestActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

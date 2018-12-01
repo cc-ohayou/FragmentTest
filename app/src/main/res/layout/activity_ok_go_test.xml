@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.OkGoTestActivity">
+<Button
+    android:id="@+id/show_toast"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="@style/but_orange_bk_c80_hw_wm"
+    android:text="show toast"
+    />
+    <Button
+        android:id="@+id/send_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/but_orange_bk_c80_hw_wm"
+        android:text="okGo"
+        />
+
+    <TextView
+        android:id="@+id/show_req_response"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

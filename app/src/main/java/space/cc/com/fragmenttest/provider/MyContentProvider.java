@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.litepal.LitePal;
+import org.litepal.tablemanager.Connector;
 
 public class MyContentProvider extends ContentProvider {
     private static final String TAG = "MyContentProvider";
