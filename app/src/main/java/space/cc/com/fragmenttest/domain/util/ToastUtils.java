@@ -219,7 +219,8 @@ public class ToastUtils {
     }
 
     public static void showDisplay(final CharSequence text) {
-        HANDLER.post(new Runnable() {
+        Toast.makeText(Utils.getApp(),text,Toast.LENGTH_SHORT).show();
+       /* HANDLER.post(new Runnable() {
             @Override
             public void run() {
                 cancel();
@@ -232,7 +233,7 @@ public class ToastUtils {
                 sToast.setGravity(Gravity.CENTER,0,0);
                 sToast.show();
             }
-        });
+        });*/
     }
 
     public static void showDisplaySuccess(final CharSequence text) {

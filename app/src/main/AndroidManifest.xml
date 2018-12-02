@@ -79,9 +79,7 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".activity.FileTestActivity" />
         <activity android:name=".activity.DBTestActivity" />
-        <activity android:name=".activity.LitePalTestActivity">
-
-        </activity>
+        <activity android:name=".activity.LitePalTestActivity"></activity>
         <activity android:name=".activity.ShowBooksActivity" />
         <activity android:name=".activity.RuntimePermmissionTestActivity" />
         <activity android:name=".activity.VisitOtherProgramDataTestActivity" />
@@ -105,9 +103,12 @@
 
         <activity android:name=".activity.media.NotificationTestActivity" />
         <activity android:name=".activity.media.NotificationDisplayActivity" />
-        <activity android:name=".activity.media.CameraAlbumActivity"></activity>
-        <activity android:name=".activity.media.VideoTestActivity"></activity>
+        <activity android:name=".activity.media.CameraAlbumActivity" />
+        <activity android:name=".activity.media.VideoTestActivity" />
         <activity android:name=".activity.OkGoTestActivity">
+
+        </activity>
+        <activity android:name=".activity.MyServiceActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
