@@ -100,6 +100,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <service android:name=".MyService">
+
+        </service>
 
         <activity android:name=".activity.media.NotificationTestActivity" />
         <activity android:name=".activity.media.NotificationDisplayActivity" />

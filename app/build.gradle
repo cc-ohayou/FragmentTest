@@ -43,6 +43,7 @@ dependencies {
     //jiaozi播放器依赖 支持最小版本 minSdkVersion 16
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
     implementation 'com.alibaba:fastjson:1.1.63.android'//json解析
-    implementation 'com.lzy.net:okgo:2.1.4'//网络请求框架okhttp
+    implementation 'com.lzy.net:okgo:3.0.4'//网络请求框架okhttp
+
 
 }
