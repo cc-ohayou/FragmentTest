@@ -2,15 +2,26 @@ package space.cc.com.fragmenttest.domain.util;
 
 import android.annotation.SuppressLint;
 import android.app.AppOpsManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.graphics.drawable.IconCompat;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.activity.MyServiceActivity;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static space.cc.com.fragmenttest.domain.util.ActivityUtils.startActivity;
 
 public class NotificationUtil {
@@ -72,5 +83,7 @@ public class NotificationUtil {
     private static String getPackageName(Context  context) {
         return context.getApplicationContext().getPackageName();
     }
+
+
 }
 

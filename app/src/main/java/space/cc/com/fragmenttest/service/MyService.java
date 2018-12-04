@@ -1,4 +1,4 @@
-package space.cc.com.fragmenttest;
+package space.cc.com.fragmenttest.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.activity.MyServiceActivity;
   /**
      * @description  注意一定要在manifest中配置一下service声明否则不会创建的

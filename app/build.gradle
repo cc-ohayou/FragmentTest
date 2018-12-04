@@ -44,6 +44,12 @@ dependencies {
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
     implementation 'com.alibaba:fastjson:1.1.63.android'//json解析
     implementation 'com.lzy.net:okgo:3.0.4'//网络请求框架okhttp
+    implementation 'com.liulishuo.okdownload:okdownload:1.0.2'
+// provide sqlite to store breakpoints
+    implementation 'com.liulishuo.okdownload:sqlite:1.0.2'
+// provide okhttp to connect to backend
+// and then please import okhttp dependencies by yourself
+
 
 
 }

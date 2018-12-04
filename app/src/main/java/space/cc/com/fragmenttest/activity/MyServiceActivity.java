@@ -10,13 +10,15 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
-import space.cc.com.fragmenttest.MyService;
-import space.cc.com.fragmenttest.R;
+import com.liulishuo.okdownload.OkDownload;
 
-public class MyServiceActivity extends BaseActivity implements View.OnClickListener{
+import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.service.MyService;
+
+public class MyServiceActivity extends BaseActivity implements   View.OnClickListener{
     private static final String TAG = "MyServiceActivity";
     private MyService.DownloadBinder downloadBinder;
-
+   private OkDownload okDownload;
     private ServiceConnection connection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

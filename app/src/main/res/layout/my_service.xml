@@ -31,4 +31,24 @@
         android:layout_height="wrap_content"
         android:text="unbind_service"
         />
+
+
+    <Button
+        android:id="@+id/startDownload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="startDownload"
+        />
+    <Button
+        android:id="@+id/pauseDownload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="pauseDownload"
+        />
+    <Button
+        android:id="@+id/cancelDownload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cancelDownload"
+        />
 </LinearLayout>
