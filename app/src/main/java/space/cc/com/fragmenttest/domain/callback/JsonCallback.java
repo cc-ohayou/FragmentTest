@@ -16,6 +16,7 @@
 package space.cc.com.fragmenttest.domain.callback;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.request.base.Request;
@@ -24,8 +25,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import space.cc.com.fragmenttest.domain.BaseResponse;
 import space.cc.com.fragmenttest.domain.MyPublicParams;
+import space.cc.com.fragmenttest.domain.util.Convert;
 import space.cc.com.fragmenttest.domain.util.EncryptUtils;
 import space.cc.com.fragmenttest.domain.util.TimeUtils;
 
@@ -92,7 +95,7 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
 
         //详细自定义的原理和文档，看这里： https://github.com/jeasonlzy/okhttp-OkGo/wiki/JsonCallback
 
-        if (type == null) {
+       /* if (type == null) {
             if (clazz == null) {
                 Type genType = getClass().getGenericSuperclass();
                 type = ((ParameterizedType) genType).getActualTypeArguments()[0];
@@ -103,12 +106,14 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         }
 
         JsonConvert<T> convert = new JsonConvert<>(type);
+        T t =convert.convertResponse(response);*/
+       //只针对平常请求 回调这样转换
+       String str= new String (response.body().bytes());
         try {
-            baseResponse= (BaseResponse) convert.convertResponse(response);
-        }catch(Exception e){
-            onError("请求返回格式错误",3001);
+            baseResponse = JSON.parseObject(str, BaseResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return (T) baseResponse;
     }
 
@@ -137,6 +142,12 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
     @Override
     public void onSuccess(com.lzy.okgo.model.Response<T> response) {
 
+        baseResponse= (BaseResponse) response.body();
+
+        if (baseResponse == null) {
+            onError("无数据", 00000000);
+            return;
+        }
         if (baseResponse == null) {
             onError("无数据", 00000000);
             return;
@@ -154,6 +165,7 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
                 onSuccess(data, baseResponse.getMsg());
                 return;
             }
+            //数组特殊处理直接强制转换
             if (!baseResponse.getData().contains("[") && !baseResponse.getData().contains("{")) {
                 data = (T) baseResponse.getData();
                 onSuccess(data, baseResponse.getMsg());
