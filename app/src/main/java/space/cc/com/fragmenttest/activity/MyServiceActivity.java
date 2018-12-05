@@ -10,9 +10,10 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
-import com.liulishuo.okdownload.OkDownload;
+import com.lzy.okserver.OkDownload;
 
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.service.MyService;
 
 public class MyServiceActivity extends BaseActivity implements   View.OnClickListener{
@@ -42,6 +43,9 @@ public class MyServiceActivity extends BaseActivity implements   View.OnClickLis
         setButOnclickListenerByRid(R.id.stop_service,this);
         setButOnclickListenerByRid(R.id.bind_service,this);
         setButOnclickListenerByRid(R.id.unbind_service,this);
+        setButOnclickListenerByRid(R.id.startDownload,this);
+        setButOnclickListenerByRid(R.id.pauseDownload,this);
+        setButOnclickListenerByRid(R.id.cancelDownload,this);
     }
 
     @Override
@@ -76,6 +80,18 @@ public class MyServiceActivity extends BaseActivity implements   View.OnClickLis
                 //解绑服务 譬如取消下载 停止导航服务等等 停止音乐服务前台显示等等
                 this.unbindService(connection);
                 toastSimple("unbind_service");
+                break;
+            case R.id.startDownload:
+                Intent startDownload=new Intent(this, DownLoadService.class);
+                //绑定服务 此处是自定义的模拟下载服务 实际场景 会真正启动一个下载后台或前台服务
+                this.bindService(startDownload,connection,BIND_AUTO_CREATE);
+                toastSimple("bind_service");
+                break;
+            case R.id.pauseDownload:
+                Intent pauseDownload=new Intent(this, DownLoadService.class);
+                //绑定服务 此处是自定义的模拟下载服务 实际场景 会真正启动一个下载后台或前台服务
+
+                toastSimple("pauseDownload");
                 break;
             default:
                 break;
