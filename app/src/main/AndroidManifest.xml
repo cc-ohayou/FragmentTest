@@ -103,7 +103,9 @@
         <service android:name=".service.MyService">
 
         </service>
+        <service android:name=".service.DownLoadService">
 
+        </service>
         <activity android:name=".activity.media.NotificationTestActivity" />
         <activity android:name=".activity.media.NotificationDisplayActivity" />
         <activity android:name=".activity.media.CameraAlbumActivity" />

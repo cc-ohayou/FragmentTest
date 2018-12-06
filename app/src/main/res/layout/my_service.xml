@@ -46,6 +46,12 @@
         android:text="pauseDownload"
         />
     <Button
+        android:id="@+id/reDownLoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="reDownLoad"
+        />
+    <Button
         android:id="@+id/cancelDownload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -61,8 +61,7 @@ private static Context context;
 
         //OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //OkGo必须调用初始化
-        OkGo.init(this);
-
+        OkGo.getInstance().init(this);
         OkGo.getInstance()
                 //.setOkHttpClient(builder.build())               //建议设置OkHttpClient，不设置将使用默认的
                 .setCacheMode(CacheMode.NO_CACHE)               //全局统一缓存模式，默认不使用缓存，可以不传

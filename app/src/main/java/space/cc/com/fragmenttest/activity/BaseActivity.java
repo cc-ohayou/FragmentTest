@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +43,7 @@ import space.cc.com.fragmenttest.broadcast.MyBroadCast;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
 import space.cc.com.fragmenttest.domain.util.CloseUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
+import space.cc.com.fragmenttest.domain.util.ToastUtils;
 
 public  abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
@@ -237,6 +239,35 @@ public  abstract class BaseActivity extends AppCompatActivity {
     public Uri getSystemDefultRingtoneUri() {
         return RingtoneManager.getActualDefaultRingtoneUri(this,
                 RingtoneManager.TYPE_RINGTONE);
+    }
+
+
+  /**
+     * @description  处理权限请求回调
+     * @author CF
+     * created at 2018/12/6/006  23:35
+     */
+    void dealRequestResult(int requestCode,int[] grantResults) {
+        switch(requestCode){
+            case 1:
+                if(grantResults.length>0&&grantResults[0]!= PackageManager.PERMISSION_GRANTED
+                        ){
+                    ToastUtils.showDisplay("拒绝权限将无法使用程序");
+                    finish();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+     void startServiceCustom(Context context, Intent startIntent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ContextCompat.startForegroundService(context, startIntent);
+        } else {
+            this.startService(startIntent);
+        }
     }
 
 }

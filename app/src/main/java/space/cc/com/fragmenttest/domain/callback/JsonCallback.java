@@ -16,7 +16,6 @@
 package space.cc.com.fragmenttest.domain.callback;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.request.base.Request;
@@ -25,10 +24,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import space.cc.com.fragmenttest.domain.BaseResponse;
 import space.cc.com.fragmenttest.domain.MyPublicParams;
-import space.cc.com.fragmenttest.domain.util.Convert;
 import space.cc.com.fragmenttest.domain.util.EncryptUtils;
 import space.cc.com.fragmenttest.domain.util.TimeUtils;
 

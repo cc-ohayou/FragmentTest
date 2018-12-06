@@ -3,30 +3,30 @@ package space.cc.com.fragmenttest.activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
-import com.lzy.okserver.OkDownload;
-
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.util.PermissinUtils;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.service.MyService;
 
-public class MyServiceActivity extends BaseActivity implements   View.OnClickListener{
+public class MyServiceActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MyServiceActivity";
-    private MyService.DownloadBinder downloadBinder;
-   private OkDownload okDownload;
-    private ServiceConnection connection=new ServiceConnection() {
+    //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
+    private DownLoadService.DownloadBinder downloadBinder;
+    private String downloadUrl = UrlConfig.DOWN_LOAD.getValue();
+    //connection用于绑定服务 绑定成功后有一个回调
+    // 在这里建立活动和服务的链接 IBinder类型 这样达到在活动里操纵服务的效果
+    private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "onServiceConnected: ");
-            downloadBinder=(MyService.DownloadBinder)service;
-            downloadBinder.startDownload();
-            downloadBinder.getProgress();
+            downloadBinder = (DownLoadService.DownloadBinder) service;
         }
 
         @Override
@@ -39,41 +39,42 @@ public class MyServiceActivity extends BaseActivity implements   View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_service);
-        setButOnclickListenerByRid(R.id.start_service,this);
-        setButOnclickListenerByRid(R.id.stop_service,this);
-        setButOnclickListenerByRid(R.id.bind_service,this);
-        setButOnclickListenerByRid(R.id.unbind_service,this);
-        setButOnclickListenerByRid(R.id.startDownload,this);
-        setButOnclickListenerByRid(R.id.pauseDownload,this);
-        setButOnclickListenerByRid(R.id.cancelDownload,this);
+        setButOnclickListenerByRid(R.id.start_service, this);
+        setButOnclickListenerByRid(R.id.stop_service, this);
+        setButOnclickListenerByRid(R.id.bind_service, this);
+        setButOnclickListenerByRid(R.id.unbind_service, this);
+
+        setButOnclickListenerByRid(R.id.startDownload, this);
+        setButOnclickListenerByRid(R.id.pauseDownload, this);
+        setButOnclickListenerByRid(R.id.cancelDownload, this);
+        setButOnclickListenerByRid(R.id.reDownLoad, this);
+        //启动下载任务
+        Intent startDownload = new Intent(this, DownLoadService.class);
+        startServiceCustom(this,startDownload);
+        //绑定服务 下载后台或前台服务
+       boolean  flag= getApplicationContext().bindService(startDownload, connection, BIND_AUTO_CREATE);
+        Log.d(TAG, "onCreate: flag="+flag);
+        PermissinUtils.requestStoragePermission(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.start_service:
-                Intent startIntent=new Intent(this, MyService.class);
+                Intent startIntent = new Intent(this, MyService.class);
                 //兼容android8.0
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                {
-                    ContextCompat.startForegroundService(this,startIntent);
-                }
-                else{
-                    this.startService(startIntent);
-                }
+                startServiceCustom(this,startIntent);
                 toastSimple("startService");
                 break;
-             case R.id.stop_service:
-                 Intent stopIntent=new Intent(this, MyService.class);
-
-                     this.stopService(stopIntent);
-
-                 toastSimple("stopService");
+            case R.id.stop_service:
+                Intent stopIntent = new Intent(this, MyService.class);
+                this.stopService(stopIntent);
+                toastSimple("stopService");
                 break;
             case R.id.bind_service:
-                Intent bindIntent=new Intent(this, MyService.class);
+                Intent bindIntent = new Intent(this, MyService.class);
                 //绑定服务 此处是自定义的模拟下载服务 实际场景 会真正启动一个下载后台或前台服务
-                this.bindService(bindIntent,connection,BIND_AUTO_CREATE);
+                this.bindService(bindIntent, connection, BIND_AUTO_CREATE);
                 toastSimple("bind_service");
                 break;
             case R.id.unbind_service:
@@ -82,20 +83,36 @@ public class MyServiceActivity extends BaseActivity implements   View.OnClickLis
                 toastSimple("unbind_service");
                 break;
             case R.id.startDownload:
-                Intent startDownload=new Intent(this, DownLoadService.class);
-                //绑定服务 此处是自定义的模拟下载服务 实际场景 会真正启动一个下载后台或前台服务
-                this.bindService(startDownload,connection,BIND_AUTO_CREATE);
-                toastSimple("bind_service");
+                downloadBinder.startDownLoad(downloadUrl);
                 break;
             case R.id.pauseDownload:
-                Intent pauseDownload=new Intent(this, DownLoadService.class);
-                //绑定服务 此处是自定义的模拟下载服务 实际场景 会真正启动一个下载后台或前台服务
-
-                toastSimple("pauseDownload");
+                downloadBinder.pauseDownLoad();
+                break;
+            case R.id.cancelDownload:
+                downloadBinder.cancelDownLoad();
+                break;
+            case R.id.reDownLoad:
+                downloadBinder.reDownLoad(downloadUrl);
                 break;
             default:
                 break;
 
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+            dealRequestResult(requestCode,grantResults);
+    }
+
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(connection);
     }
 }
