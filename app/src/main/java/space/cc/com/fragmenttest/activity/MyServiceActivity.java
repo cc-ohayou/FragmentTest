@@ -10,7 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
-import com.liulishuo.okdownload.OkDownload;
+
+import com.lzy.okserver.OkDownload;
 
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.service.MyService;

@@ -5,13 +5,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+import com.lzy.okgo.model.Response;
 
 import java.util.List;
 
 import space.cc.com.fragmenttest.R;
-import space.cc.com.fragmenttest.domain.JsonCallBack;
+import space.cc.com.fragmenttest.domain.BaseResponse;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.JsonUtil;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
@@ -36,18 +39,22 @@ public class OkGoTestActivity extends BaseActivity  implements View.OnClickListe
         switch(v.getId()){
             case R.id.send_request:
                 ClientUtlis.post(true, UrlConfig.TEST_URL.getValue(),params,
-                        this,new JsonCallBack<String>(this) {
+                        this,new JsonCallback<List>() {
                             @Override
-                            public void onSuccess(String result, String msg) {
-                                JSONObject data = JsonUtil.getJsonListFirst(result, "data");
-                                shouResponse.setText(data.toString());
+                            public void onSuccess( List obj,String msg) {
+                                toastSimple(obj.toString());
+                                shouResponse.setText(obj.toString());
 
                             }
 
                             @Override
                             public void onError(String msg, int code) {
+//                                toastSimple(msg);
                                 shouResponse.setText(msg);
                             }
+
+
+
                         });
 
                 break;
@@ -56,11 +63,10 @@ public class OkGoTestActivity extends BaseActivity  implements View.OnClickListe
                 break;
             case R.id.send_get:
                 ClientUtlis.get(this, UrlConfig.TEST_URL.getValue(),
-                        this,new JsonCallBack<String>(this) {
+                        this,new JsonCallback<List>() {
                             @Override
-                            public void onSuccess(String result, String msg) {
-                               List list = JsonUtil.getJsontoList(result, "data");
-                                shouResponse.setText(list.toString());
+                            public void onSuccess(List list,String msg) {
+                                shouResponse.setText(list.get(0).toString());
                             }
 
                             @Override

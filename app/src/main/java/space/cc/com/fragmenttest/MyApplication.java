@@ -61,7 +61,7 @@ private static Context context;
 
         //OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //OkGo必须调用初始化
-        OkGo.init(this);
+        OkGo.getInstance().init(this);
 
         OkGo.getInstance()
                 //.setOkHttpClient(builder.build())               //建议设置OkHttpClient，不设置将使用默认的

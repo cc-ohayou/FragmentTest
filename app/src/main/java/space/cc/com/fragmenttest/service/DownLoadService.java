@@ -76,7 +76,7 @@ public class DownLoadService extends Service {
                     .setContentText("This is content text")
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.mipmap.msg_32)
-                    .setLargeIcon(BitmapFactory.decodeResource(IconCompat.getResources(), R.mipmap.msg_64))
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
                     .setContentIntent(pendingIntent)
                     .build();
         }else{
@@ -94,11 +94,11 @@ public class DownLoadService extends Service {
         return notification;
     }
 
-    @Nullable
+/*    @Nullable
   @Override
   public IBinder onBind(Intent intent) {
       return mBinder;
-  }
+  }*/
 
   @Override
   public void onCreate() {
@@ -156,8 +156,14 @@ public class DownLoadService extends Service {
       super.onDestroy();
   }
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
-  @Override
+
+    @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
       Log.d(TAG,"MyService onStartCommand");
       return super.onStartCommand(intent, flags, startId);
