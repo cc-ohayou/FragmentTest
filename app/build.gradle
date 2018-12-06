@@ -47,9 +47,6 @@ dependencies {
     implementation 'com.lzy.net:okserver:2.0.5'
     implementation 'com.google.code.gson:gson:2.8.0'
 
-// provide sqlite to store breakpoints
-// provide okhttp to connect to backend
-// and then please import okhttp dependencies by yourself
 
 
 
