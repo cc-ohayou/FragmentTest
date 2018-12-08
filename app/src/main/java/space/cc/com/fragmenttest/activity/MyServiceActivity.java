@@ -19,7 +19,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     private static final String TAG = "MyServiceActivity";
     //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
     private DownLoadService.DownloadBinder downloadBinder;
-    private String downloadUrl = UrlConfig.DOWN_LOAD.getValue();
+    private String downloadUrl = UrlConfig.DOWN_LOAD02.getValue();
     //connection用于绑定服务 绑定成功后有一个回调
     // 在这里建立活动和服务的链接 IBinder类型 这样达到在活动里操纵服务的效果
     private ServiceConnection connection = new ServiceConnection() {
