@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -50,24 +51,42 @@ public class NotificationUtil {
 
 
     public static void gotoOpenNotificationActivity(Context  context){
-        if (!isNotificationEnabled(context)) {
-            Intent localIntent = new Intent();
-            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (Build.VERSION.SDK_INT >= 9) {
-                localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                localIntent.setData(Uri.fromParts("package", getPackageName(context), null));
-            } else if (Build.VERSION.SDK_INT <= 8) {
-                localIntent.setAction(Intent.ACTION_VIEW);
-                localIntent.setClassName("com.android.settings", "com.android.setting.InstalledAppDetails");
-                localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName(context));
+
+
+
+
+      /*  摘要：4.4以下并没有提过从app跳转到应用通知设置页面的Action,可考虑跳转到应用详情页面,下面是直接跳转到应用通知设置的代码:if(android.os.Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){Intentintent=newIntent();intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");intent.p
+
+            4.4以下并没有提过从app跳转到应用通知设置页面的Action,可考虑跳转到应用详情页面,下面是直接跳转到应用通知设置的代码:
+*/
+
+            boolean enabled=  isNotificationEnabled(context);
+           if(enabled){
+                    return;
+            }else{
+
+           }
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // 进入设置系统应用权限界面
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
+                return;
+                /*Intent intent = new Intent();
+                intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                intent.putExtra("app_package", context.getPackageName());
+                ToastUtils.showDisplay(context.getApplicationInfo().uid+context.getApplicationInfo().packageName, Toast.LENGTH_LONG);
+                intent.putExtra("app_uid", context.getApplicationInfo().uid);
+                startActivity(intent);*/
+            } else if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                startActivity(intent);
             }
-            startActivity(localIntent);
 
 
         }
-
-
-    }
 
     private static String getPackageName(Context  context) {
         return context.getApplicationContext().getPackageName();

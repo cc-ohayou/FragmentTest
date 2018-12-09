@@ -33,6 +33,11 @@ public class LitePalTestActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
+    public void requestPermission() {
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.create_db_litePal:

@@ -2,14 +2,15 @@ package space.cc.com.fragmenttest.domain.util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 public class PermissinUtils {
 
-    public static void requestStoragePermission(Activity activity){
-       if( ContextCompat.checkSelfPermission(Utils.getApp(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public static void requestStoragePermission(Context context,Activity activity){
+       if( ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},

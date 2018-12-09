@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
+//apply plugin: 'com.jakewharton.butterknife'
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "space.cc.com.fragmenttest"
-        minSdkVersion 26
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -47,8 +47,8 @@ dependencies {
     implementation 'com.lzy.net:okserver:2.0.5'
     implementation 'com.google.code.gson:gson:2.8.0'
     //黄油刀依赖
-    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
+//    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
+//    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
 
 
 

@@ -28,6 +28,11 @@ public class OkGoTestActivity extends BaseActivity  implements View.OnClickListe
     }
 
     @Override
+    public void requestPermission() {
+
+    }
+
+    @Override
     public void onClick(View v) {
         RequestParams params=new RequestParams(1);
         switch(v.getId()){

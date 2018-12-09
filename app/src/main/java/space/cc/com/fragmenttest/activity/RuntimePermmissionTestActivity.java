@@ -34,6 +34,11 @@ public class RuntimePermmissionTestActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void requestPermission() {
+
+    }
+
     @SuppressLint("MissingPermission")
     private void makePhoneCall() {
         try{

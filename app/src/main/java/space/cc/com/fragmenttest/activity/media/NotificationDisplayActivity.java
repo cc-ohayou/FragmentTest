@@ -20,4 +20,9 @@ public class NotificationDisplayActivity extends BaseActivity {
         notifyText=findViewById(R.id.notifyText);
         notifyText.setText(notifyMsg);
     }
+
+    @Override
+    public void requestPermission() {
+
+    }
 }

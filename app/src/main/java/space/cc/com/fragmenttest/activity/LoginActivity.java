@@ -112,7 +112,13 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-  /**
+
+    @Override
+    public void requestPermission() {
+
+    }
+
+    /**
      * @description 判断是否设置过记住密码 是则填充上次登录的信息
      * @author CF
      * created at 2018/11/11/011  18:28

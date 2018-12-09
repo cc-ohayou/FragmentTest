@@ -45,7 +45,13 @@ public class VideoTestActivity extends BaseActivity implements View.OnClickListe
             initVideoView();
         }
     }
-  /**
+
+    @Override
+    public void requestPermission() {
+
+    }
+
+    /**
      * @description 初始化mediaPlayer 播放音频
    * 常用方法api
    * setDataSource 设置要播放的音频文件位置

@@ -24,6 +24,11 @@ public class FileTestActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void requestPermission() {
+
+    }
+
 
     @Override
     protected void onDestroy() {

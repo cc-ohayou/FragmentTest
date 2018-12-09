@@ -40,6 +40,11 @@ public class ShowBooksActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void requestPermission() {
+
+    }
+
     private void initData() {
                 books= LitePal.findAll(Book.class);
 

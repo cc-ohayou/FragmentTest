@@ -1,12 +1,9 @@
 package space.cc.com.fragmenttest.activity;
 
-import android.annotation.SuppressLint;
-import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -16,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatDrawableManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -36,7 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
@@ -58,15 +53,18 @@ public  abstract class BaseActivity extends AppCompatActivity {
 // 设置背景透明色
 // this.getWindow().getDecorView().setBackgroundColor(Color.TRANSPARENT);
 //        this.getWindow().getDecorView().setBackgroundColor(Color.TRANSPARENT);
+//        首先要获取权限
         //设置背景为墙纸
-        Drawable wallPaper = WallpaperManager.getInstance( getBaseContext()).getDrawable();
-        @SuppressLint("RestrictedApi")
-        Drawable res= AppCompatDrawableManager.get().getDrawable(getBaseContext(), R.drawable.image04);
-//        this.getWindow().setBackgroundDrawable(wallPaper);
-        this.getWindow().setBackgroundDrawable(res);
+//        requestPermission();
+//        PermissinUtils.requestStoragePermission(Utils.getApp(),BaseActivity.this);
+
+
+//        this.getWindow().setBackgroundDrawable(res);
         ActivityCollector.addActivity(this);
 
     }
+
+    public abstract void requestPermission();
 
     @Override
     protected void onDestroy() {
@@ -248,6 +246,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
      * created at 2018/12/6/006  23:35
      */
     void dealRequestResult(int requestCode,int[] grantResults) {
+        ToastUtils.showDisplay(requestCode+",res="+grantResults.toString());
         switch(requestCode){
             case 1:
                 if(grantResults.length>0&&grantResults[0]!= PackageManager.PERMISSION_GRANTED

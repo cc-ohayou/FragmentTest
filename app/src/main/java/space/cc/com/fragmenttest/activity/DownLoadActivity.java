@@ -26,6 +26,11 @@ public class DownLoadActivity extends BaseActivity implements XExecutor.OnAllTas
     }
 
     @Override
+    public void requestPermission() {
+
+    }
+
+    @Override
     public void onAllTaskEnd() {
          toastSimple("所有下载任务已结束");
     }

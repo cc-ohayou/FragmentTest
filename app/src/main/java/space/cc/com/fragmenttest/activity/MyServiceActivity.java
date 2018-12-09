@@ -1,9 +1,12 @@
 package space.cc.com.fragmenttest.activity;
 
+import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -11,15 +14,18 @@ import android.view.View;
 
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.util.LogUtil;
 import space.cc.com.fragmenttest.domain.util.PermissinUtils;
+import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.service.MyService;
 
 public class MyServiceActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MyServiceActivity";
+    private static  int progress = 0;
     //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
     private DownLoadService.DownloadBinder downloadBinder;
-    private String downloadUrl = UrlConfig.DOWN_LOAD02.getValue();
+    private String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
     //connection用于绑定服务 绑定成功后有一个回调
     // 在这里建立活动和服务的链接 IBinder类型 这样达到在活动里操纵服务的效果
     private ServiceConnection connection = new ServiceConnection() {
@@ -37,24 +43,49 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_service);
-        setButOnclickListenerByRid(R.id.start_service, this);
-        setButOnclickListenerByRid(R.id.stop_service, this);
-        setButOnclickListenerByRid(R.id.bind_service, this);
-        setButOnclickListenerByRid(R.id.unbind_service, this);
+        ToastUtils.showDisplay( Environment.getExternalStorageDirectory().getAbsolutePath());
 
-        setButOnclickListenerByRid(R.id.startDownload, this);
-        setButOnclickListenerByRid(R.id.pauseDownload, this);
-        setButOnclickListenerByRid(R.id.cancelDownload, this);
-        setButOnclickListenerByRid(R.id.reDownLoad, this);
-        //启动下载任务
-        Intent startDownload = new Intent(this, DownLoadService.class);
-        startServiceCustom(this,startDownload);
-        //绑定服务 下载后台或前台服务
-       boolean  flag= getApplicationContext().bindService(startDownload, connection, BIND_AUTO_CREATE);
-        Log.d(TAG, "onCreate: flag="+flag);
-        PermissinUtils.requestStoragePermission(this);
+        try {
+
+
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.my_service);
+            setButOnclickListenerByRid(R.id.start_service, this);
+            setButOnclickListenerByRid(R.id.stop_service, this);
+            setButOnclickListenerByRid(R.id.bind_service, this);
+            setButOnclickListenerByRid(R.id.unbind_service, this);
+            setButOnclickListenerByRid(R.id.startDownload, this);
+            setButOnclickListenerByRid(R.id.pauseDownload, this);
+            setButOnclickListenerByRid(R.id.cancelDownload, this);
+            setButOnclickListenerByRid(R.id.reDownLoad, this);
+//            NotificationUtil.gotoOpenNotificationActivity(this);
+
+            PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
+            //启动下载任务
+            Intent startDownload = new Intent(this, DownLoadService.class);
+            startServiceCustom(this,startDownload);
+            //绑定服务 下载后台或前台服务 必须在activity完成
+            boolean  flag= getApplicationContext().bindService(startDownload, connection, BIND_AUTO_CREATE);
+            Log.d(TAG, "onCreate: flag="+flag);
+            setWallperAsBackGround();
+
+        } catch (Exception e) {
+            ToastUtils.showDisplay(e.getMessage());
+            LogUtil.getInstance().writeEvent(TAG, "onCreate: failed" + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void requestPermission() {
+        PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
+        setWallperAsBackGround();
+    }
+
+    private void setWallperAsBackGround() {
+        Drawable wallPaper = WallpaperManager.getInstance( getBaseContext()).getDrawable();
+//        @SuppressLint("RestrictedApi")
+//        Drawable res= AppCompatDrawableManager.get().getDrawable(getBaseContext(), R.drawable.image04);
+        this.getWindow().setBackgroundDrawable(wallPaper);
     }
 
     @Override
@@ -83,6 +114,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
                 toastSimple("unbind_service");
                 break;
             case R.id.startDownload:
+
                 downloadBinder.startDownLoad(downloadUrl);
                 break;
             case R.id.pauseDownload:
@@ -93,6 +125,10 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.reDownLoad:
                 downloadBinder.reDownLoad(downloadUrl);
+                break;
+                case R.id.addProgress:
+                    progress+=500;
+                downloadBinder.changeProgress(progress);
                 break;
             default:
                 break;

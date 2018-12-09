@@ -58,8 +58,7 @@ public class DownLoadService extends Service {
         }
         downloadTask.start();
         //显示服务前台通知
-        startForeground(notifyId,getNotification("Downloading...",downloadTask.progress));
-//        refresh(downloadTask.progress);
+        startForeground(notifyId,getNotification("Downloading...",downloadTask.progress,NotificationManager.IMPORTANCE_HIGH));
         ToastUtils.showDisplay("Downloading");
     }
 
@@ -113,6 +112,12 @@ public class DownLoadService extends Service {
         }
           downloadTask.restart();
       }
+      public void changeProgress(int progress){
+
+        getNotificationManager().notify(notifyId,
+                getNotification("change mannual",progress,"100KB/s",NotificationManager.IMPORTANCE_HIGH));
+      }
+
 
   }
    private  DownloadListener MyDownLoadListener =new  DownloadListener(TAG){
@@ -121,7 +126,7 @@ public class DownLoadService extends Service {
        public void onStart(Progress progress) {
            Log.d(TAG, "onStart: progress.filePath="+progress.filePath);
 
-           getNotificationManager().notify(notifyId,getNotification("Download start", progress));
+           getNotificationManager().notify(notifyId,getNotification("Download start", progress,NotificationManager.IMPORTANCE_HIGH));
 
        }
 
@@ -130,6 +135,8 @@ public class DownLoadService extends Service {
            Log.e(TAG, "onProgress: progress="+progress );
            Log.e(TAG, "progress.sttatus= "+progress.status );
            System.err.println("refresh going"+progress.status);
+           //下载文件源要选择好 否则DownLoadTask的Progress获取到的status一直是waiting状态 不是loading状态
+           // 此时进度刷新的回调方法onProgress不会被执行也就不会更新下载进度
            refresh(progress);
 //          getNotificationManager().notify(notifyId,getNotification("Downloading...", progress));
        }
@@ -141,29 +148,29 @@ public class DownLoadService extends Service {
 
            switch (progress.status) {
                case Progress.NONE:
-                   getNotification("停止", progress);
+                   getNotification("停止", progress,NotificationManager.IMPORTANCE_DEFAULT);
                    break;
                case Progress.PAUSE:
-                   getNotification("暂停中", progress);
+                   getNotification("暂停中", progress,NotificationManager.IMPORTANCE_HIGH);
 
                    break;
                case Progress.ERROR:
-                   getNotification("下载出错", progress);
+                   getNotification("下载出错", progress,NotificationManager.IMPORTANCE_HIGH);
 
                    break;
                case Progress.WAITING:
-                   getNotification("等地中", progress);
+                   getNotification("等地中", progress,NotificationManager.IMPORTANCE_DEFAULT);
 
                    break;
                case Progress.FINISH:
-                   getNotification("下载完成", progress);
+                   getNotification("下载完成", progress,NotificationManager.IMPORTANCE_HIGH);
                    break;
                case Progress.LOADING:
                    String speed = Formatter.formatFileSize(getBaseContext(), progress.speed);
                    Log.e(TAG, "LOADING speed= "+speed );
                    break;
            }
-           getNotification("DownLoading", progress);
+           getNotificationManager().notify(notifyId,getNotification("DownLoading", progress,NotificationManager.IMPORTANCE_LOW));
 
        }
        @Override
@@ -172,7 +179,7 @@ public class DownLoadService extends Service {
            downloadTask=null;
            stopForeground(true);
            progress.fraction=-1;
-           getNotificationManager().notify(notifyId,getNotification("Downlaod Failed",progress));
+           getNotificationManager().notify(notifyId,getNotification("Downlaod Failed",progress,NotificationManager.IMPORTANCE_HIGH));
            ToastUtils.showDisplay("DownLoad Failed");
            progress.exception.printStackTrace();
        }
@@ -184,7 +191,7 @@ public class DownLoadService extends Service {
           stopForeground(true);
           //下载成功的通知
            progress.fraction=-1;
-          getNotificationManager().notify(notifyId,getNotification("Downlaod Success",progress));
+          getNotificationManager().notify(notifyId,getNotification("Downlaod Success",progress,NotificationManager.IMPORTANCE_HIGH));
            ToastUtils.showDisplay("DownLoad Success");
        }
 
@@ -203,33 +210,15 @@ public class DownLoadService extends Service {
 
     }
 
-    Notification getNotification(String title, Progress progress) {
+    Notification getNotification(String title, Progress progress,int importanceLevel) {
 
         int progressFraction= (int) (progress.fraction*10000);
         if(progress.fraction<0){progressFraction=-1;}
+        String speedDesc= Formatter.formatFileSize(getBaseContext(), progress.speed)+"/s";
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "getNotification: CODES.O"+",progressFraction="+progressFraction+" progress="+progress);
-            NotificationChannel channel = new NotificationChannel("fore_service", "前台服务", NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
-            Intent intentForeSerive = new Intent(Utils.getApp(), MyServiceActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(Utils.getApp(), 0, intentForeSerive, 0);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(Utils.getApp(), "fore_service")
-                    .setContentTitle(title)
-                    .setContentText(progress.speed/1024+"KB/s")
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.mipmap.msg_32)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
-                    .setContentIntent(pendingIntent);
-            //进度条
-            builder.setProgress(10000, progressFraction, false);
-
-           /* if (progressFraction > 0) {
-
-                builder.setProgress(10000, progressFraction, true);
-//                builder.setContentText(progress + "%");
-            }*/
-            return builder.build();
+            return getNotification(title, progressFraction,speedDesc,importanceLevel);
         } else {
             Log.d(TAG, "getNotification: progress"+progress);
 
@@ -237,9 +226,10 @@ public class DownLoadService extends Service {
             PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setContentTitle(title)
-                    .setContentText(title)
+                    .setContentText(speedDesc)
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.mipmap.msg_32)
+                    .setOnlyAlertOnce(true)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
                     .setContentIntent(pi);
             if (progressFraction > 0) {
@@ -250,9 +240,33 @@ public class DownLoadService extends Service {
         }
     }
 
+    private Notification getNotification(String title, int progressFraction,String speedDesc,int importanceLevel) {
+        NotificationChannel channel = new NotificationChannel("fore_service", "前台服务", importanceLevel);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
+        Intent intentForeSerive = new Intent(Utils.getApp(), MyServiceActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(Utils.getApp(), 0, intentForeSerive, 0);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(Utils.getApp(), "fore_service")
+                .setContentTitle(title)
+                .setContentText(speedDesc)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.msg_32)
+                .setOnlyAlertOnce(true)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
+                .setContentIntent(pendingIntent);
+        //进度条
+        builder.setProgress(10000, progressFraction, false);
+
+           /* if (progressFraction > 0) {
+
+                builder.setProgress(10000, progressFraction, true);
+//                builder.setContentText(progress + "%");
+            }*/
+        return builder.build();
+    }
 
 
-  @Override
+    @Override
   public void onCreate() {
       Log.d(TAG, " onCreate");
       super.onCreate();

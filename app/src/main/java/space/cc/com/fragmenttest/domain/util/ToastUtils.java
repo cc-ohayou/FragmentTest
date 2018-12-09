@@ -236,6 +236,23 @@ public class ToastUtils {
         });*/
     }
 
+    public static void showDisplay(final CharSequence text,int showModel) {
+        Toast.makeText(Utils.getApp(),text,showModel).show();
+       /* HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                cancel();
+                View view = LayoutInflater.from(Utils.getApp()).inflate(R.layout.dialog_display, null);
+                ImageView iv_img = view.findViewById(R.id.iv_img);
+                TextView tv_msg = view.findViewById(R.id.tv_msg);
+                tv_msg.setText(text);
+                sToast = Toast.makeText(Utils.getApp(), text, Toast.LENGTH_SHORT);
+                sToast.setView(view);
+                sToast.setGravity(Gravity.CENTER,0,0);
+                sToast.show();
+            }
+        });*/
+    }
     public static void showDisplaySuccess(final CharSequence text) {
         HANDLER.post(new Runnable() {
             @Override
