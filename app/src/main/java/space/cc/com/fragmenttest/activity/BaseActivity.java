@@ -246,7 +246,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
      * created at 2018/12/6/006  23:35
      */
     void dealRequestResult(int requestCode,int[] grantResults) {
-        ToastUtils.showDisplay(requestCode+",res="+grantResults.toString());
+//        ToastUtils.showDisplay(requestCode+",res="+grantResults.toString());
         switch(requestCode){
             case 1:
                 if(grantResults.length>0&&grantResults[0]!= PackageManager.PERMISSION_GRANTED
