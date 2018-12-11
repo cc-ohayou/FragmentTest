@@ -71,9 +71,9 @@
         <activity
             android:name=".broadcast.BroadcastTestActivity"
             android:label="broadcast test" />
-        静态广播接收器 必须此处进行配置注册
+     <!--   静态广播接收器 必须此处进行配置注册
         exported表示是否允许接收其他程序的广播
-        anabled表示是否启用
+        anabled表示是否启用-->
         <!--
         <receiver
             android:name=".broadcast.BootCompleteReceiver"
@@ -124,7 +124,7 @@
 
         <service android:name=".service.MyService"></service>
         <service android:name=".service.DownLoadService"></service>
-        //百度定位服务
+        <!--//百度定位服务-->
         <service android:name="com.baidu.location.f"
         android:enabled="true"
         android:process=":remote">
