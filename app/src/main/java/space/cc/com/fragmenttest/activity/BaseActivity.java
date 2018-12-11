@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -58,6 +59,11 @@ public  abstract class BaseActivity extends AppCompatActivity {
 //        requestPermission();
 //        PermissinUtils.requestStoragePermission(Utils.getApp(),BaseActivity.this);
 
+        //隐藏默认的actionBar
+        ActionBar actionBar=getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.hide();
+        }
 
 //        this.getWindow().setBackgroundDrawable(res);
         ActivityCollector.addActivity(this);

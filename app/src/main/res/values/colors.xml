@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="title01">#2E9FD6</color>
 
     <!-- 全透明 -->
     <color name="C100">#00000000</color>

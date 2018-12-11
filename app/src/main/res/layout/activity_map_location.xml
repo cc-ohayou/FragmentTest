@@ -6,14 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MapLocationActivity">
-
+    <!-- 通过引入时间编写好的自定义标题布局  （标题布局自我实现布局中的按钮事件
+    避免了在引入布局处编写重复代码的问题） -->
+    <space.cc.com.fragmenttest.activity.common.TitleLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        />
     <TextView
         android:id="@+id/position_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         />
-<!--  -->
+    <!--android:visibility="gone"-->
+    <!--  -->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
