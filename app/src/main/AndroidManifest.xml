@@ -20,22 +20,21 @@
     <!-- android6.0以前申请打电话 只需要此处进行配置 但是后面版本改为只能使用运行时权限  否则报错 Permission Denial -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- android 4.4之前访问sd卡应用关联目录还是需要申请权限的 所以做下兼容 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!--//读取设备硬件信息，统计数据-->
+    <!-- //读取设备硬件信息，统计数据 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--//读取系统信息，包含系统版本等信息，用作统计-->
+    <!-- //读取系统信息，包含系统版本等信息，用作统计 -->
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!--//获取统计数据-->
+    <!-- //获取统计数据 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!--//使用步行AR导航，配置Camera权限-->
+    <!-- //使用步行AR导航，配置Camera权限 -->
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <!--
     有了自定义的应用时 在应用里面记得初始化Litepal的使用 如下
@@ -60,8 +59,11 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--  百度位置服务相关 在网站上以开发者身份获取自己应用的 api_key
-        http://lbsyun.baidu.com/index.php?title=androidsdk/guide -->
+
+        <!--
+        百度位置服务相关 在网站上以开发者身份获取自己应用的 api_key
+        http://lbsyun.baidu.com/index.php?title=androidsdk/guide
+        -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="kpw3x7tBA6SjVGUq3avpiPyMCLkE7q9u" />
@@ -71,9 +73,11 @@
         <activity
             android:name=".broadcast.BroadcastTestActivity"
             android:label="broadcast test" />
-     <!--   静态广播接收器 必须此处进行配置注册
+        <!--
+        静态广播接收器 必须此处进行配置注册
         exported表示是否允许接收其他程序的广播
-        anabled表示是否启用-->
+        anabled表示是否启用
+        -->
         <!--
         <receiver
             android:name=".broadcast.BootCompleteReceiver"
@@ -122,29 +126,31 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service android:name=".service.MyService"></service>
-        <service android:name=".service.DownLoadService"></service>
-        <!--//百度定位服务-->
-        <service android:name="com.baidu.location.f"
-        android:enabled="true"
-        android:process=":remote">
+        <service android:name=".service.MyService" />
+        <service android:name=".service.DownLoadService" />
+        <!-- //百度定位服务 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
 
-        </service>
         <activity android:name=".activity.media.NotificationTestActivity" />
         <activity android:name=".activity.media.NotificationDisplayActivity" />
         <activity android:name=".activity.media.CameraAlbumActivity" />
         <activity android:name=".activity.media.VideoTestActivity" />
-        <activity android:name=".activity.OkGoTestActivity"></activity>
-        <activity android:name=".activity.MyServiceActivity">
+        <activity android:name=".activity.OkGoTestActivity" />
+        <activity android:name=".activity.MyServiceActivity"></activity>
+        <activity android:name=".activity.MapLocationActivity">
 
         </activity>
-        <activity android:name=".activity.MapLocationActivity">
+        <activity android:name=".activity.MaterialDesignActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
