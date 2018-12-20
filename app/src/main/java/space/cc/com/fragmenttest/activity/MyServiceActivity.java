@@ -67,6 +67,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
             setButOnclickListenerByRid(R.id.pauseDownload, this);
             setButOnclickListenerByRid(R.id.cancelDownload, this);
             setButOnclickListenerByRid(R.id.reDownLoad, this);
+            setButOnclickListenerByRid(R.id.addProgress, this);
 //            NotificationUtil.gotoOpenNotificationActivity(this);
             initDownLoadUrl();
             PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
@@ -154,7 +155,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
             case R.id.reDownLoad:
                 downloadBinder.reDownLoad(downloadUrl);
                 break;
-                case R.id.addProgress:
+            case R.id.addProgress:
                     ToastUtils.showDisplay(downloadUrl);
                     break;
             default:
