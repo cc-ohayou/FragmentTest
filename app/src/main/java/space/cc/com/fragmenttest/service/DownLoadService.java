@@ -5,13 +5,16 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.text.format.Formatter;
 import android.util.Log;
 
@@ -41,7 +44,7 @@ public class DownLoadService extends Service {
   private DownloadTask downloadTask;
   private int notifyId=1;
     private String  downloadUrl;
-
+    private Context mContext;
   private DownloadBinder mbinder=new DownloadBinder();
 
   public class DownloadBinder extends Binder {
@@ -58,6 +61,7 @@ public class DownLoadService extends Service {
         }
         downloadTask.start();
         //显示服务前台通知
+//        getNotificationManager().notify(notifyId,getNotification("Downloading...",downloadTask.progress,NotificationManager.IMPORTANCE_HIGH));
         startForeground(notifyId,getNotification("Downloading...",downloadTask.progress,NotificationManager.IMPORTANCE_HIGH));
         ToastUtils.showDisplay("Downloading");
     }
@@ -164,6 +168,8 @@ public class DownLoadService extends Service {
                    break;
                case Progress.FINISH:
                    getNotification("下载完成", progress,NotificationManager.IMPORTANCE_HIGH);
+
+
                    break;
                case Progress.LOADING:
                    String speed = Formatter.formatFileSize(getBaseContext(), progress.speed);
@@ -187,19 +193,21 @@ public class DownLoadService extends Service {
        @Override
        public void onFinish(File file, Progress progress) {
           downloadTask=null;
-          //关闭前台服务
-          stopForeground(true);
+           //关闭前台服务
+           stopForeground(true);
           //下载成功的通知
            progress.fraction=-1;
-          getNotificationManager().notify(notifyId,getNotification("Downlaod Success",progress,NotificationManager.IMPORTANCE_HIGH));
-           ToastUtils.showDisplay("DownLoad Success");
+           getNotificationManager().notify(notifyId,getNotification("Downlaod Success",progress,NotificationManager.IMPORTANCE_HIGH));
+//           ToastUtils.showDisplay("DownLoad Success");
+           installApk(file);// 安装apk
+
        }
 
        @Override
        public void onRemove(Progress progress) {
             downloadTask=null;
             stopForeground(true);
-           ToastUtils.showDisplay("DownLoad Canceled");
+            ToastUtils.showDisplay("DownLoad Canceled");
 
        }
    };
@@ -292,6 +300,37 @@ public class DownLoadService extends Service {
     @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
       Log.d(TAG,"MyService onStartCommand");
+      mContext = this;
       return super.onStartCommand(intent, flags, startId);
   }
+
+    /**
+     * 安装软件
+     *
+     * @param file
+     */
+    /*
+     * 安装apk
+     */
+    private void installApk(File file) {
+//        ToastUtils.showDisplay("install start");
+
+        Intent intent = new Intent();
+        // 执行动作
+        intent.setAction(Intent.ACTION_VIEW);
+        //兼容android N
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(mContext,  "com.cc.space.fileprovider", file);
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+//        ToastUtils.showDisplay("install success");
+        mContext.startActivity(intent);
+        android.os.Process.killProcess(android.os.Process.myPid());//如果不加，最后不会提示完成、打开。
+    }
+
+
 }

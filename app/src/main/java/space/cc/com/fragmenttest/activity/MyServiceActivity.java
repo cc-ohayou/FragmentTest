@@ -12,10 +12,17 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
+import java.util.List;
+
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.callback.JsonCallback;
+import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.LogUtil;
 import space.cc.com.fragmenttest.domain.util.PermissinUtils;
+import space.cc.com.fragmenttest.domain.util.SDCardUtils;
+import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.service.MyService;
@@ -25,7 +32,10 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     private static  int progress = 0;
     //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
     private DownLoadService.DownloadBinder downloadBinder;
-    private String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
+    private static String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
+
+
+
     //connection用于绑定服务 绑定成功后有一个回调
     // 在这里建立活动和服务的链接 IBinder类型 这样达到在活动里操纵服务的效果
     private ServiceConnection connection = new ServiceConnection() {
@@ -43,7 +53,6 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ToastUtils.showDisplay( Environment.getExternalStorageDirectory().getAbsolutePath());
 
         try {
 
@@ -59,7 +68,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
             setButOnclickListenerByRid(R.id.cancelDownload, this);
             setButOnclickListenerByRid(R.id.reDownLoad, this);
 //            NotificationUtil.gotoOpenNotificationActivity(this);
-
+            initDownLoadUrl();
             PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
             //启动下载任务
             Intent startDownload = new Intent(this, DownLoadService.class);
@@ -73,6 +82,25 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
             ToastUtils.showDisplay(e.getMessage());
             LogUtil.getInstance().writeEvent(TAG, "onCreate: failed" + e.getMessage(), e);
         }
+    }
+
+    private void initDownLoadUrl() {
+        RequestParams params=new RequestParams(1);
+
+        ClientUtlis.post(true, UrlConfig.TEST_DOWNLOAD.getValue(),params,
+                this,new JsonCallback<String>() {
+                    @Override
+                    public void onSuccess(String url, String msg) {
+                        downloadUrl=url;
+                        ToastUtils.showDisplay(downloadUrl);
+                    }
+
+                    @Override
+                    public void onError(String msg, int code) {
+                        ToastUtils.showDisplay(msg);
+                    }
+                });
+
     }
 
     @Override
@@ -127,9 +155,8 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
                 downloadBinder.reDownLoad(downloadUrl);
                 break;
                 case R.id.addProgress:
-                    progress+=500;
-                downloadBinder.changeProgress(progress);
-                break;
+                    ToastUtils.showDisplay(downloadUrl);
+                    break;
             default:
                 break;
 
