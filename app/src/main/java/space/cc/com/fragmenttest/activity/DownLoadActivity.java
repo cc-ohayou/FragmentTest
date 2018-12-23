@@ -1,5 +1,6 @@
 package space.cc.com.fragmenttest.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -8,12 +9,23 @@ import com.lzy.okserver.OkDownload;
 import com.lzy.okserver.task.XExecutor;
 
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.domain.util.SDCardUtils;
+import space.cc.com.fragmenttest.domain.util.StringUtils;
+import space.cc.com.fragmenttest.domain.util.ToastUtils;
+
 
 public class DownLoadActivity extends BaseActivity implements XExecutor.OnAllTaskEndListener{
 
     private OkDownload okDownload;
-    public static String path= Environment.getExternalStorageDirectory().getPath()+"/download/";
+    public static String path;
+    static{
+        path = SDCardUtils.getSDCardPath();
+        if(StringUtils.isEmpty(path)){
+            ToastUtils.showShort("无存储空间");
 
+        }
+        path +="/cc/download";
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -23,6 +35,7 @@ public class DownLoadActivity extends BaseActivity implements XExecutor.OnAllTas
             //设置同时下载数量
             okDownload.getThreadPool().setCorePoolSize(3);
             okDownload.addOnAllTaskEndListener(this);
+
     }
 
     @Override
