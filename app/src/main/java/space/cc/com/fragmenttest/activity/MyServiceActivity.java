@@ -31,14 +31,14 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     private static final String TAG = "MyServiceActivity";
     private static  int progress = 0;
     //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
-    private DownLoadService.DownloadBinder downloadBinder;
+//    private DownLoadService.DownloadBinder downloadBinder;
     private static String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
 
 
 
     //connection用于绑定服务 绑定成功后有一个回调
     // 在这里建立活动和服务的链接 IBinder类型 这样达到在活动里操纵服务的效果
-    private ServiceConnection connection = new ServiceConnection() {
+   /* private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "onServiceConnected: ");
@@ -49,7 +49,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "onServiceDisconnected: ");
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +71,10 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
 //            NotificationUtil.gotoOpenNotificationActivity(this);
             initDownLoadUrl();
             PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
-            //启动下载任务
-            Intent startDownload = new Intent(this, DownLoadService.class);
-            startServiceCustom(this,startDownload);
-            //绑定服务 下载后台或前台服务 必须在activity完成
-            boolean  flag= getApplicationContext().bindService(startDownload, connection, BIND_AUTO_CREATE);
-            Log.d(TAG, "onCreate: flag="+flag);
+
+//            绑定服务 下载后台或前台服务 必须在activity完成
+//            boolean  flag= getApplicationContext().bindService(startDownload, connection, BIND_AUTO_CREATE);
+//            Log.d(TAG, "onCreate: flag="+flag);
             setWallperAsBackGround();
 
         } catch (Exception e) {
@@ -132,18 +130,20 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
                 toastSimple("stopService");
                 break;
             case R.id.bind_service:
-                Intent bindIntent = new Intent(this, MyService.class);
+//                Intent bindIntent = new Intent(this, MyService.class);
                 //绑定服务 此处是自定义的模拟下载服务 实际场景 会真正启动一个下载后台或前台服务
-                this.bindService(bindIntent, connection, BIND_AUTO_CREATE);
+//                this.bindService(bindIntent, connection, BIND_AUTO_CREATE);
                 toastSimple("bind_service");
                 break;
             case R.id.unbind_service:
                 //解绑服务 譬如取消下载 停止导航服务等等 停止音乐服务前台显示等等
-                this.unbindService(connection);
+//                this.unbindService(connection);
                 toastSimple("unbind_service");
                 break;
             case R.id.startDownload:
-
+                //启动下载任务
+                Intent startDownload = new Intent(this, DownLoadService.class);
+                startServiceCustom(this,startDownload);
                 downloadBinder.startDownLoad(downloadUrl);
                 break;
             case R.id.pauseDownload:
