@@ -1,18 +1,11 @@
 package space.cc.com.fragmenttest.activity;
 
 import android.app.WallpaperManager;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
-
-import java.util.List;
 
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.domain.RequestParams;
@@ -20,9 +13,8 @@ import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.LogUtil;
+import space.cc.com.fragmenttest.domain.util.NotificationUtil;
 import space.cc.com.fragmenttest.domain.util.PermissinUtils;
-import space.cc.com.fragmenttest.domain.util.SDCardUtils;
-import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.service.MyService;
@@ -32,7 +24,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     private static  int progress = 0;
     //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
 //    private DownLoadService.DownloadBinder downloadBinder;
-    private static String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
+    public static String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
 
 
 
@@ -68,7 +60,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
             setButOnclickListenerByRid(R.id.cancelDownload, this);
             setButOnclickListenerByRid(R.id.reDownLoad, this);
             setButOnclickListenerByRid(R.id.addProgress, this);
-//            NotificationUtil.gotoOpenNotificationActivity(this);
+            NotificationUtil.gotoOpenNotificationActivity(this);
             initDownLoadUrl();
             PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
 
@@ -144,16 +136,16 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
                 //启动下载任务
                 Intent startDownload = new Intent(this, DownLoadService.class);
                 startServiceCustom(this,startDownload);
-                downloadBinder.startDownLoad(downloadUrl);
+//                downloadBinder.startDownLoad(downloadUrl);
                 break;
             case R.id.pauseDownload:
-                downloadBinder.pauseDownLoad();
+//                downloadBinder.pauseDownLoad();
                 break;
             case R.id.cancelDownload:
-                downloadBinder.cancelDownLoad();
+//                downloadBinder.cancelDownLoad();
                 break;
             case R.id.reDownLoad:
-                downloadBinder.reDownLoad(downloadUrl);
+//                downloadBinder.reDownLoad(downloadUrl);
                 break;
             case R.id.addProgress:
                     ToastUtils.showDisplay(downloadUrl);
@@ -177,6 +169,6 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(connection);
+//        unbindService(connection);
     }
 }
