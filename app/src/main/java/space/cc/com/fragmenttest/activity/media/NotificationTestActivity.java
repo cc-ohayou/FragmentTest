@@ -27,7 +27,7 @@ public class NotificationTestActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_test);
         setButOnclickListenerByRid(R.id.sendNotifyBut, this);
-        NotificationUtil.gotoOpenNotificationActivity(this);
+        NotificationUtil.gotoOpenNotificationActivity(this,this);
     }
 
     @Override

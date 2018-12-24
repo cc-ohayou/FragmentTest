@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -268,14 +267,14 @@ public class DownLoadService extends Service {
             progressFraction = -1;
         }
         if (preProgress < progressFraction) {
-            if (StringUtils.isEmpty(text)) {
+            if (!StringUtils.isEmpty(text)) {
                 builder.setContentText(text);
             } else {
-                builder.setContentText(progress + "%");
+                builder.setContentText(progressFraction + "%");
             }
             builder.setSubText(speed + "/s");
 //          builder.setProgress(100, (int) progress, false);
-            builder.setProgress(10000, progressFraction, true);
+            builder.setProgress(10000, progressFraction, false);
             notificationManager.notify(notifyId, builder.build());
         }
         preProgress = progressFraction;

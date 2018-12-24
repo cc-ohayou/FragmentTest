@@ -60,7 +60,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
             setButOnclickListenerByRid(R.id.cancelDownload, this);
             setButOnclickListenerByRid(R.id.reDownLoad, this);
             setButOnclickListenerByRid(R.id.addProgress, this);
-            NotificationUtil.gotoOpenNotificationActivity(this);
+            NotificationUtil.gotoOpenNotificationActivity(this,MyServiceActivity.this);
             initDownLoadUrl();
             PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
 
