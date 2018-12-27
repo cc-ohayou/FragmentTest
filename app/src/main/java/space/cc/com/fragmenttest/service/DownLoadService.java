@@ -291,7 +291,9 @@ public class DownLoadService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.msg_32)
                 .setOnlyAlertOnce(true)
-//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
+                .setNumber(13)
+//                .setLargeIcon()
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.downloadicon))
                 .setContentIntent(pendingIntent);
         getNotificationManager().notify(notifyId, builder.build());
         return builder.build();

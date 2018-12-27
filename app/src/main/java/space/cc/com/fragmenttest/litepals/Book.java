@@ -13,5 +13,6 @@ public class Book extends LitePalSupport {
     private String name;
     private int pages;
     private double price;
+    private int imageId;
 
 }

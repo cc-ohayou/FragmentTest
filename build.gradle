@@ -23,6 +23,10 @@ allprojects {
         maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         google()
     }
+    repositories {
+//        /BaseRecyclerViewAdapterHelper的依赖库
+        maven { url "https://jitpack.io" }
+    }
 }
 
 task clean(type: Delete) {

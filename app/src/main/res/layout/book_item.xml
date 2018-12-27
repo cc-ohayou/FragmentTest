@@ -22,6 +22,9 @@
     <TextView
         android:id="@+id/book_price"
         style="@style/book_list_item_back" />
+    <ImageView
+        android:id="@+id/book_image"
+        style="@style/book_list_item_back" />
 
 
 </LinearLayout>
