@@ -15,6 +15,7 @@ import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.LogUtil;
 import space.cc.com.fragmenttest.domain.util.NotificationUtil;
 import space.cc.com.fragmenttest.domain.util.PermissinUtils;
+import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.service.MyService;
@@ -24,7 +25,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     private static  int progress = 0;
     //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
 //    private DownLoadService.DownloadBinder downloadBinder;
-    public static String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
+    public static String downloadUrl ;
 
 
 
@@ -82,7 +83,11 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
                 this,new JsonCallback<String>() {
                     @Override
                     public void onSuccess(String url, String msg) {
-                        downloadUrl=url;
+                        if(StringUtils.isEmpty(url)){
+                            downloadUrl= UrlConfig.DOWN_LOAD04.getValue();
+                        }else{
+                            downloadUrl=url;
+                        }
                         ToastUtils.showDisplay(downloadUrl);
                     }
 
