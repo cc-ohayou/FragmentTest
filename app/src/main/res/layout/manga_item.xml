@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/manga_item"
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+    <!--android:background="@drawable/b3_christmas"-->
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        >
+        <!--封面-->
+        <ImageView
+            android:id="@+id/manga_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:layout_gravity="right">
+        <!--名称-->
+        <TextView
+            android:id="@+id/manga_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            />
+        <!--第几话-->
+        <TextView
+            android:id="@+id/manga_episode"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/manga_title"
+            />^^
+        <!-- 区域-->
+        <!--android:layout_alignParentRight="true"-->
+
+        <TextView
+            android:id="@+id/manga_area"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/manga_episode"
+            />
+        <TextView
+            android:id="@+id/manga_new_desc"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/manga_area"
+
+            />
+    </RelativeLayout>
+
+
+</LinearLayout>
+

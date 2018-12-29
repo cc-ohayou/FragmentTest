@@ -146,15 +146,19 @@
         <activity android:name=".activity.media.VideoTestActivity" />
         <activity android:name=".activity.OkGoTestActivity" />
         <activity android:name=".activity.MyServiceActivity">
+
+        </activity>
+        <activity android:name=".activity.MapLocationActivity"></activity>
+        <activity android:name=".activity.MaterialDesignActivity"></activity>
+        <activity android:name=".activity.BrvahTestActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".activity.MapLocationActivity"></activity>
-        <activity android:name=".activity.MaterialDesignActivity"></activity>
-        <activity android:name=".activity.BrvahTestActivity"></activity>
     </application>
 
 </manifest>

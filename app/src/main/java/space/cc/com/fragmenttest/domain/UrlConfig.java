@@ -6,7 +6,7 @@ public enum UrlConfig {
     DOWN_LOAD(UrlConstants.PREFIX02+"app-release.apk","下载测试url"),
     DOWN_LOAD02(UrlConstants.PREFIX03+"","下载测试url"),
     DOWN_LOAD04(UrlConstants.PREFIX04+"","下载测试url"),
-    MANGA_LIST(UrlConstants.PREFIX+"v1/cc/getMangaList","下载测试url"),
+    MANGA_LIST(UrlConstants.PREFIX+"/v1/cc/getMangaList","下载测试url"),
     ;
 
     private String value;
