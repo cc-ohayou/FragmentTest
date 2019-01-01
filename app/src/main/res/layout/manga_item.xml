@@ -3,8 +3,8 @@
     android:id="@+id/manga_item"
     android:layout_margin="5dp"
     android:layout_width="match_parent"
-    android:gravity="center"
-    android:layout_height="match_parent">
+    android:background="@drawable/bg01"
+    android:layout_height="wrap_content">
     <!--android:background="@drawable/b3_christmas"-->
 
     <FrameLayout
@@ -15,14 +15,14 @@
         <!--封面-->
         <ImageView
             android:id="@+id/manga_cover"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </FrameLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:padding="5dp"
         android:layout_gravity="right">

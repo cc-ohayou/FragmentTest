@@ -1,17 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/blue_007b"
+    android:id="@+id/manga_drawer_lay_out"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.BrvahTestActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/brvah_book_list"
+    <android.support.design.widget.CoordinatorLayout
+
+    android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/manga_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                >
+                <TextView
+                    android:id="@+id/manga_toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="首页"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/brvah_book_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize"
+            android:clipToPadding="false"/>
+    <!--
+
+     http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0317/2612.html
+     toolbar和recycleView相互遮挡的问题说明  使用AppBarLayout包装toolbar
+     recycleView和toolbar共存最常见问题  就是相互遮挡
+        不设置paddingTop 和clipToPadding的话
+        列表最上面有部分内容会被Toolbar挡住，你应该知道是因为FrameLayout的缘故，
+       ，为RecyclerView添加和Toolbar相同高度的paddingTo，
+        但是需要注意RecyclerView默认clipToPadding是true的，我们需要关掉，关于clipToPadding，
+        请看这篇文章 http://jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0317/2613.html-->
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!-- <TextView
+         android:id="@+id/textFloat"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_gravity="start"
+         android:text="this is menu"
+         android:textSize="30sp"
+         android:background="@drawable/app_icon"
+         />
+ -->
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height= "match_parent"
+        android:layout_gravity="start"
+        android:text="this is slide menu"
+        android:textSize="30sp"
+        android:background="@drawable/image04"
+        />
 
 
-</LinearLayout>
+
+
+
+</android.support.v4.widget.DrawerLayout>

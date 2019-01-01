@@ -150,7 +150,9 @@
         </activity>
         <activity android:name=".activity.MapLocationActivity"></activity>
         <activity android:name=".activity.MaterialDesignActivity"></activity>
-        <activity android:name=".activity.BrvahTestActivity">
+        <activity android:name=".activity.BrvahTestActivity"
+            android:theme="@style/CustomAppTheme"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

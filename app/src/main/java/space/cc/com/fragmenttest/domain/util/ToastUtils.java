@@ -41,7 +41,7 @@ public class ToastUtils {
     private static int bgColor    = COLOR_DEFAULT;
     private static int bgResource = -1;
     private static int msgColor   = COLOR_DEFAULT;
-
+    private static Toast mToast;
     private ToastUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
@@ -219,7 +219,9 @@ public class ToastUtils {
     }
 
     public static void showDisplay(final CharSequence text) {
-        Toast.makeText(Utils.getApp(),text,Toast.LENGTH_SHORT).show();
+        mToast = Toast.makeText(Utils.getApp(), "", Toast.LENGTH_SHORT);
+        mToast.setGravity(Gravity.CENTER, 0, 0);
+        mToast.makeText(Utils.getApp(),text,Toast.LENGTH_SHORT).show();
        /* HANDLER.post(new Runnable() {
             @Override
             public void run() {
