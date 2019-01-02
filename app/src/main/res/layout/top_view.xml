@@ -2,11 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_margin="5dp"
     android:layout_width="match_parent"
-    android:background="@drawable/b3_christmas"
-
     android:layout_height="wrap_content">
 
+
+    <!--
+    android:scaleType="fitXY"
+  fitXY  强制拉伸 但是会变形
+  centerCrop  中心裁剪不会变形
+    -->
+
     <ImageView
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/b3_christmas"/>

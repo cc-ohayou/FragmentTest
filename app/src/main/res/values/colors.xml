@@ -70,4 +70,7 @@
     <color name="green_liushui">#62C915</color>
     /* app规范颜色*/
 
+
+    <color name="toolbarBack">#FF4081</color>
+
 </resources>

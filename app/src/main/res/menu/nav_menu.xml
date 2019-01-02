@@ -1,0 +1,37 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+
+
+         <item
+             android:id="@+id/nav_profile"
+             android:orderInCategory="100"
+             android:title="@string/nav_profile"
+             android:icon="@drawable/profile_16"
+             />
+
+        <item
+            android:id="@+id/nav_collect"
+            android:icon="@drawable/collect_16"
+            android:orderInCategory="80"
+            android:title="@string/nav_collect"
+            />
+
+        <item
+            android:id="@+id/nav_location"
+            android:icon="@drawable/location_16"
+            android:orderInCategory="90"
+            android:title="@string/nav_location" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/history_16"
+            android:orderInCategory="100"
+            android:title="@string/nav_history" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/set_16"
+            android:orderInCategory="100"
+            android:title="@string/nav_setting" />
+
+    </group>
+</menu>
