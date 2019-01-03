@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 
+import androidx.appcompat.app.AlertDialog;
 import space.cc.com.fragmenttest.activity.LoginActivity;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
 

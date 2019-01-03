@@ -1,14 +1,15 @@
 package space.cc.com.fragmenttest;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 
-  /**
+
+/**
      * @description
      * @author CF
      * created at 2018/11/6/006  0:17

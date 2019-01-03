@@ -16,8 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,10 +29,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.broadcast.BroadcastTestActivity;
 import space.cc.com.fragmenttest.domain.LoginConstants;

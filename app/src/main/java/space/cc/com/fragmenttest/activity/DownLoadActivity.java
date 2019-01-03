@@ -1,13 +1,11 @@
 package space.cc.com.fragmenttest.activity;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.Nullable;
 
 import com.lzy.okserver.OkDownload;
 import com.lzy.okserver.task.XExecutor;
 
+import androidx.annotation.Nullable;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.domain.util.SDCardUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtils;
@@ -21,7 +19,7 @@ public class DownLoadActivity extends BaseActivity implements XExecutor.OnAllTas
     static{
         path = SDCardUtils.getSDCardPath();
         if(StringUtils.isEmpty(path)){
-            ToastUtils.showShort("无存储空间");
+            ToastUtils.showDisplay("无存储空间");
 
         }
         path +="/cc/download";

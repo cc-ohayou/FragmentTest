@@ -18,7 +18,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //        为避免AndroidStudio3.0 Canary 8注解报错
 // Annotation processors must be explicitly declared now 添加如下配置
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
@@ -42,19 +42,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 //    使用recyclerView的依赖
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
     implementation 'com.google.firebase:firebase-messaging:12.0.1'
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
     //lombok注解支持
     compileOnly "org.projectlombok:lombok:1.12.6"
-    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 //    https://github.com/LitePalFramework/Litepal
     //开源数据库组件依赖 方便的实现数据库操作
     implementation 'org.litepal.android:java:3.0.0'
@@ -68,12 +68,28 @@ dependencies {
     implementation 'com.jakewharton:butterknife:9.0.0-rc2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
 //    好用的RecycleViewAdapter第三方组件
-//    https://github.com/CymChad/BaseRecyclerViewAdapterHelper
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+//    https://github.com/CymChad/BaseRecyclerViewAdapterHelper  由于不支持androidx手动将使用到的lei搬迁过来
+//    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
    //    图片处理加载框架picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
    //圆形头像处理三方组件
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+//  开关按钮组件
+    implementation 'com.kyleduo.switchbutton:library:2.0.0'
+//   好用的 material风格 dialog组件  14k+ star  https://github.com/afollestad/material-dialogs#basics
+    implementation 'com.afollestad.material-dialogs:core:2.0.0-rc5'
+//    图片裁剪 https://github.com/Yalantis/uCrop   star 8k+ 比较酷炫时尚
+
+//    https://github.com/jdamcd/android-crop start 4k+
+//    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+
+//    https://github.com/zagum/Android-SwitchIcon      图标开关
+// implementation 'com.github.zagum:Android-SwitchIcon:1.3.8'
+//     时尚侧边栏菜单  https://github.com/Yalantis/Side-Menu.Android
+
+//    https://github.com/neokree/MaterialTabs
+//    compile 'it.neokree:MaterialTabs:0.11'
+
 
 
 }

@@ -4,9 +4,9 @@ import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;

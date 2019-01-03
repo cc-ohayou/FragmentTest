@@ -8,7 +8,7 @@
     >
     <!--android:background="?attr/colorPrimary"-->
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <space.cc.com.fragmenttest.util.CircleImageView
     android:id="@+id/profile_image"
     android:layout_width="70dp"
     android:layout_height="70dp"

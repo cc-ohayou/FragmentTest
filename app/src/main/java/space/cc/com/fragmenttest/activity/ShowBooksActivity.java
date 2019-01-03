@@ -2,14 +2,14 @@ package space.cc.com.fragmenttest.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import org.litepal.LitePal;
 
 import java.util.List;
 import java.util.Map;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.BookAdapter;
 import space.cc.com.fragmenttest.litepals.Book;

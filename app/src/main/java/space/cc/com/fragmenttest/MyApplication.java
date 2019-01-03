@@ -1,7 +1,6 @@
 package space.cc.com.fragmenttest;
 
 import android.content.Context;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.baidu.mapapi.CoordType;
@@ -13,6 +12,7 @@ import com.lzy.okgo.model.HttpHeaders;
 import org.litepal.LitePal;
 import org.litepal.tablemanager.Connector;
 
+import androidx.multidex.MultiDexApplication;
 import space.cc.com.fragmenttest.domain.util.Utils;
 
 public class MyApplication extends MultiDexApplication {

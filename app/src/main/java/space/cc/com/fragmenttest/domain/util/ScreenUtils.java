@@ -1,9 +1,10 @@
 package space.cc.com.fragmenttest.domain.util;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
 
 /**
  * 屏幕相关工具类

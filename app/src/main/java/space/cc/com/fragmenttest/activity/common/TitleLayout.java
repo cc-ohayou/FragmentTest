@@ -2,7 +2,6 @@ package space.cc.com.fragmenttest.activity.common;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import space.cc.com.fragmenttest.R;
 
 public class TitleLayout extends LinearLayout implements View.OnClickListener {

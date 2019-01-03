@@ -3,8 +3,7 @@ package space.cc.com.fragmenttest.adapter;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

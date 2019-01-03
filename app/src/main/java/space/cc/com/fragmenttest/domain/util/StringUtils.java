@@ -1,8 +1,9 @@
 package space.cc.com.fragmenttest.domain.util;
 
-import android.support.v4.util.ArrayMap;
 
 import java.text.DecimalFormat;
+
+import androidx.collection.ArrayMap;
 
 /**
  * 字符串相关工具类
