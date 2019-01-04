@@ -1,9 +1,11 @@
 package space.cc.com.fragmenttest.activity;
 
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -21,7 +23,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,18 +39,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
+import space.cc.com.fragmenttest.domain.RequestParams;
+import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
+import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.CloseUtils;
+import space.cc.com.fragmenttest.domain.util.NotificationUtil;
+import space.cc.com.fragmenttest.domain.util.PermissinUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
+import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 
 public  abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     static final Map EMPTY_MAP = new HashMap();
     private ForceOffLineReceiver receiver;
+    public static String downloadUrl ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +75,10 @@ public  abstract class BaseActivity extends AppCompatActivity {
 //        PermissinUtils.requestStoragePermission(Utils.getApp(),BaseActivity.this);
 
         //隐藏默认的actionBar
+        NotificationUtil.gotoOpenNotificationActivity(this,this);
+        PermissinUtils.requestStoragePermission(this,BaseActivity.this);
+        initDownLoadUrl();
+
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
@@ -71,7 +89,18 @@ public  abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    public abstract void requestPermission();
+    public  void requestPermission(){
+        PermissinUtils.requestStoragePermission(this,BaseActivity.this);
+//        setWallperAsBackGround();
+    }
+
+    private void setWallperAsBackGround() {
+        Drawable wallPaper = WallpaperManager.getInstance( getBaseContext()).getDrawable();
+//        @SuppressLint("RestrictedApi")
+//        Drawable res= AppCompatDrawableManager.get().getDrawable(getBaseContext(), R.drawable.image04);
+        this.getWindow().setBackgroundDrawable(wallPaper);
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -274,6 +303,40 @@ public  abstract class BaseActivity extends AppCompatActivity {
         } else {
             this.startService(startIntent);
         }
+    }
+
+
+
+
+    public void initDownLoadUrl() {
+        RequestParams params=new RequestParams(1);
+
+        ClientUtlis.post(true, UrlConfig.TEST_DOWNLOAD.getValue(),params,
+                this,new JsonCallback<String>() {
+                    @Override
+                    public void onSuccess(String url, String msg) {
+                        if(StringUtils.isEmpty(url)){
+                            downloadUrl= UrlConfig.DOWN_LOAD04.getValue();
+                        }else{
+                            downloadUrl=url;
+                        }
+                        ToastUtils.showDisplay(downloadUrl);
+                    }
+
+                    @Override
+                    public void onError(String msg, int code) {
+                        ToastUtils.showDisplay(msg);
+                    }
+                });
+
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        dealRequestResult(requestCode,grantResults);
     }
 
 }

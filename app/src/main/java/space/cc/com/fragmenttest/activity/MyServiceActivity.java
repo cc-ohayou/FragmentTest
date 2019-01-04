@@ -25,7 +25,6 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     private static  int progress = 0;
     //通过downLoadBinder进行活动和服务之间的通信  依赖于Ibinder接口的特性
 //    private DownLoadService.DownloadBinder downloadBinder;
-    public static String downloadUrl ;
 
 
 
@@ -61,56 +60,19 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
             setButOnclickListenerByRid(R.id.cancelDownload, this);
             setButOnclickListenerByRid(R.id.reDownLoad, this);
             setButOnclickListenerByRid(R.id.addProgress, this);
-            NotificationUtil.gotoOpenNotificationActivity(this,MyServiceActivity.this);
-            initDownLoadUrl();
-            PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
 
 //            绑定服务 下载后台或前台服务 必须在activity完成
 //            boolean  flag= getApplicationContext().bindService(startDownload, connection, BIND_AUTO_CREATE);
 //            Log.d(TAG, "onCreate: flag="+flag);
-            setWallperAsBackGround();
-
         } catch (Exception e) {
             ToastUtils.showDisplay(e.getMessage());
             LogUtil.getInstance().writeEvent(TAG, "onCreate: failed" + e.getMessage(), e);
         }
     }
 
-    private void initDownLoadUrl() {
-        RequestParams params=new RequestParams(1);
 
-        ClientUtlis.post(true, UrlConfig.TEST_DOWNLOAD.getValue(),params,
-                this,new JsonCallback<String>() {
-                    @Override
-                    public void onSuccess(String url, String msg) {
-                        if(StringUtils.isEmpty(url)){
-                            downloadUrl= UrlConfig.DOWN_LOAD04.getValue();
-                        }else{
-                            downloadUrl=url;
-                        }
-                        ToastUtils.showDisplay(downloadUrl);
-                    }
 
-                    @Override
-                    public void onError(String msg, int code) {
-                        ToastUtils.showDisplay(msg);
-                    }
-                });
 
-    }
-
-    @Override
-    public void requestPermission() {
-        PermissinUtils.requestStoragePermission(this,MyServiceActivity.this);
-        setWallperAsBackGround();
-    }
-
-    private void setWallperAsBackGround() {
-        Drawable wallPaper = WallpaperManager.getInstance( getBaseContext()).getDrawable();
-//        @SuppressLint("RestrictedApi")
-//        Drawable res= AppCompatDrawableManager.get().getDrawable(getBaseContext(), R.drawable.image04);
-        this.getWindow().setBackgroundDrawable(wallPaper);
-    }
 
     @Override
     public void onClick(View v) {
@@ -153,7 +115,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
 //                downloadBinder.reDownLoad(downloadUrl);
                 break;
             case R.id.addProgress:
-                    ToastUtils.showDisplay(downloadUrl);
+                    ToastUtils.showDisplay(BaseActivity.downloadUrl);
                     break;
             default:
                 break;
@@ -162,11 +124,6 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-            dealRequestResult(requestCode,grantResults);
-    }
 
 
 

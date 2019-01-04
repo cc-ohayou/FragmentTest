@@ -15,18 +15,18 @@
         <!--android:title="@string/action_edit"-->
         <!--app:showAsAction="ifRoom" />-->
 
-    <item
+   <!-- <item
         android:id="@+id/action_share"
-        android:icon="@drawable/share_32"
+        android:icon="@drawable/vector_drawable_share_white___"
         android:orderInCategory="90"
         android:title="@string/action_share"
         app:showAsAction="ifRoom" />
-
+-->
     <item
         android:id="@+id/action_overflow"
         android:orderInCategory="100"
         android:title="@string/action_more"
-        android:icon="@drawable/more_love"
+        android:icon="@drawable/vector_drawable_more_white___"
         app:showAsAction="always" />
 
     <!--<item-->

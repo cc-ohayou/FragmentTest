@@ -1,5 +1,8 @@
 package space.cc.com.fragmenttest.activity;
 
+import android.content.Intent;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,13 +11,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -22,7 +31,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import space.cc.com.fragmenttest.R;
-import space.cc.com.fragmenttest.adapter.BaseQuickAdapter;
+import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
@@ -30,16 +39,26 @@ import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.litepals.Manga;
+import space.cc.com.fragmenttest.service.DownLoadService;
+import space.cc.com.fragmenttest.util.UtilBox;
+import space.cc.com.fragmenttest.util.circleimage.CircleImageView;
 
 
-public class BrvahTestActivity extends BaseActivity {
+public class BrvahTestActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "BrvahTestActivity";
     private List<Manga> mangaList;
     private static List<Manga> defaultList;
     private RecyclerView mRecyclerView;
     MyQuickAdapter homeAdapter;
     private DrawerLayout drawerLayout;
+    PopupWindow mPopupWindow;
+    Toolbar toolbar;
+    NavigationView navView;
+    View topView;
+    TextView popItem1TextView;
+    TextView popItem2TextView;
 
+    int yOffset;
     private static String defaultData = "[{\"area\":\"中国大陆\",\"arealimit\":317,\"attention\":352150,\"bangumi_id\":0,\"nowEpisode\":\"11\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8f19c704a6516bab4716931db10621c1b6c6e4bf.jpg\",\"danmaku_count\":105072,\"ep_id\":258700,\"favorites\":352150,\"is_finish\":0,\"lastupdate\":1545883200,\"lastupdate_at\":\"2018-12-27 12:00:00\",\"isNew\":false,\"play_count\":8263731,\"pub_time\":\"\",\"season_id\":25823,\"season_status\":13,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/67a851a5cd87fef2ddd6f9bd6cf691781a1d8b95.jpg\",\"title\":\"画江湖之不良人 第三季\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":12083,\"bangumi_id\":0,\"nowEpisode\":\"4\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8df12fc092928ba57069eb16e077f9d719f345e5.jpg\",\"danmaku_count\":10022,\"ep_id\":258686,\"favorites\":12083,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":486760,\"pub_time\":\"\",\"season_id\":26176,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\"title\":\"通灵妃 河南话版\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":151420,\"bangumi_id\":0,\"nowEpisode\":\"10\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/57dc8fdf8373f8c1facfc2911d50be1cfc6da18a.jpg\",\"danmaku_count\":26706,\"ep_id\":258689,\"favorites\":151420,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":2023158,\"pub_time\":\"\",\"season_id\":24888,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/ef2f039b71564cc469b2cac9d8f2879e1259a74f.jpg\",\"title\":\"山河社稷图\",\"viewRank\":0,\"weekday\":4}]";
 
     static {
@@ -52,36 +71,51 @@ public class BrvahTestActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_brvah_test);
-        Toolbar toolbar = findViewById(R.id.manga_toolbar);
+
+        try {
+
+
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_brvah_test);
+            toolbar = findViewById(R.id.manga_toolbar);
 //        toolbar.setLogo(R.drawable.app_icon2);
-        // 主标题,默认为app_label的名字
-        setSupportActionBar(toolbar);
-//        setToobarStyle(toolbar);
-        drawerLayout = findViewById(R.id.manga_drawer_lay_out);
-        NavigationView navView = findViewById(R.id.nav_view);
-        //侧边栏菜单 监听
-        setNavigationViewListener(navView);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            // 主标题,默认为app_label的名字  设置Title为空""则不显示  注意需要在setSupportActionBar之前
+            toolbar.setTitle("");
+            setSupportActionBar(toolbar);
+            setToolbarStyle(toolbar);
+            drawerLayout = findViewById(R.id.manga_drawer_lay_out);
+            navView = findViewById(R.id.nav_view);
+            //侧边栏菜单 监听
+            setNavigationViewListener();
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
 //            setHomeButtonEnabled(true) //设置返回键可用
 //            setDisplayHomeAsUpEnabled(true) //设置返回键显示
-            actionBar.setHomeAsUpIndicator(R.drawable.home_32_1);
-        }
-
-        initView();
-        initAdapter();
+                actionBar.setHomeAsUpIndicator(R.drawable.nav_left_white_16);
+            }
+            initView();
+            initAdapter();
 //      远端加载数据
-        initData();
+            initData();
+            FloatingActionButton fab = findViewById(R.id.float_but);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate error", e);
 
+        }
 //        int standardHeight=getViewIemWidth(4,BrvahTestActivity.this);
 
 
     }
 
-    private void setNavigationViewListener(NavigationView navView) {
+    private void setNavigationViewListener() {
 //        navView.setCheckedItem(R.id.nav_collect);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -93,7 +127,9 @@ public class BrvahTestActivity extends BaseActivity {
         });
     }
 
-    private void setToobarStyle(Toolbar toolbar) {
+    private void setToolbarStyle(Toolbar toolbar) {
+
+
 //        toolbar.setTitle("Title");
 //        toolbar.setTitleTextColor(Color.YELLOW);
         // 副标题
@@ -132,12 +168,29 @@ public class BrvahTestActivity extends BaseActivity {
 
             }
         });*/
-        toolbar.findViewById(R.id.manga_toolbar_title).setOnClickListener(new View.OnClickListener() {
+      /*  toolbar.findViewById(R.id.manga_toolbar_title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ToastUtils.showDisplay("点击自定义标题");
             }
+        });*/
+
+        UtilBox.box().picasso.loadDrawResIntoView((CircleImageView) findViewById(R.id.nav_topLeft_image), R.drawable.a2_profile);
+        toolbar.findViewById(R.id.nav_topLeft_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+//                ToastUtils.showDisplay("点击自定义图标");
+            }
         });
+       /* toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                ToastUtils.showDisplay("click NavigationIcon");
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });*/
+
     }
 
     @Override
@@ -145,7 +198,7 @@ public class BrvahTestActivity extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_my, menu);
-        menu.getItem(0);
+//        menu.getItem(0);
 
         return true;
     }
@@ -156,21 +209,83 @@ public class BrvahTestActivity extends BaseActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
-            case R.id.action_share:
+           /* case R.id.action_share:
                 ToastUtils.showDisplay("click share");
-                break;
+                break;*/
             case R.id.action_overflow:
                 //弹出自定义overflow
-//                        popUpMyOverflow();
-                ToastUtils.showDisplay("click action_overflow");
-
+                popUpMyOverflow();
                 break;
-            case R.id.nav_topLeft_image:
+           /* case R.id.nav_topLeft_image:
+                ToastUtils.showDisplay("onOptionsItemSelected 点击自定义图标");
                 drawerLayout.openDrawer(GravityCompat.START);
-                break;
+                break;*/
 
         }
         return true;
+    }
+
+    /**
+     * 弹出自定义的popWindow
+     */
+    public void popUpMyOverflow() {
+
+        if (null == mPopupWindow) {
+            //获取状态栏高度
+            getToolBarHeight();
+            //初始化PopupWindow的布局
+            View popView = getLayoutInflater().inflate(R.layout.action_overflow_popwindow, null);
+            //popView即popupWindow的布局，ture设置focusAble.
+            mPopupWindow = new PopupWindow(popView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            //必须设置BackgroundDrawable后setOutsideTouchable(true)才会有效
+            mPopupWindow.setBackgroundDrawable(new ColorDrawable());
+            //点击外部关闭。
+            mPopupWindow.setOutsideTouchable(true);
+            //设置一个动画。
+            mPopupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
+            //设置Gravity，让它显示在右上角。
+            mPopupWindow.showAtLocation(toolbar, Gravity.RIGHT | Gravity.TOP, 0, yOffset);
+            //设置item的点击监听
+            popView.findViewById(R.id.ll_item1).setOnClickListener(this);
+            popView.findViewById(R.id.ll_item2).setOnClickListener(this);
+
+            popItem1TextView= popView.findViewById(R.id.ll_item1_text);
+            popItem2TextView= popView.findViewById(R.id.ll_item2_text);
+
+        } else {
+            mPopupWindow.showAtLocation(toolbar, Gravity.RIGHT | Gravity.TOP, 0, yOffset);
+        }
+
+    }
+
+    private void getToolBarHeight() {
+        Rect frame = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        //状态栏高度+toolbar的高度
+        yOffset= frame.top + toolbar.getHeight();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_item1:
+                ToastUtils.showDisplay(popItem1TextView.getText());
+                break;
+            case R.id.ll_item2:
+                ToastUtils.showDisplay(popItem2TextView.getText());
+                //下载更新
+                Intent startDownload = new Intent(this, DownLoadService.class);
+                startServiceCustom(this,startDownload);
+                break;
+
+        }
+        //点击PopWindow的item后,关闭此PopWindow
+        if (null != mPopupWindow && mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+        }
     }
 
     @Override
@@ -202,10 +317,14 @@ public class BrvahTestActivity extends BaseActivity {
 //         homeAdapter = new MyQuickAdapter(R.layout.manga_item, mangaList);
 //        homeAdapter.openLoadAnimation();
         //放大动画
-        homeAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
+//        homeAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
+        homeAdapter.openLoadAnimation();
+//        homeAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
 //        BaseQuickAdapter.SLIDEIN_LEFT 左边划入动画
-        View top = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
-        homeAdapter.addHeaderView(top);
+        topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
+        UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
+                R.drawable.b3_christmas);
+        homeAdapter.addHeaderView(topView);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

@@ -12,10 +12,11 @@
     -->
 
     <ImageView
+        android:id="@+id/top_header_view_bac_image"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/b3_christmas"/>
+        />
 
     <!--<ImageView-->
         <!--android:layout_width="wrap_content"-->

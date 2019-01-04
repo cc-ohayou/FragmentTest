@@ -28,6 +28,7 @@ import com.lzy.okserver.download.DownloadTask;
 import java.io.File;
 
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.activity.BaseActivity;
 import space.cc.com.fragmenttest.activity.DownLoadActivity;
 import space.cc.com.fragmenttest.activity.MyServiceActivity;
 import space.cc.com.fragmenttest.domain.UrlConfig;
@@ -303,7 +304,7 @@ public class DownLoadService extends Service {
 
     private void initDownLoadTask() {
 
-        downloadUrl = MyServiceActivity.downloadUrl;
+        downloadUrl = BaseActivity.downloadUrl;
         GetRequest<File> request = OkGo.<File>get(downloadUrl)
                 .headers("aaa", "111")
                 .params("bbb", "222");

@@ -1,5 +1,7 @@
 package space.cc.com.fragmenttest.adapter;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -9,7 +11,10 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
+import space.cc.com.fragmenttest.adapter.base.BaseViewHolder;
 import space.cc.com.fragmenttest.litepals.Manga;
+import space.cc.com.fragmenttest.util.UtilBox;
 
 public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
     private int resId;
@@ -31,6 +36,7 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
     }
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         BaseViewHolder holder = super.onCreateViewHolder(parent, viewType);
@@ -57,6 +63,11 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
             }
             holder.getConvertView().setLayoutParams(linearParams);
             holder.itemView.setLayoutParams(linearParams);
+//            Color.parseColor("#865955")  将string转化为 int 型color
+//          int color=Color.rgb(red, green, blue)   将RGB转化为int 型colorcolor
+// 如果需要透明度
+// int color=Color.argb(a,red, green, blue)
+//            holder.itemView.setBackgroundColor(R.color.mangaItemBack);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,25 +84,10 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
             holder.setText(R.id.manga_new_desc, item.isNew() ? "新番" : "老番");
             //子控件的点击事件除了 活动那里adapter需要设置点击监听 此处也需要对对应的子控件进行设置
             holder.addOnClickListener(R.id.manga_cover);
-            //http://square.github.io/picasso/    Picasso使用说明
-//            helper.setImageBitmap()
-//            Picasso.get().load(R.drawable.landing_screen).into(imageView1);
-//            Picasso.get().load("file:///android_asset/DvpvklR.png").into(imageView2);
-//            Picasso.get().load(new File(...)).into(imageView3);
-//            获取单例实例
-            Picasso instance = Picasso.get();
-//            debug模式 方便看出图片的来源  网络来源红色  绿色 内存 磁盘蓝色 左上角三角标识
-            instance.setIndicatorsEnabled(true);
-            instance.load(item.getCoverImage())
-//                     .resize(50, 50)
-//                     中心修剪
-//                     .centerCrop()
-                    .placeholder(R.drawable.manga_default)
-                    .error(R.drawable.manga_default_error)
-//                     此处使用 helper.getView获取对应位置的view对象
-                    .into((ImageView) holder.getView(R.id.manga_cover));
-
-//            helper.setImageBitmap()
+            UtilBox.box().picasso.loadUrlResIntoView((ImageView) holder.getView(R.id.manga_cover),
+                    item.getCoverImage());
+            UtilBox.box().picasso.loadUrlResIntoView((ImageView) holder.getView(R.id.manga_cover),
+                    item.getCoverImage());
         } catch (Exception e) {
             e.printStackTrace();
         }

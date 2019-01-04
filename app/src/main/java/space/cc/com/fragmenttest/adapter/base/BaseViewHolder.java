@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package space.cc.com.fragmenttest.adapter;
+package space.cc.com.fragmenttest.adapter.base;
 
 import android.graphics.Bitmap;
 import android.graphics.Paint;

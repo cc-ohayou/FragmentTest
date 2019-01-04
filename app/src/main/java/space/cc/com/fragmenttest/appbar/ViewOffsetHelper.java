@@ -1,4 +1,4 @@
-package space.cc.com.fragmenttest.util;
+package space.cc.com.fragmenttest.appbar;
 import android.view.View;
 
 import androidx.core.view.ViewCompat;

@@ -31,7 +31,7 @@ public class ToastUtils {
         if (context instanceof Application)
             checkNotification = 0;
         else
-            checkNotification = UtilBox.getBox().want.isNotificationEnabled(context) ? 0 : 1;
+            checkNotification = UtilBox.box().want.isNotificationEnabled(context) ? 0 : 1;
 
         if (checkNotification == 1)
             mToast = new EToast(context, text, time, iconType);

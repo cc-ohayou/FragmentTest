@@ -6,7 +6,7 @@ package space.cc.com.fragmenttest.adapter.base.loadmore;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
-import space.cc.com.fragmenttest.adapter.BaseViewHolder;
+import space.cc.com.fragmenttest.adapter.base.BaseViewHolder;
 
 /**
  * Created by BlingBling on 2016/11/11.

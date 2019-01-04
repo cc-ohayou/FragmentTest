@@ -7,8 +7,6 @@ import java.util.List;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.LayoutRes;
-import space.cc.com.fragmenttest.adapter.BaseQuickAdapter;
-import space.cc.com.fragmenttest.adapter.BaseViewHolder;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper

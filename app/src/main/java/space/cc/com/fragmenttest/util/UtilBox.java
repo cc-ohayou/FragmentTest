@@ -31,6 +31,10 @@ public class UtilBox {
      * 图像工具类
      */
     public UtilBitmap bitmap;
+    /**
+     * 图片处理工具类
+     */
+    public PicassoUtil picasso;
 
     /**
      * 私有化构造方法
@@ -40,6 +44,7 @@ public class UtilBox {
         ui = new UtilUI();
         want = new UtilWant();
         info = new UtilInfo();
+        picasso = new PicassoUtil();
 
         // 然后再初始化非急需的工具类
         initBox();
@@ -71,7 +76,7 @@ public class UtilBox {
      *
      * @return
      */
-    public static UtilBox getBox() {
+    public static UtilBox box() {
         return StockRemindUtilHolder.mUtilBox;
     }
 

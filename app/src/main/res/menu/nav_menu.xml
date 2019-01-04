@@ -1,37 +1,51 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group1"
+        >
 
+        <item
+            android:id="@+id/nav_home"
+            android:orderInCategory="10"
+            android:title="@string/nav_home"
+            android:icon="@drawable/vector_drawable_nav_home_grey___"
+            />
 
          <item
              android:id="@+id/nav_profile"
-             android:orderInCategory="100"
+             android:orderInCategory="80"
              android:title="@string/nav_profile"
-             android:icon="@drawable/profile_16"
+             android:icon="@drawable/vector_drawable_nav_profile_grey___"
              />
 
         <item
             android:id="@+id/nav_collect"
-            android:icon="@drawable/collect_16"
-            android:orderInCategory="80"
+            android:icon="@drawable/nav_collect_grey_16"
+            android:orderInCategory="60"
             android:title="@string/nav_collect"
             />
 
         <item
             android:id="@+id/nav_location"
-            android:icon="@drawable/location_16"
+            android:icon="@drawable/vector_drawable_nav_location_grey___"
             android:orderInCategory="90"
             android:title="@string/nav_location" />
         <item
             android:id="@+id/nav_history"
-            android:icon="@drawable/history_16"
+            android:icon="@drawable/vector_drawable_nav_history_grey___"
             android:orderInCategory="100"
             android:title="@string/nav_history" />
-        <item
-            android:id="@+id/nav_setting"
-            android:icon="@drawable/set_16"
-            android:orderInCategory="100"
-            android:title="@string/nav_setting" />
 
+
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2"
+        >
+
+    <item
+        android:id="@+id/nav_setting"
+        android:icon="@drawable/vector_drawable_nav_setting_grey___"
+        android:orderInCategory="100"
+        android:title="@string/nav_setting" />
     </group>
 </menu>

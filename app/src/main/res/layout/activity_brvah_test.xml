@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         >
 
-        <space.cc.com.fragmenttest.util.AppBarLayout
+        <space.cc.com.fragmenttest.appbar.AppBarLayout
 
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
@@ -34,11 +34,11 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 >
-                <space.cc.com.fragmenttest.util.CircleImageView
+                <space.cc.com.fragmenttest.util.circleimage.CircleImageView
                     android:id="@+id/nav_topLeft_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/a2_profile"
+                    android:layout_gravity="left"
                     app:civ_border_width="2dp"
                     app:civ_border_color="#FF000000"/>
                 <TextView
@@ -52,7 +52,7 @@
 
             </androidx.appcompat.widget.Toolbar>
         <!--android.support.design.widget.AppBarLayout-->
-        </space.cc.com.fragmenttest.util.AppBarLayout>
+        </space.cc.com.fragmenttest.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/brvah_book_list"
@@ -70,7 +70,13 @@
        ，为RecyclerView添加和Toolbar相同高度的paddingTo，
         但是需要注意RecyclerView默认clipToPadding是true的，我们需要关掉，关于clipToPadding，
         请看这篇文章 http://jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0317/2613.html-->
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/float_but"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_dialog_email" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- <TextView

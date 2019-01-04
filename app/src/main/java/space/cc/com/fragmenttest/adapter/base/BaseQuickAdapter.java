@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package space.cc.com.fragmenttest.adapter;
+package space.cc.com.fragmenttest.adapter.base;
 
 import android.animation.Animator;
 import android.content.Context;
@@ -48,8 +48,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import space.cc.com.fragmenttest.adapter.base.IExpandable;
-import space.cc.com.fragmenttest.adapter.base.MultiTypeDelegate;
 import space.cc.com.fragmenttest.adapter.base.animation.AlphaInAnimation;
 import space.cc.com.fragmenttest.adapter.base.animation.BaseAnimation;
 import space.cc.com.fragmenttest.adapter.base.animation.ScaleInAnimation;

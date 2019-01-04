@@ -73,4 +73,7 @@
 
     <color name="toolbarBack">#FF4081</color>
 
+    <color name="mangaItemBack">#EDF2EB</color>
+    <color name="popMenuBack">#FF6C9F</color>
+
 </resources>
