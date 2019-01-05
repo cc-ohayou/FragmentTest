@@ -4,12 +4,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,18 +15,24 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import de.hdodenhof.circleimageview.CircleImageView;
 import space.cc.com.fragmenttest.R;
-import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
+import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
@@ -41,7 +41,6 @@ import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.UtilBox;
-import space.cc.com.fragmenttest.util.circleimage.CircleImageView;
 
 
 public class BrvahTestActivity extends BaseActivity implements View.OnClickListener {
@@ -74,38 +73,29 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
         try {
 
-
+//            androidx.cardview.widget.CardView
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_brvah_test);
             toolbar = findViewById(R.id.manga_toolbar);
 //        toolbar.setLogo(R.drawable.app_icon2);
             // 主标题,默认为app_label的名字  设置Title为空""则不显示  注意需要在setSupportActionBar之前
             toolbar.setTitle("");
-            setSupportActionBar(toolbar);
             setToolbarStyle(toolbar);
+            setSupportActionBar(toolbar);
             drawerLayout = findViewById(R.id.manga_drawer_lay_out);
             navView = findViewById(R.id.nav_view);
             //侧边栏菜单 监听
             setNavigationViewListener();
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-//            setHomeButtonEnabled(true) //设置返回键可用
-//            setDisplayHomeAsUpEnabled(true) //设置返回键显示
-                actionBar.setHomeAsUpIndicator(R.drawable.nav_left_white_16);
-            }
+//            initActionBar();
+            //初始化recycleView
             initView();
+//            初始化homeAdapter
             initAdapter();
 //      远端加载数据
             initData();
-            FloatingActionButton fab = findViewById(R.id.float_but);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
+            initFloatBut();
+            appBarToggleSet();
+
         } catch (Exception e) {
             Log.e(TAG, "onCreate error", e);
 
@@ -115,13 +105,60 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     }
 
+    private void appBarToggleSet() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+//            setHomeButtonEnabled(true) //设置返回键可用
+//            setDisplayHomeAsUpEnabled(true) //设置返回键显示
+//            actionBar.setHomeAsUpIndicator(R.drawable.nav_left_white_16);
+        }
+    }
+
+    private void initFloatBut() {
+        FloatingActionButton fab = findViewById(R.id.float_but);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
+                        .setAction("Action",
+
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ToastUtils.showDisplay("undo action");
+                                    }
+                                }).show();
+            }
+        });
+    }
+
     private void setNavigationViewListener() {
 //        navView.setCheckedItem(R.id.nav_collect);
+        UtilBox.box().picasso.loadDrawResReSize(
+                (CircleImageView) navView.getHeaderView(0).findViewById(R.id.head_image),
+                R.drawable.default_head,0,0);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 //                drawerLayout.closeDrawers();
-                ToastUtils.showDisplay(menuItem.getTitle());
+
+                if(menuItem.getItemId()==R.id.nav_home){
+                    drawerLayout.closeDrawers();
+                }else if(menuItem.getItemId()==R.id.nav_history){
+                    startAction(BrvahTestActivity.this,null,DrawerDemoActivity.class);
+                }else if(menuItem.getItemId()==R.id.nav_collect){
+                    startAction(BrvahTestActivity.this,null,TabTestActivity.class);
+                }else{
+                    ToastUtils.showDisplay(menuItem.getTitle());
+                }
                 return true;
             }
         });
@@ -191,6 +228,14 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             }
         });*/
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -413,7 +458,19 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private void initView() {
         mRecyclerView = findViewById(R.id.brvah_book_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setBackgroundResource(R.drawable.image04);
     }
 
+    public static void main(String[] args) {
+        double transparentRatio=0.85;
+        String  db=String.valueOf(255*(1-transparentRatio));
+        db.subSequence(0,db.indexOf("."));
+        Integer x = Integer.parseInt(db.substring(0,db.indexOf(".")));
+        String hex = x.toHexString(x);
+        System.out.println(hex);
 
+       /* String hex = "0xfff";
+        Integer x = Integer.parseInt(hex.substring(2),16);//从第2个字符开始截取
+        System.out.println(x);*/
+    }
 }

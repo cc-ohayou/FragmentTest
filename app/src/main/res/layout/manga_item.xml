@@ -2,9 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/manga_item"
     android:layout_margin="5dp"
+    android:alpha="0.3"
     android:background="@color/mangaItemBack"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <!--android:background="@color/mangaItemBack"-->
+
+    <!--alpha  android:alpha的值为0~1之间的数。数字越大，越不透明。1表示完全不透明，0表示完全透明-->
+    <!--text.getBackground().mutate().setAlpha(12); 代码中设置透明度
+     0-255 数字越大，越不透明 mutate是为了不共享 防止影响其他控件-->
     <!--android:background="@drawable/b3_christmas"-->
     <!--android:background="@drawable/bg01"-->
 

@@ -10,23 +10,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,7 +29,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import space.cc.com.fragmenttest.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
@@ -320,7 +315,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
                         }else{
                             downloadUrl=url;
                         }
-                        ToastUtils.showDisplay(downloadUrl);
+//                        ToastUtils.showDisplay(downloadUrl);
                     }
 
                     @Override

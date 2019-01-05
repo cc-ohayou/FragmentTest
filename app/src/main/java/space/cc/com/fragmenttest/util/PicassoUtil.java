@@ -1,5 +1,6 @@
 package space.cc.com.fragmenttest.util;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -9,11 +10,27 @@ import space.cc.com.fragmenttest.R;
 
 public class PicassoUtil {
     private static Picasso picassoInst = Picasso.get();
+    private static final int DEF_WIDTH = 50;
+    private static int DEF_HEIGHT =50;
+   /* 对于不透明的图片可以使用RGB_565来优化内存。
 
+            Picasso.with( imageView.getContext() )
+            .load(url)
+.config(Bitmap.Config.RGB_565)
+.into(imageView);
+默认情况下，Android使用ARGB_8888
+
+Android中有四种，分别是：
+ALPHA_8：每个像素占用1byte内存
+ARGB_4444:每个像素占用2byte内存
+ARGB_8888:每个像素占用4byte内存
+RGB_565:每个像素占用2byte内存
+*/
     static {
         if (BuildConfig.DEBUG) {
             picassoInst.setIndicatorsEnabled(true);
         }
+
 
     }
     //http://square.github.io/picasso/    Picasso使用说明
@@ -46,6 +63,26 @@ public class PicassoUtil {
         loadWork(targetView, drawableResId, R.drawable.manga_default);
 
     }
+  /**
+     * @description
+     * @author CF
+     * created at 2019/1/5/005  21:50
+     */
+    public void loadDrawResReSize(ImageView targetView, int drawableResId,int width,int height) {
+
+
+        picassoInst.load(drawableResId)
+//                .resize和centerCrop()需要一起使用
+                .resize(width<=0?DEF_WIDTH:width, height<=0?DEF_HEIGHT:height)
+//               中心修剪
+                .centerCrop()
+                .config(Bitmap.Config.RGB_565)
+                .placeholder(R.drawable.manga_default)
+                .error(R.drawable.manga_default_error)
+//                     此处使用 helper.getView获取对应位置的view对象
+                .into(targetView);
+
+    }
 
     /**
      * @author CF
@@ -68,6 +105,8 @@ public class PicassoUtil {
 //                .centerCrop()
                 .placeholder(R.drawable.manga_default)
                 .error(R.drawable.manga_default_error)
+                .config(Bitmap.Config.RGB_565)
+
 //                     此处使用 helper.getView获取对应位置的view对象
                 .into(targetView);
     }
@@ -110,15 +149,20 @@ public class PicassoUtil {
      * @description
      */
     private void loadWork(ImageView targetView, int drawableResId, int defaultResId) {
+
         picassoInst.load(drawableResId)
 //                .resize和centerCrop()需要一起使用
 //                     .resize(50, 50)
 //                     中心修剪
 //                .centerCrop()
                 .placeholder(defaultResId)
+                .config(Bitmap.Config.RGB_565)
+
                 .error(R.drawable.manga_default_error)
 //                     此处使用 helper.getView获取对应位置的view对象
                 .into(targetView);
+
     }
+
 
 }

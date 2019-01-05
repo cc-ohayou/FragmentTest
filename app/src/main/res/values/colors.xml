@@ -72,8 +72,17 @@
 
 
     <color name="toolbarBack">#FF4081</color>
+    <!--Android中的颜色值一般格式是：#AARRGGBB。AA就是透明度值（这里我只聊透明度）。
+    透明度计算转换公式
+       double transparentRatio=0.85;
+        String  db=String.valueOf(255*(1-transparentRatio));
+        db.subSequence(0,db.indexOf("."));
+        Integer x = Integer.parseInt(db.substring(0,db.indexOf(".")));
+        String hex = x.toHexString(x);
+    -->
 
-    <color name="mangaItemBack">#EDF2EB</color>
+
+    <color name="mangaItemBack">#26000000</color>
     <color name="popMenuBack">#FF6C9F</color>
 
 </resources>
