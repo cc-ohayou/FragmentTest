@@ -96,17 +96,15 @@
             </intent-filter>
         </receiver>
         -->
-        <!--
         <receiver
             android:name=".broadcast.MyBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
 
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="space.cc.com.fragmenttest.broadcast.MyBroadCast" />
-            </intent-filter>
+            </intent-filter>-->
         </receiver>
-        -->
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />

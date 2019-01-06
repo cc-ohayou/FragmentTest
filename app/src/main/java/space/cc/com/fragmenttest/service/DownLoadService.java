@@ -11,12 +11,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.FileProvider;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.View;
+import android.widget.RemoteViews;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Progress;
@@ -27,10 +25,14 @@ import com.lzy.okserver.download.DownloadTask;
 
 import java.io.File;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.activity.BaseActivity;
 import space.cc.com.fragmenttest.activity.DownLoadActivity;
 import space.cc.com.fragmenttest.activity.MyServiceActivity;
+import space.cc.com.fragmenttest.broadcast.MyBroadcastReceiver;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
@@ -43,14 +45,20 @@ import space.cc.com.fragmenttest.domain.util.Utils;
  */
 public class DownLoadService extends Service {
     private static final String TAG = "testTag";
-    private DownloadTask downloadTask;
-    private int notifyId = 1;
+    public static DownloadTask downloadTask;
+    public static String PAUSE = "pause";
+    public static String START = "start";
+    public static String CLOSE = "cancel";
+
+    private static int downLoadStatus;
+    public static int notifyId = 1;
     private int preProgress = 1;
     private Context mContext;
     private NotificationCompat.Builder builder;
     private NotificationManager notificationManager;
     private static String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
 
+    private static RemoteViews notifyCustomView;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -64,7 +72,7 @@ public class DownLoadService extends Service {
             }
             downloadTask.start();
 
-            ToastUtils.showDisplay("Downloading");
+//            ToastUtils.showDisplay("Downloading");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +85,7 @@ public class DownLoadService extends Service {
         Log.d(TAG, " onCreate");
         super.onCreate();
         mContext = this;
-        startForeground(notifyId,initNotification());
+        startForeground(notifyId, initNotification());
     }
 
     @Override
@@ -154,7 +162,7 @@ public class DownLoadService extends Service {
             Log.e(TAG, "refresh: currentSize=" + currentSize);
             String totalSize = Formatter.formatFileSize(getBaseContext(), progress.totalSize);
             Log.e(TAG, "refresh: totalSize=" + totalSize);
-
+            downLoadStatus = progress.status;
             switch (progress.status) {
                 case Progress.NONE:
                     updateNotification("停止", progress);
@@ -173,6 +181,7 @@ public class DownLoadService extends Service {
                     break;
                 case Progress.FINISH:
                     updateNotification("下载完成", progress);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_start_pause,View.INVISIBLE);
                     break;
                 case Progress.LOADING:
                     String speed = Formatter.formatFileSize(getBaseContext(), progress.speed);
@@ -221,7 +230,14 @@ public class DownLoadService extends Service {
      * 初始化Notification通知
      */
     private Notification initNotification() {
+        notifyCustomView = new RemoteViews(getPackageName(), R.layout.download_notify);//通知栏布局
+        notifyCustomView.setTextViewText(R.id.download_status, "下载中");
+        notifyCustomView.setTextViewText(R.id.download_speed, "0kb/s");
+        notifyCustomView.setProgressBar(R.id.download_progres, 10000, 0, false);
 
+        setIntentActionOnTargetRes(CLOSE, R.id.download_notify_close);
+        setIntentActionOnTargetRes(START, R.id.download_notify_start_pause);
+        setIntentActionOnTargetRes(PAUSE, R.id.download_notify_start_pause);
 
 //        int progressFraction= (int) (progress.fraction*10000);
 //        if(progress.fraction<0){progressFraction=-1;}
@@ -242,11 +258,21 @@ public class DownLoadService extends Service {
                     .setOnlyAlertOnce(true)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
                     .setContentIntent(pi);
+            builder.setContent(notifyCustomView);
             getNotificationManager().notify(notifyId, builder.build());
             return builder.build();
         }
 
 
+    }
+
+    private void setIntentActionOnTargetRes(String action, int resId) {
+        Intent closeIntent = new Intent(this, MyBroadcastReceiver.class);//intent是一个广播类对象
+        //设置动作
+        closeIntent.setAction(action);
+        PendingIntent closePendingIntent = PendingIntent.getBroadcast(this, 0,
+                closeIntent, 0);//pendingIntent得到广播
+        notifyCustomView.setOnClickPendingIntent(resId, closePendingIntent);
     }
 
 
@@ -270,13 +296,17 @@ public class DownLoadService extends Service {
         }
         if (preProgress < progressFraction) {
             if (!StringUtils.isEmpty(text)) {
-                builder.setContentText(text);
+//                builder.setContentText(text);
+                notifyCustomView.setTextViewText(R.id.download_status, text);
             } else {
-                builder.setContentText(progressFraction + "%");
+//                builder.setContentText(progressFraction + "%");
+                notifyCustomView.setTextViewText(R.id.download_status, progressFraction + "%");
             }
-            builder.setSubText(speed + "/s");
+//            builder.setSubText(speed + "/s");download_status
+            notifyCustomView.setTextViewText(R.id.download_speed, speed + "/s");
 //          builder.setProgress(100, (int) progress, false);
-            builder.setProgress(10000, progressFraction, false);
+//            builder.setProgress(10000, progressFraction, false);
+            notifyCustomView.setProgressBar(R.id.download_progres, 10000, progressFraction, false);
             notificationManager.notify(notifyId, builder.build());
         }
         preProgress = progressFraction;
@@ -286,6 +316,7 @@ public class DownLoadService extends Service {
     private Notification getNotification(String title, int importanceLevel) {
         NotificationChannel channel = new NotificationChannel("fore_service", "前台服务", importanceLevel);
         getNotificationManager().createNotificationChannel(channel);
+
         Intent intentForeSerive = new Intent(Utils.getApp(), MyServiceActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(Utils.getApp(), 0, intentForeSerive, 0);
         builder = new NotificationCompat.Builder(Utils.getApp(), "fore_service")
@@ -297,6 +328,7 @@ public class DownLoadService extends Service {
 //                .setLargeIcon()
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.downloadicon))
                 .setContentIntent(pendingIntent);
+        builder.setContent(notifyCustomView);
         getNotificationManager().notify(notifyId, builder.build());
         return builder.build();
     }
@@ -342,5 +374,36 @@ public class DownLoadService extends Service {
         android.os.Process.killProcess(android.os.Process.myPid());//如果不加，最后不会提示完成、打开。
     }
 
+    /**
+     * @description
+     * @author CF
+     * created at 2019/1/7/007  1:54
+     */
+    public static void controlDownloadStateByAction(String action) {
+        try {
+
+            if (PAUSE.equals(action)) {
+                //点击开始暂停按钮 切换下载状态 是一个按钮所以通过 当前状态来切换图标 和 任务开启暂停的切换
+                if (downloadTask != null && downLoadStatus == Progress.PAUSE) {
+                    //暂停中可以继续
+                    downloadTask.start();
+                    notifyCustomView.setImageViewResource(R.id.download_notify_start_pause, R.drawable.vector_drawable_download_start);
+                } else if (downloadTask != null && downLoadStatus == Progress.LOADING) {
+                    //下载中可以暂停
+                    downloadTask.pause();
+                    notifyCustomView.setImageViewResource(R.id.download_notify_start_pause, R.drawable.vector_drawable_download_pause___);
+                }
+
+            } else if (CLOSE.equals(action)) {
+                ((NotificationManager) Utils.getApp().getSystemService(Context.NOTIFICATION_SERVICE))
+                        .cancel(notifyId);
+                Intent stopIntent = new Intent(Utils.getApp(), DownLoadService.class);
+                Utils.getApp().stopService(stopIntent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
