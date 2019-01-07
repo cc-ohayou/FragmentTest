@@ -374,7 +374,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //        BaseQuickAdapter.SLIDEIN_LEFT 左边划入动画
         topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
-                R.drawable.bg01);
+                R.drawable.manga_top_view_bg);
         homeAdapter.addHeaderView(topView);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

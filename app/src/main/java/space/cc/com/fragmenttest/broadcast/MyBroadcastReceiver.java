@@ -13,7 +13,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: receive mybroadcast");
-        DownLoadService.controlDownloadStateByAction(intent.getAction());
+        DownLoadService.controlDownloadStateByBroadCastAction(intent.getAction());
 
        Log.d(TAG,"receive mybroadcast "+intent.getAction());
     }

@@ -54,8 +54,8 @@ public class DownLoadService extends Service {
     public static int notifyId = 1;
     private int preProgress = 1;
     private Context mContext;
-    private NotificationCompat.Builder builder;
-    private NotificationManager notificationManager;
+    private static NotificationCompat.Builder builder;
+    private static NotificationManager notificationManager;
     private static String downloadUrl = UrlConfig.DOWN_LOAD04.getValue();
 
     private static RemoteViews notifyCustomView;
@@ -237,8 +237,8 @@ public class DownLoadService extends Service {
         notifyCustomView.setProgressBar(R.id.download_progres, 10000, 0, false);
 
         setIntentActionOnTargetRes(CLOSE, R.id.download_notify_close);
-        setIntentActionOnTargetRes(START, R.id.download_notify_start);
-        setIntentActionOnTargetRes(PAUSE, R.id.download_notify_pause);
+        setIntentActionOnTargetRes(START, R.id.download_notify_pause);
+        setIntentActionOnTargetRes(PAUSE, R.id.download_notify_start);
 
 //        int progressFraction= (int) (progress.fraction*10000);
 //        if(progress.fraction<0){progressFraction=-1;}
@@ -383,23 +383,29 @@ public class DownLoadService extends Service {
      * @author CF
      * created at 2019/1/7/007  1:54
      */
-    public static void controlDownloadStateByAction(String action) {
+    public static void controlDownloadStateByBroadCastAction(String action) {
         try {
 
             if (PAUSE.equals(action)) {
                 //点击开始暂停按钮 切换下载状态 是一个按钮所以通过 当前状态来切换图标 和 任务开启暂停的切换
-                if (downloadTask != null) {
+                if (downloadTask != null&&downLoadStatus==Progress.LOADING) {
                     //下载中可以暂停 暂停隐藏 开始键显示
-                    notifyCustomView.setViewVisibility(R.id.download_notify_pause, View.GONE);
-                    notifyCustomView.setViewVisibility(R.id.download_notify_start, View.VISIBLE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_pause, View.VISIBLE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_start, View.GONE);
+                    Log.d(TAG,"PAUSE action");
                     downloadTask.pause();
+//                  由于暂停状态下不会回调onProgress方法更新通知 所以此处修改的notifyCustomView不会更新
+//                  需要此处手动调用进行更新
+                    updateNotificationOnBroadcastReceive("暂停下载");
+
                 }
-            } else if (START.equals(action)) {
+            } else if (START.equals(action)&&downLoadStatus==Progress.PAUSE) {
                 if (downloadTask != null) {
                     //暂停中状态 重新继续下载  开始隐藏 暂停键显示
 //                    notifyCustomView.setImageViewResource(R.id.download_notify_switch, R.drawable.vector_drawable_download_start);
-                    notifyCustomView.setViewVisibility(R.id.download_notify_start, View.GONE);
-                    notifyCustomView.setViewVisibility(R.id.download_notify_pause, View.VISIBLE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_start, View.VISIBLE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_pause, View.GONE);
+                    Log.d(TAG,"START action");
                     downloadTask.start();
                 }
             } else if (CLOSE.equals(action)) {
@@ -414,6 +420,8 @@ public class DownLoadService extends Service {
                 Intent stopIntent = new Intent(Utils.getApp(), DownLoadService.class);
 //                停止服务
                 Utils.getApp().stopService(stopIntent);
+            }else{
+                System.err.println("real action is "+action+",downLoadStatus is "+downLoadStatus);
             }
 
     } catch (Exception e){
@@ -421,5 +429,10 @@ public class DownLoadService extends Service {
         }
 
 }
+
+    private static void updateNotificationOnBroadcastReceive(String title ) {
+        notifyCustomView.setTextViewText(R.id.download_status, title);
+        notificationManager.notify(notifyId, builder.build());
+    }
 
 }

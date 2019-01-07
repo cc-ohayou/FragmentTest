@@ -10,10 +10,12 @@
   fitXY  强制拉伸 但是会变形
   centerCrop  中心裁剪不会变形
     -->
+    <!--android:scaleType="centerCrop"-->
 
     <ImageView
         android:id="@+id/top_header_view_bac_image"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
