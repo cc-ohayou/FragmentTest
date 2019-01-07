@@ -85,7 +85,7 @@ dependencies {
 //  开关按钮组件
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
 //   好用的 material风格 dialog组件  14k+ star  https://github.com/afollestad/material-dialogs#basics
-    implementation 'com.afollestad.material-dialogs:core:2.0.0-rc5'
+//    implementation 'com.afollestad.material-dialogs:core:2.0.0-rc5'
 //    图片裁剪 https://github.com/Yalantis/uCrop   star 8k+ 比较酷炫时尚
 
 //    https://github.com/jdamcd/android-crop start 4k+
@@ -99,5 +99,6 @@ dependencies {
 //    compile 'it.neokree:MaterialTabs:0.11'
 //    implementation 'androidx.cardview:cardview:1.1.0-alpha01'
 
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 
 }

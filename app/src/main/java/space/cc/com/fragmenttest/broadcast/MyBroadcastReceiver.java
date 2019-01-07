@@ -15,7 +15,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         Log.d(TAG, "onReceive: receive mybroadcast");
         DownLoadService.controlDownloadStateByAction(intent.getAction());
 
-
-        Toast.makeText(context,"receive mybroadcast "+intent.getAction(),Toast.LENGTH_SHORT).show();
+       Log.d(TAG,"receive mybroadcast "+intent.getAction());
     }
 }

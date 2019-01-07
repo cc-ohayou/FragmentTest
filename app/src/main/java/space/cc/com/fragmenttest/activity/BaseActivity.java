@@ -40,6 +40,7 @@ import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
@@ -54,7 +55,9 @@ public  abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     static final Map EMPTY_MAP = new HashMap();
     private ForceOffLineReceiver receiver;
-    public static String downloadUrl ;
+    public static CustomProperties settingProperties;
+    static final String UPDATE="1";
+    static final String NO_UPDATE="0";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,8 +75,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
         //隐藏默认的actionBar
         NotificationUtil.gotoOpenNotificationActivity(this,this);
         PermissinUtils.requestStoragePermission(this,BaseActivity.this);
-        initDownLoadUrl();
-
+        initCustomProperties();
         ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
@@ -83,6 +85,24 @@ public  abstract class BaseActivity extends AppCompatActivity {
         ActivityCollector.addActivity(this);
 
     }
+
+    private void initCustomProperties() {
+        RequestParams params=new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        ClientUtlis.post(true, UrlConfig.CUSTOM_PROPERTIES.getValue(),params,
+                this,new JsonCallback<CustomProperties>() {
+                    @Override
+                    public void onSuccess(CustomProperties customProperties, String msg) {
+                        settingProperties=customProperties;
+                    }
+
+                    @Override
+                    public void onError(String msg, int code) {
+                        ToastUtils.showDisplay(msg);
+                    }
+                });
+    }
+
+
 
     public  void requestPermission(){
         PermissinUtils.requestStoragePermission(this,BaseActivity.this);
@@ -303,28 +323,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
 
 
 
-    public void initDownLoadUrl() {
-        RequestParams params=new RequestParams(1);
 
-        ClientUtlis.post(true, UrlConfig.TEST_DOWNLOAD.getValue(),params,
-                this,new JsonCallback<String>() {
-                    @Override
-                    public void onSuccess(String url, String msg) {
-                        if(StringUtils.isEmpty(url)){
-                            downloadUrl= UrlConfig.DOWN_LOAD04.getValue();
-                        }else{
-                            downloadUrl=url;
-                        }
-//                        ToastUtils.showDisplay(downloadUrl);
-                    }
-
-                    @Override
-                    public void onError(String msg, int code) {
-                        ToastUtils.showDisplay(msg);
-                    }
-                });
-
-    }
 
 
 

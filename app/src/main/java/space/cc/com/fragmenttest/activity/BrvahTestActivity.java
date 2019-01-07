@@ -73,7 +73,6 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
         try {
 
-//            androidx.cardview.widget.CardView
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_brvah_test);
             toolbar = findViewById(R.id.manga_toolbar);
@@ -321,9 +320,14 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.ll_item2:
                 ToastUtils.showDisplay(popItem2TextView.getText());
-                //下载更新
-                Intent startDownload = new Intent(this, DownLoadService.class);
-                startServiceCustom(this,startDownload);
+
+               if(UPDATE.equals(settingProperties.getUpdateSign())){
+                   //下载更新
+                   Intent startDownload = new Intent(this, DownLoadService.class);
+                   startServiceCustom(this,startDownload);
+               }else{
+                   ToastUtils.showDisplay("暂未发现新的版本哦^^");
+               }
                 break;
 
         }
@@ -332,6 +336,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             mPopupWindow.dismiss();
         }
     }
+
+
 
     @Override
     public void requestPermission() {
@@ -368,7 +374,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //        BaseQuickAdapter.SLIDEIN_LEFT 左边划入动画
         topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
-                R.drawable.b3_christmas);
+                R.drawable.bg01);
         homeAdapter.addHeaderView(topView);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -458,7 +464,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private void initView() {
         mRecyclerView = findViewById(R.id.brvah_book_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setBackgroundResource(R.drawable.image04);
+        mRecyclerView.setBackgroundResource(R.drawable.default_head);
     }
 
     public static void main(String[] args) {

@@ -181,7 +181,8 @@ public class DownLoadService extends Service {
                     break;
                 case Progress.FINISH:
                     updateNotification("下载完成", progress);
-                    notifyCustomView.setViewVisibility(R.id.download_notify_start_pause,View.INVISIBLE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_start, View.INVISIBLE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_pause, View.INVISIBLE);
                     break;
                 case Progress.LOADING:
                     String speed = Formatter.formatFileSize(getBaseContext(), progress.speed);
@@ -236,8 +237,8 @@ public class DownLoadService extends Service {
         notifyCustomView.setProgressBar(R.id.download_progres, 10000, 0, false);
 
         setIntentActionOnTargetRes(CLOSE, R.id.download_notify_close);
-        setIntentActionOnTargetRes(START, R.id.download_notify_start_pause);
-        setIntentActionOnTargetRes(PAUSE, R.id.download_notify_start_pause);
+        setIntentActionOnTargetRes(START, R.id.download_notify_start);
+        setIntentActionOnTargetRes(PAUSE, R.id.download_notify_pause);
 
 //        int progressFraction= (int) (progress.fraction*10000);
 //        if(progress.fraction<0){progressFraction=-1;}
@@ -257,6 +258,7 @@ public class DownLoadService extends Service {
                     .setSmallIcon(R.mipmap.msg_32)
                     .setOnlyAlertOnce(true)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.msg_64))
+                    .setOngoing(true)
                     .setContentIntent(pi);
             builder.setContent(notifyCustomView);
             getNotificationManager().notify(notifyId, builder.build());
@@ -325,6 +327,8 @@ public class DownLoadService extends Service {
                 .setSmallIcon(R.mipmap.msg_32)
                 .setOnlyAlertOnce(true)
                 .setNumber(13)
+                .setOngoing(true)
+
 //                .setLargeIcon()
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.downloadicon))
                 .setContentIntent(pendingIntent);
@@ -336,7 +340,7 @@ public class DownLoadService extends Service {
 
     private void initDownLoadTask() {
 
-        downloadUrl = BaseActivity.downloadUrl;
+        downloadUrl = BaseActivity.settingProperties.getDownLoadUrl();
         GetRequest<File> request = OkGo.<File>get(downloadUrl)
                 .headers("aaa", "111")
                 .params("bbb", "222");
@@ -384,26 +388,38 @@ public class DownLoadService extends Service {
 
             if (PAUSE.equals(action)) {
                 //点击开始暂停按钮 切换下载状态 是一个按钮所以通过 当前状态来切换图标 和 任务开启暂停的切换
-                if (downloadTask != null && downLoadStatus == Progress.PAUSE) {
-                    //暂停中可以继续
-                    downloadTask.start();
-                    notifyCustomView.setImageViewResource(R.id.download_notify_start_pause, R.drawable.vector_drawable_download_start);
-                } else if (downloadTask != null && downLoadStatus == Progress.LOADING) {
-                    //下载中可以暂停
+                if (downloadTask != null) {
+                    //下载中可以暂停 暂停隐藏 开始键显示
+                    notifyCustomView.setViewVisibility(R.id.download_notify_pause, View.GONE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_start, View.VISIBLE);
                     downloadTask.pause();
-                    notifyCustomView.setImageViewResource(R.id.download_notify_start_pause, R.drawable.vector_drawable_download_pause___);
                 }
-
+            } else if (START.equals(action)) {
+                if (downloadTask != null) {
+                    //暂停中状态 重新继续下载  开始隐藏 暂停键显示
+//                    notifyCustomView.setImageViewResource(R.id.download_notify_switch, R.drawable.vector_drawable_download_start);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_start, View.GONE);
+                    notifyCustomView.setViewVisibility(R.id.download_notify_pause, View.VISIBLE);
+                    downloadTask.start();
+                }
             } else if (CLOSE.equals(action)) {
                 ((NotificationManager) Utils.getApp().getSystemService(Context.NOTIFICATION_SERVICE))
                         .cancel(notifyId);
+//              移除任务  内部会移除已下载的文件同时调用onRemove方法内部实际调用 stopForeground 停止服务前台显示
+//              下次再下载就是重新下载了
+                if (downloadTask != null) {
+                    downloadTask.remove();
+                    downloadTask = null;
+                }
                 Intent stopIntent = new Intent(Utils.getApp(), DownLoadService.class);
+//                停止服务
                 Utils.getApp().stopService(stopIntent);
             }
-        } catch (Exception e) {
+
+    } catch (Exception e){
             e.printStackTrace();
         }
 
-    }
+}
 
 }

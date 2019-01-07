@@ -115,7 +115,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
 //                downloadBinder.reDownLoad(downloadUrl);
                 break;
             case R.id.addProgress:
-                    ToastUtils.showDisplay(BaseActivity.downloadUrl);
+                    ToastUtils.showDisplay(settingProperties.getDownLoadUrl());
                     break;
             default:
                 break;

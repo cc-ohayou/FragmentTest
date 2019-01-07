@@ -3,10 +3,9 @@ package space.cc.com.fragmenttest.domain;
 public enum UrlConfig {
     TEST_URL(UrlConstants.PREFIX+"v1/cc/get/userList","测试url"),
     TEST_DOWNLOAD(UrlConstants.PREFIX+"v1/cc/getDownloadUrl","测试下载url"),
-    DOWN_LOAD(UrlConstants.PREFIX02+"app-release.apk","下载测试url"),
-    DOWN_LOAD02(UrlConstants.PREFIX03+"","下载测试url"),
     DOWN_LOAD04(UrlConstants.PREFIX04+"","下载测试url"),
-    MANGA_LIST(UrlConstants.PREFIX+"/v1/cc/getMangaList","下载测试url"),
+    MANGA_LIST(UrlConstants.PREFIX+"/v1/cc/getMangaList","manga列表url"),
+    CUSTOM_PROPERTIES(UrlConstants.PREFIX+"/v1/cc/getCustomProperties","获取全局自定义属性"),
     ;
 
     private String value;
