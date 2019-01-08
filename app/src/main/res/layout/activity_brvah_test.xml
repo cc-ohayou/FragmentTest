@@ -55,6 +55,8 @@
         <!--android.support.design.widget.AppBarLayout-->
         </com.google.android.material.appbar.AppBarLayout>
 
+        <include layout="@layout/top_view"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/brvah_book_list"
             android:layout_width="match_parent"

@@ -76,10 +76,10 @@ public  abstract class BaseActivity extends AppCompatActivity {
         NotificationUtil.gotoOpenNotificationActivity(this,this);
         PermissinUtils.requestStoragePermission(this,BaseActivity.this);
         initCustomProperties();
-        ActionBar actionBar=getSupportActionBar();
+       /* ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
-        }
+        }*/
 
 //        this.getWindow().setBackgroundDrawable(res);
         ActivityCollector.addActivity(this);

@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -372,10 +373,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         homeAdapter.openLoadAnimation();
 //        homeAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
 //        BaseQuickAdapter.SLIDEIN_LEFT 左边划入动画
+//        CardView
         topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
                 R.drawable.manga_top_view_bg);
-        homeAdapter.addHeaderView(topView);
+//        homeAdapter.addHeaderView(topView);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
