@@ -169,4 +169,14 @@ public class UtilWant {
             return true;
         }
     }
+
+
+    public static void main(String[] args) {
+        double transparentRatio=0.75;
+        String  db=String.valueOf(255*(1-transparentRatio));
+        db.subSequence(0,db.indexOf("."));
+        Integer x = Integer.parseInt(db.substring(0,db.indexOf(".")));
+        String hex = x.toHexString(x);
+        System.out.println(hex);
+    }
 }

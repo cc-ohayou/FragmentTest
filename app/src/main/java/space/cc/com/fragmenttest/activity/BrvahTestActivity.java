@@ -1,6 +1,8 @@
 package space.cc.com.fragmenttest.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,8 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -25,7 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,12 +45,14 @@ import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
+import space.cc.com.fragmenttest.listener.HidingScrollListener;
 import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
+import space.cc.com.fragmenttest.util.CustomScrollView;
 import space.cc.com.fragmenttest.util.UtilBox;
 
 
-public class BrvahTestActivity extends BaseActivity implements View.OnClickListener {
+public class BrvahTestActivity extends BaseActivity implements View.OnClickListener ,CustomScrollView.OnScrollChangeListener {
     private static final String TAG = "BrvahTestActivity";
     private List<Manga> mangaList;
     private static List<Manga> defaultList;
@@ -57,8 +65,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     View topView;
     TextView popItem1TextView;
     TextView popItem2TextView;
-
-    int yOffset;
+    FloatingActionButton floatBackToTopBut;
+    private ScrollView scrollerView;
+    RecyclerView.LayoutManager layoutManager;
+    
+    int popMenuYoffset;
+    
     private static String defaultData = "[{\"area\":\"中国大陆\",\"arealimit\":317,\"attention\":352150,\"bangumi_id\":0,\"nowEpisode\":\"11\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8f19c704a6516bab4716931db10621c1b6c6e4bf.jpg\",\"danmaku_count\":105072,\"ep_id\":258700,\"favorites\":352150,\"is_finish\":0,\"lastupdate\":1545883200,\"lastupdate_at\":\"2018-12-27 12:00:00\",\"isNew\":false,\"play_count\":8263731,\"pub_time\":\"\",\"season_id\":25823,\"season_status\":13,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/67a851a5cd87fef2ddd6f9bd6cf691781a1d8b95.jpg\",\"title\":\"画江湖之不良人 第三季\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":12083,\"bangumi_id\":0,\"nowEpisode\":\"4\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8df12fc092928ba57069eb16e077f9d719f345e5.jpg\",\"danmaku_count\":10022,\"ep_id\":258686,\"favorites\":12083,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":486760,\"pub_time\":\"\",\"season_id\":26176,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\"title\":\"通灵妃 河南话版\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":151420,\"bangumi_id\":0,\"nowEpisode\":\"10\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/57dc8fdf8373f8c1facfc2911d50be1cfc6da18a.jpg\",\"danmaku_count\":26706,\"ep_id\":258689,\"favorites\":151420,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":2023158,\"pub_time\":\"\",\"season_id\":24888,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/ef2f039b71564cc469b2cac9d8f2879e1259a74f.jpg\",\"title\":\"山河社稷图\",\"viewRank\":0,\"weekday\":4}]";
 
     static {
@@ -76,6 +88,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_brvah_test);
+            scrollerView=findViewById(R.id.scrollBar);
             toolbar = findViewById(R.id.manga_toolbar);
 //        toolbar.setLogo(R.drawable.app_icon2);
             // 主标题,默认为app_label的名字  设置Title为空""则不显示  注意需要在setSupportActionBar之前
@@ -94,6 +107,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //      远端加载数据
             initData();
             initFloatBut();
+//            scrollerView.onSc
             appBarToggleSet();
 
         } catch (Exception e) {
@@ -121,13 +135,42 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //            actionBar.setHomeAsUpIndicator(R.drawable.nav_left_white_16);
         }
     }
+    @Override
+    public void onScrollToStart() {
+       ToastUtils.showDisplay("滑动到顶部了");
+    }
+
+    @Override
+    public void onScrollToEnd() {
+        ToastUtils.showDisplay("滑动到底部了");
+
+    }
+
 
     private void initFloatBut() {
-        FloatingActionButton fab = findViewById(R.id.float_but);
-        fab.setOnClickListener(new View.OnClickListener() {
+       floatBackToTopBut = findViewById(R.id.float_but);
+
+        floatBackToTopBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
+//                mRecyclerView.getF
+                UtilBox.box().ui.MoveToPosition((LinearLayoutManager) layoutManager,0);
+//                UIUtils.MoveToPosition(new LinearLayoutManager(mContext), recyclerview, 0);
+//               显示toolbar
+//                toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
+                hideViews();
+                /* scrollerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollerView.post(new Runnable() {
+                            public void run() {
+                                // 滚动至顶部
+                                scrollerView.fullScroll(ScrollView.FOCUS_UP);
+                            }
+                        });
+                    }
+                });*/
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
                         .setAction("Action",
 
                                 new View.OnClickListener() {
@@ -135,7 +178,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                                     public void onClick(View v) {
                                         ToastUtils.showDisplay("undo action");
                                     }
-                                }).show();
+                                }).show();*/
             }
         });
     }
@@ -291,7 +334,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             //设置一个动画。
             mPopupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
             //设置Gravity，让它显示在右上角。
-            mPopupWindow.showAtLocation(toolbar, Gravity.RIGHT | Gravity.TOP, 0, yOffset);
+            mPopupWindow.showAtLocation(toolbar, Gravity.RIGHT | Gravity.TOP, 0, popMenuYoffset);
             //设置item的点击监听
             popView.findViewById(R.id.ll_item1).setOnClickListener(this);
             popView.findViewById(R.id.ll_item2).setOnClickListener(this);
@@ -300,7 +343,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             popItem2TextView= popView.findViewById(R.id.ll_item2_text);
 
         } else {
-            mPopupWindow.showAtLocation(toolbar, Gravity.RIGHT | Gravity.TOP, 0, yOffset);
+            mPopupWindow.showAtLocation(toolbar, Gravity.RIGHT | Gravity.TOP, 0, popMenuYoffset);
         }
 
     }
@@ -309,7 +352,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         Rect frame = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         //状态栏高度+toolbar的高度
-        yOffset= frame.top + toolbar.getHeight();
+        popMenuYoffset= frame.top + toolbar.getHeight();
     }
 
 
@@ -364,6 +407,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
      * @date 2018/12/29
      * @description
      */
+    @SuppressLint("ResourceAsColor")
     private void initAdapter() {
         homeAdapter = new MyQuickAdapter(R.layout.manga_item, mangaList, 0, getViewIemHeight(5, this));
 //         homeAdapter = new MyQuickAdapter(R.layout.manga_item, mangaList);
@@ -377,7 +421,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
                 R.drawable.manga_top_view_bg);
-//        homeAdapter.addHeaderView(topView);
+        topView.setBackgroundColor(R.color.mangaTopViewBack);
+        homeAdapter.addHeaderView(topView);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -467,6 +512,47 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         mRecyclerView = findViewById(R.id.brvah_book_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setBackgroundResource(R.drawable.default_head);
+
+       layoutManager = mRecyclerView.getLayoutManager();
+
+        //setting up our OnScrollListener
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(!recyclerView.canScrollVertically(-1)){
+//                  返回false表示不能往下滑动，即代表到顶部了
+//                  隐藏到顶部的浮动按钮
+                    hideViews();
+                }else{
+//                    显示浮动按钮
+                    showViews();
+                }
+//                recyclerView.computeVerticalScrollOffset()
+
+//                判断是否滑动到底部， recyclerView.canScrollVertically(1);返回false表示不能往上滑动，即代表到底部了；
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
+
+
+    private void hideViews() {
+//        显示toolbar
+//        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) floatBackToTopBut.getLayoutParams();
+        int fabBottomMargin = lp.bottomMargin;
+        floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
+
+    private void showViews() {
+//        mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        floatBackToTopBut.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     public static void main(String[] args) {

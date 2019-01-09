@@ -25,9 +25,12 @@
 
 
             <!--android:background="@color/toolbarBack"-->
-            <!--app:layout_scrollFlags="scroll|enterAlways"-->
+            <!--
+           上拉数据后标题栏隐藏
+            app:layout_scrollFlags="scroll|enterAlways"-->
 
             <androidx.appcompat.widget.Toolbar
+                app:layout_scrollFlags="scroll|enterAlways"
                 android:id="@+id/manga_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -55,14 +58,32 @@
         <!--android.support.design.widget.AppBarLayout-->
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/top_view"/>
+        <!--<include layout="@layout/top_view"/>-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/brvah_book_list"
+        <ScrollView
+            android:id="@+id/scrollBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--android:paddingTop="?attr/actionBarSize"-->
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:paddingTop="?attr/actionBarSize"
+                android:id="@+id/brvah_book_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="?attr/actionBarSize"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                />
+
+            </LinearLayout>
+        </ScrollView>
     <!--
 
      http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0317/2612.html
@@ -79,7 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_dialog_email" />
+            app:srcCompat="@drawable/bak_to_top" />
+        <!-- 常用系统自带图标  @android:drawable/ic_dialog_email  -->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- <TextView

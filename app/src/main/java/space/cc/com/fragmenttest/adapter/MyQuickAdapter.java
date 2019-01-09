@@ -63,6 +63,7 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
             }
             holder.getConvertView().setLayoutParams(linearParams);
             holder.itemView.setLayoutParams(linearParams);
+//            holder.itemView.findViewById(R.id.manga_title);
 //            Color.parseColor("#865955")  将string转化为 int 型color
 //          int color=Color.rgb(red, green, blue)   将RGB转化为int 型colorcolor
 // 如果需要透明度
