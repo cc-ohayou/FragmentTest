@@ -1,32 +1,26 @@
 package space.cc.com.fragmenttest.adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseViewHolder;
-import space.cc.com.fragmenttest.litepals.Manga;
-import space.cc.com.fragmenttest.util.UtilBox;
+import space.cc.com.fragmenttest.domain.bizobject.OperateBiz;
 
-public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
+public class OperationBizAdapter extends BaseQuickAdapter<OperateBiz, BaseViewHolder> {
     private int resId;
     private int height = 0;
     private int width = 0;
 
-    public MyQuickAdapter(int layoutResId, List data) {
+    public OperationBizAdapter(int layoutResId, List data) {
         super(layoutResId, data);
         resId = layoutResId;
     }
 
-    public MyQuickAdapter(int layoutResId, List data, int width, int height) {
+    public OperationBizAdapter(int layoutResId, List data, int width, int height) {
         super(layoutResId, data);
         this.resId = layoutResId;
         this.width = width;
@@ -77,23 +71,17 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, Manga item) {
+    protected void convert(BaseViewHolder holder, OperateBiz item) {
         try {
-            holder.setText(R.id.manga_title, item.getTitle());
-            holder.setText(R.id.manga_episode, "第" + item.getNowEpisode() + "话");
-            holder.setText(R.id.manga_area, item.getArea());
-            holder.setText(R.id.manga_new_desc, item.isNew() ? "新番" : "老番");
-            //子控件的点击事件除了 活动那里adapter需要设置点击监听 此处也需要对对应的子控件进行设置
+            holder.setText(R.id.item_oper_content, item.getDesc());
+            holder.setText(R.id.item_oper_create_time, "创建时间: " + item.getCreateTime() );
             holder.addOnClickListener(R.id.manga_cover);
-            holder.addOnLongClickListener(R.id.manga_title);
-            UtilBox.box().picasso.loadUrlResIntoView((ImageView) holder.getView(R.id.manga_cover),
+            holder.addOnLongClickListener(R.id.item_oper_but);
+            /*UtilBox.box().picasso.loadUrlResIntoView((ImageView) holder.getView(R.id.manga_cover),
                     item.getCoverImage());
-
+*/
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-
-
-

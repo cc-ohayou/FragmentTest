@@ -1,0 +1,51 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stateListAnimator="@drawable/lift_on_touch"
+        android:layout_marginLeft="@dimen/dp_4"
+        android:layout_marginRight="@dimen/dp_4"
+        android:id="@+id/item_oper"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/dp_10"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="false">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           >
+       <TextView
+           android:id="@+id/item_oper_content"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="操作描述"
+           />
+       <TextView
+               android:id="@+id/item_oper_create_time"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="创建时间"
+           />
+
+
+           <ImageButton
+               android:id="@+id/item_oper_but"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@color/C100"
+               android:layout_gravity="center_horizontal"
+               />
+
+
+       </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+

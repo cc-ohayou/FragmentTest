@@ -13,6 +13,13 @@ import org.litepal.LitePal;
 import org.litepal.tablemanager.Connector;
 
 import androidx.multidex.MultiDexApplication;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
+import space.cc.com.fragmenttest.domain.RequestParams;
+import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
+import space.cc.com.fragmenttest.domain.callback.JsonCallback;
+import space.cc.com.fragmenttest.domain.util.ClientUtlis;
+import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.domain.util.Utils;
 
 public class MyApplication extends MultiDexApplication {
@@ -42,6 +49,29 @@ private static Context context;
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
+//
+        initCustomProperties();
+
+    }
+
+
+    private void initCustomProperties() {
+        RequestParams params=new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        ClientUtlis.post(true, UrlConfig.CUSTOM_PROPERTIES.getValue(),params,
+                this,new JsonCallback<CustomProperties>() {
+                    @Override
+                    public void onSuccess(CustomProperties customProperties, String msg) {
+                        if(customProperties!=null){
+                            GlobalSettings.settingProperties = customProperties;
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(String msg, int code) {
+                        ToastUtils.showDisplay(msg);
+                    }
+                });
     }
       /**
          * @description 提供一个全局的获取context的方法

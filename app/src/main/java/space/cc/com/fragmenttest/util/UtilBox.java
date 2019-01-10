@@ -36,6 +36,8 @@ public class UtilBox {
      */
     public PicassoUtil picasso;
 
+    public UtilDialog dialog;
+
     /**
      * 私有化构造方法
      */
@@ -45,7 +47,7 @@ public class UtilBox {
         want = new UtilWant();
         info = new UtilInfo();
         picasso = new PicassoUtil();
-
+        dialog= new UtilDialog();
         // 然后再初始化非急需的工具类
         initBox();
     }

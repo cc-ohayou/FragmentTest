@@ -98,7 +98,9 @@ dependencies {
 //    https://github.com/neokree/MaterialTabs
 //    compile 'it.neokree:MaterialTabs:0.11'
 //    implementation 'androidx.cardview:cardview:1.1.0-alpha01'
-
+//   material风格对话框 不是最新版本最新版本是kotlin语言兼容java不大好
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+//    下拉刷新 上拉刷新框架
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
 
 }

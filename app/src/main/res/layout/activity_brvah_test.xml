@@ -16,49 +16,9 @@
         android:layout_height="match_parent"
         >
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
 
 
-            <!--android:background="@color/toolbarBack"-->
-            <!--
-           上拉数据后标题栏隐藏
-            app:layout_scrollFlags="scroll|enterAlways"-->
-
-            <androidx.appcompat.widget.Toolbar
-                app:layout_scrollFlags="scroll|enterAlways"
-                android:id="@+id/manga_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorAccent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/nav_topLeft_image"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="left"
-                    app:civ_border_width="2dp"
-                    app:civ_border_color="#FF000000"/>
-                <TextView
-                    android:id="@+id/manga_toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="首页"
-                    android:textSize="20sp" />
-
-            </androidx.appcompat.widget.Toolbar>
-        <!--android.support.design.widget.AppBarLayout-->
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <!--<include layout="@layout/top_view"/>-->
+        <include layout="@layout/appbar_layout"/>
 
         <ScrollView
             android:id="@+id/scrollBar"

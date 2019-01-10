@@ -33,6 +33,7 @@ import space.cc.com.fragmenttest.activity.BaseActivity;
 import space.cc.com.fragmenttest.activity.DownLoadActivity;
 import space.cc.com.fragmenttest.activity.MyServiceActivity;
 import space.cc.com.fragmenttest.broadcast.MyBroadcastReceiver;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
@@ -340,7 +341,7 @@ public class DownLoadService extends Service {
 
     private void initDownLoadTask() {
 
-        downloadUrl = BaseActivity.settingProperties.getDownLoadUrl();
+        downloadUrl = GlobalSettings.settingProperties.getDownLoadUrl();
         GetRequest<File> request = OkGo.<File>get(downloadUrl)
                 .headers("aaa", "111")
                 .params("bbb", "222");

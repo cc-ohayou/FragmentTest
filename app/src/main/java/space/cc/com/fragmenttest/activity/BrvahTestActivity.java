@@ -42,6 +42,7 @@ import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
@@ -95,6 +96,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             toolbar.setTitle("");
             setToolbarStyle(toolbar);
             setSupportActionBar(toolbar);
+            appBarToggleSet();
             drawerLayout = findViewById(R.id.manga_drawer_lay_out);
             navView = findViewById(R.id.nav_view);
             //侧边栏菜单 监听
@@ -108,7 +110,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             initData();
             initFloatBut();
 //            scrollerView.onSc
-            appBarToggleSet();
+
 
         } catch (Exception e) {
             Log.e(TAG, "onCreate error", e);
@@ -365,7 +367,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             case R.id.ll_item2:
                 ToastUtils.showDisplay(popItem2TextView.getText());
 
-               if(UPDATE.equals(settingProperties.getUpdateSign())){
+               if(CustomProperties.UPDATE.equals(settingProperties.getUpdateSign())){
                    //下载更新
                    Intent startDownload = new Intent(this, DownLoadService.class);
                    startServiceCustom(this,startDownload);
@@ -480,7 +482,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initData() {
-        RequestParams params = new RequestParams(1);
+        RequestParams params = new RequestParams(RequestParams.PARAM_TYPE_FORM);
 //        mangaList=(new ClientUtlis<Manga>()).getBizList(params,UrlConfig.MANGA_LIST,this,"列表获取异常",mangaList);
         getBizList(params, UrlConfig.MANGA_LIST, this, "列表获取异常");
 

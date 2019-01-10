@@ -38,6 +38,7 @@ import androidx.core.content.ContextCompat;
 import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
@@ -55,9 +56,8 @@ public  abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     static final Map EMPTY_MAP = new HashMap();
     private ForceOffLineReceiver receiver;
-    public static CustomProperties settingProperties;
-    static final String UPDATE="1";
-    static final String NO_UPDATE="0";
+    public static CustomProperties settingProperties = GlobalSettings.settingProperties;
+    private static boolean updateSign=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,9 +73,9 @@ public  abstract class BaseActivity extends AppCompatActivity {
 //        PermissinUtils.requestStoragePermission(Utils.getApp(),BaseActivity.this);
 
         //隐藏默认的actionBar
-        NotificationUtil.gotoOpenNotificationActivity(this,this);
         PermissinUtils.requestStoragePermission(this,BaseActivity.this);
-        initCustomProperties();
+        NotificationUtil.gotoOpenNotificationActivity(this,this);
+
        /* ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
@@ -84,23 +84,14 @@ public  abstract class BaseActivity extends AppCompatActivity {
 //        this.getWindow().setBackgroundDrawable(res);
         ActivityCollector.addActivity(this);
 
+        if(CustomProperties.UPDATE.equals( GlobalSettings.settingProperties.getUpdateSign())){
+           ToastUtils.showDisplay("软件有更新，可在右上角菜单中自行更新");
+            updateSign=true;
+        }
+
     }
 
-    private void initCustomProperties() {
-        RequestParams params=new RequestParams(RequestParams.PARAM_TYPE_FORM);
-        ClientUtlis.post(true, UrlConfig.CUSTOM_PROPERTIES.getValue(),params,
-                this,new JsonCallback<CustomProperties>() {
-                    @Override
-                    public void onSuccess(CustomProperties customProperties, String msg) {
-                        settingProperties=customProperties;
-                    }
 
-                    @Override
-                    public void onError(String msg, int code) {
-                        ToastUtils.showDisplay(msg);
-                    }
-                });
-    }
 
 
 

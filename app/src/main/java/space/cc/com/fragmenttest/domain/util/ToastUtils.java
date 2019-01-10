@@ -60,6 +60,9 @@ public class ToastUtils {
         new ToastUtils(context, text, 0, ICONTYPE_NONE).show();
     }
 
+
+
+
     /**
      * 显示一个带图标的吐司
      *
@@ -146,10 +149,26 @@ public class ToastUtils {
             ((Toast) mToast).cancel();
         }
     }
-
+/**
+     * @author  CF
+     * @date   2019/1/10
+     * @description  默认短时间显示
+     *
+     */
     public static void showDisplay(CharSequence errMsg) {
 
 
         showText(Utils.getApp(),errMsg);
+    }
+/**
+     * @author  CF
+     * @date   2019/1/10
+     * @description  根据传入时间确定是长显示还是短显示
+     *
+     */
+    public static void showLong(CharSequence msg) {
+
+
+        showText(Utils.getApp(),msg,Toast.LENGTH_LONG);
     }
 }
