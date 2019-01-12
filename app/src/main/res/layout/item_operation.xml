@@ -1,51 +1,94 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_oper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_2"
+    android:background="@color/white"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:stateListAnimator="@drawable/lift_on_touch"
+    app:cardCornerRadius="@dimen/dp_10"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
 
-        android:background="@color/white"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stateListAnimator="@drawable/lift_on_touch"
-        android:layout_marginLeft="@dimen/dp_4"
-        android:layout_marginRight="@dimen/dp_4"
-        android:id="@+id/item_oper"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="@dimen/dp_10"
-        app:cardElevation="10dp"
-        app:cardUseCompatPadding="true"
-        app:cardPreventCornerOverlap="false">
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           >
-       <TextView
-           android:id="@+id/item_oper_content"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:text="操作描述"
-           />
-       <TextView
-               android:id="@+id/item_oper_create_time"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:text="创建时间"
-           />
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/item_oper_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="操作名称" />
+            <TextView
+                android:id="@+id/item_oper_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="操作描述" />
+            <TextView
+                android:id="@+id/item_oper_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorAccent"
+                android:text="目标url" />
+
+            <TextView
+                android:id="@+id/item_oper_env"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorAccent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                >
 
 
-           <ImageButton
-               android:id="@+id/item_oper_but"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:background="@color/C100"
-               android:layout_gravity="center_horizontal"
-               />
+            </TextView>
+            <TextView
+                android:id="@+id/item_oper_create_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="创建时间" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:layout_weight="3"
 
-       </LinearLayout>
-    </androidx.cardview.widget.CardView>
+            >
+
+            <ImageButton
+                android:id="@+id/item_oper_but"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/C100"
+                android:src="@drawable/press_but"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
 
 
 

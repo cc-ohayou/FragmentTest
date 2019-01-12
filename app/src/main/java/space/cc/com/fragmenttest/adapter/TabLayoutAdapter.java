@@ -1,10 +1,16 @@
 package space.cc.com.fragmenttest.adapter;
 
+import android.app.Activity;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import space.cc.com.fragmenttest.fragment.OperationListFragment;
+import space.cc.com.fragmenttest.fragment.DynamicFragment;
+
 /**
      * @author  CF
      * @date   2019/1/10
@@ -15,34 +21,35 @@ public class TabLayoutAdapter  extends FragmentPagerAdapter{
 
 
     private String [] title ;
-    private List<Fragment> fragmentList;
-    public TabLayoutAdapter(FragmentManager fm, String[] titles, List<Fragment> fragmentList) {
+    private Activity activity ;
+    public TabLayoutAdapter(FragmentManager fm, String[] titles, Activity activity) {
         super(fm);
         this.title=titles;
-        this.fragmentList = fragmentList;
+        this.activity=activity;
     }
+
+
+
     @Override
     public Fragment getItem(int position) {
-
-        if(fragmentList.get(position)==null){
-            initFragment(position);
-        }
-
-        return fragmentList.get(position);
+            return  initFragment(position);
     }
 
-    private void initFragment(int position) {
+    private Fragment initFragment(int position) {
         switch(position){
             case 0:
-
-                break;
+                return  OperationListFragment.newInstance(title[position],activity);
+            case 1:
+                return  (DynamicFragment.newInstance(title[position]));
+            default:
+                return  OperationListFragment.newInstance(title[position],activity);
 
         }
     }
 
     @Override
     public int getCount() {
-        return fragmentList.size();
+        return title.length;
     }
     @Override
     public CharSequence getPageTitle(int position) {

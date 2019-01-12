@@ -3,9 +3,7 @@ package space.cc.com.fragmenttest.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import com.google.android.material.tabs.TabLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -23,22 +21,15 @@ import androidx.viewpager.widget.ViewPager;
 import butterknife.ButterKnife;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.TabLayoutAdapter;
+import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.fragment.BaseFragment;
+import space.cc.com.fragmenttest.fragment.DynamicFragment;
 import space.cc.com.fragmenttest.fragment.OperationListFragment;
-import space.cc.com.fragmenttest.fragment.OperationTabItemFragment;
 
 public class TabTestActivity extends AppCompatActivity {
 
-    private static final String TAG_TAB_ONE ="dynamic" ;
-    private static final String TAG_TAB_TWO ="operList" ;
-    /**
-     * The {@link androidx.viewpager.widget.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * androidx.fragment.app.FragmentStatePagerAdapter.
-     */
+    private static final String TAG_TAB_ONE = "dynamic";
+    private static final String TAG_TAB_TWO = "operList";
     private TabLayoutAdapter mPagerAdapter;
 
     /**
@@ -49,32 +40,24 @@ public class TabTestActivity extends AppCompatActivity {
     private SmartRefreshLayout srl_home;
 
     private List<Fragment> tabFragments;
-    private String[] tabTitles={"列表","动态"};
+    private String[] tabTitles = {"列表", "动态"};
     FragmentManager fManager;
     BaseFragment dynamicFragment;
     BaseFragment operListFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_tab_test);
-            ButterKnife.bind(this);
-
-            Toolbar toolbar = findViewById(R.id.toolbar);
+            Toolbar toolbar = findViewById(R.id.tab_toolbar);
             setSupportActionBar(toolbar);
-//          初始化每个tab内部的fragment
-            initFragmentList();
-
             intiViewPagerAndAdapter();
-            mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
+//            mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
 
             initTabLayout();
-            stateCheck(savedInstanceState);
-//            tabLayout.findViewById(R.id.tabItem);
-//            setupWithViewPager(mViewPager); 内部完成了下面注释的两行代码的功能 以及adapter监听器的添加
-//             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+//           stateCheck(savedInstanceState);
 
             initFloatBut();
         } catch (Exception e) {
@@ -83,6 +66,7 @@ public class TabTestActivity extends AppCompatActivity {
 
 
     }
+
 
     private void initFloatBut() {
      /*   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -96,97 +80,67 @@ public class TabTestActivity extends AppCompatActivity {
     }
 
     private void initTabLayout() {
-        tabLayout=findViewById(R.id.tabs);
-       /* tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout = findViewById(R.id.tabs);
+//        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         //设置tab标题字体颜色
-        tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.bg_gray), ContextCompat.getColor(this, R.color.white));
+//        tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.bg_gray), ContextCompat.getColor(this, R.color.white));
         //设置选中区域背景色
-        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));*/
+//        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
         ViewCompat.setElevation(tabLayout, 10);
-
+//            setupWithViewPager(mViewPager); 内部完成了下面注释的两行代码的功能 以及adapter监听器的添加
+//             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+//            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         tabLayout.setupWithViewPager(mViewPager);
     }
 
     private void intiViewPagerAndAdapter() {
-        mPagerAdapter = new TabLayoutAdapter(getSupportFragmentManager(),tabTitles,tabFragments);
+        mPagerAdapter = new TabLayoutAdapter(getSupportFragmentManager(), tabTitles,TabTestActivity.this);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager =  findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
+
         mViewPager.setAdapter(mPagerAdapter);
-    }
+        //设置ViewPager的切换监听
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected ( int position){
+//                ToastUtils.showDisplay("switch to "+position);
+                switch (position) {
+                    case 0:
+                        selectTab(position);
+                        break;
+                    case 1:
+                        selectTab(position);
 
-    private void initFragmentList() {
-        tabFragments = new ArrayList<>();
-        for (String title : tabTitles) {
-            if("列表".equals(title)){
-
-                tabFragments.add(OperationListFragment.newInstance(title));
-            }
-        }
-
-
-    }
-
-
-
-    /**
-     * 状态检测 用于内存不足的时候保证fragment不会重叠
-     */
-    private void stateCheck(Bundle savedInstanceState) {
-
-            if (null != savedInstanceState) {
-                //页面意外终止后（如进程被杀）恢复原状态
-                int position = savedInstanceState.getInt("position", 2);
-                switchContent(position);
-            } else {
-                switchContent(0);
-            }
-
-
-    }
-
-    private int mIntPosition = -1;
-
-    /**
-     * 切换Fragment
-     */
-    private void switchContent(int index) {
-        if (mIntPosition == index) return;
-        mIntPosition = index;
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        // 获取fragment，同时防止页面意外终止后（如进程被杀）恢复时有重叠情况出现
-        operListFragment = (OperationListFragment) fManager.findFragmentByTag(TAG_TAB_ONE);
-        dynamicFragment = (OperationTabItemFragment) fManager.findFragmentByTag(TAG_TAB_TWO);
-
-        hideFragments(transaction);
-
-        switch (index) {
-            case 0:
-                if (operListFragment == null) {
-                    operListFragment = new OperationListFragment();
-                    transaction.add(R.id.tab_activity, operListFragment, TAG_TAB_ONE);
-                } else {
-                    transaction.show(operListFragment);
+                        break;
+                    case 2:
+                        selectTab(position);
+                        break;
                 }
-                break;
-            case 1:
-                if (dynamicFragment == null) {
-                    dynamicFragment = new OperationTabItemFragment();
-                    transaction.add(R.id.tab_activity, dynamicFragment, TAG_TAB_TWO);
-                } else {
-                    transaction.show(dynamicFragment);
-                }
-                break;
-            default:
-                break;
-        }
-//        getSupportFragmentManager().beginTransaction().replace(R.id.tab_activity,dynamicFragment).commitAllowingStateLoss();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.tab_activity,dynamicFragment).commit();
+            }
+            //页面滚动事件
+            @Override
+            public void onPageScrolled ( int arg0, float arg1, int arg2){
+            }
+            //页面滚动状态改变事件
+            @Override
+            public void onPageScrollStateChanged ( int arg0){
+            }
+        });
 
-        //commit 在onSaveInstanceState之后调用报错 java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
-        //transaction.commit();
-        transaction.commitAllowingStateLoss();
     }
+    /**
+         * @author  CF
+         * @date   2019/1/11
+         * @description   选中tab  切换图标选中状态和viewPager的当前item
+         *
+         */
+    private void selectTab(int position) {
+        mViewPager.setCurrentItem(position);
+
+    }
+
+
 
     /**
      * 将所有的Fragment都置为隐藏状态。

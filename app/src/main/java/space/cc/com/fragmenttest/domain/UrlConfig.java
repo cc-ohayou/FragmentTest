@@ -5,6 +5,7 @@ public enum UrlConfig {
     TEST_DOWNLOAD(UrlConstants.PREFIX+"v1/cc/getDownloadUrl","测试下载url"),
     DOWN_LOAD04(UrlConstants.PREFIX04+"","下载测试url"),
     MANGA_LIST(UrlConstants.PREFIX+"/v1/cc/getMangaList","manga列表url"),
+    OPER_LIST(UrlConstants.PREFIX+"/v1/cc/getOperateList","操作列表url"),
     CUSTOM_PROPERTIES(UrlConstants.PREFIX+"/v1/cc/getCustomProperties","获取全局自定义属性"),
     ;
 

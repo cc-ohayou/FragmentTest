@@ -1,11 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/manga_item"
-    android:layout_margin="5dp"
     android:alpha="0.3"
-    android:background="@color/mangaItemBack"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@color/mangaItemBack"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:stateListAnimator="@drawable/lift_on_touch"
+    android:padding="4dp"
+    app:cardCornerRadius="@dimen/dp_10"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="false"
+  >
+    <!--app:cardUseCompatPadding="true"-->
     <!--android:background="@color/mangaItemBack"-->
 
     <!--alpha  android:alpha的值为0~1之间的数。数字越大，越不透明。1表示完全不透明，0表示完全透明-->
@@ -74,5 +84,5 @@
     </RelativeLayout>
 
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>
 

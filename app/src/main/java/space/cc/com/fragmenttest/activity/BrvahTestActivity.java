@@ -96,9 +96,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             toolbar.setTitle("");
             setToolbarStyle(toolbar);
             setSupportActionBar(toolbar);
-            appBarToggleSet();
             drawerLayout = findViewById(R.id.manga_drawer_lay_out);
-            navView = findViewById(R.id.nav_view);
+            appBarToggleSet();
             //侧边栏菜单 监听
             setNavigationViewListener();
 //            initActionBar();
@@ -186,6 +185,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void setNavigationViewListener() {
+        navView = findViewById(R.id.nav_view);
 //        navView.setCheckedItem(R.id.nav_collect);
         UtilBox.box().picasso.loadDrawResReSize(
                 (CircleImageView) navView.getHeaderView(0).findViewById(R.id.head_image),
@@ -423,7 +423,6 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
                 R.drawable.manga_top_view_bg);
-        topView.setBackgroundColor(R.color.mangaTopViewBack);
         homeAdapter.addHeaderView(topView);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

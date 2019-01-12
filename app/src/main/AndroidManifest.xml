@@ -101,10 +101,13 @@
             android:enabled="true"
             android:exported="true">
 
-           <!-- <intent-filter>
+            <!--
+            <intent-filter>
                 <action android:name="space.cc.com.fragmenttest.broadcast.MyBroadCast" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </receiver>
+
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
@@ -164,7 +167,7 @@
         <activity
             android:name=".activity.DrawerDemoActivity"
             android:label="@string/title_activity_drawer_demo"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

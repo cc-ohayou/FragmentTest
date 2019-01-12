@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/dynamic_frag_tab_item"
+    android:orientation="vertical">
+
+    <!--android:layout_gravity： 表示当前View，即控件本身，在父一级内的（即父一级控件所给当前子控件所分配的显示范围内）的对齐方式-->
+    <TextView
+        android:id="@+id/dynamic_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        />
+
+</LinearLayout>

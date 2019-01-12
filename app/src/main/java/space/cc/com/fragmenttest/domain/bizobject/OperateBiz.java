@@ -11,21 +11,18 @@ import java.util.Date;
 @Data
 public class OperateBiz {
     private String operId;
+    //操作简称 比如 递延
+    private String operName;
+    //类型
     private String type;
     private String desc;
+    // 定时任务
+    private String label;
+    //环境类型
+    private String envType;
     private String url;
     private String createTime;
     private String updateTime;
 
-    public static void main(String[] args) {
-        OperateBiz operateBiz=new OperateBiz();
-        operateBiz.setOperId("001");
-        operateBiz.setType("1");
-        operateBiz.setDesc("递延操作");
-        operateBiz.setUrl("");
-        operateBiz.setCreateTime("");
-        operateBiz.setUpdateTime(operateBiz.getCreateTime());
 
-
-    }
 }

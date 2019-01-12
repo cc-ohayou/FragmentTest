@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import space.cc.com.fragmenttest.domain.util.Utils;
 
 /**
  * 关于UI的工具类
@@ -141,5 +144,45 @@ public class UtilUI {
     public static void MoveToPosition(LinearLayoutManager manager, int n) {
         manager.scrollToPositionWithOffset(n, 0);
         manager.setStackFromEnd(true);
+    }
+
+
+    /**
+         * @author  CF
+         * @date   2019/1/11
+         * @description
+         *
+         */
+    public int getViewIemWidth(int divide,Context context) {
+        //获取屏幕高度
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(dm);
+        //屏幕宽度
+        int mScreenWidth = dm.widthPixels;
+        return (mScreenWidth)/divide;
+    }
+    /**
+     * @author  CF
+     * @date   2019/1/11
+     * @description
+     *
+     */
+    public int getViewIemHeight(int divide ,Context context) {
+        //获取屏幕高度
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(dm);
+        int mScreenHeight = dm.heightPixels;//屏幕高度
+        return (mScreenHeight)/divide;
+    }
+
+    public int getViewIemHeight(int divide ) {
+        //获取屏幕高度
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager wm = (WindowManager) Utils.getApp().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(dm);
+        int mScreenHeight = dm.heightPixels;//屏幕高度
+        return (mScreenHeight)/divide;
     }
 }

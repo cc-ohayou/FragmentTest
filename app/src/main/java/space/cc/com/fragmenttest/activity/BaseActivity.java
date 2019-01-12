@@ -51,6 +51,7 @@ import space.cc.com.fragmenttest.domain.util.PermissinUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
 import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
+import space.cc.com.fragmenttest.util.UtilBox;
 
 public  abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
@@ -84,8 +85,8 @@ public  abstract class BaseActivity extends AppCompatActivity {
 //        this.getWindow().setBackgroundDrawable(res);
         ActivityCollector.addActivity(this);
 
-        if(CustomProperties.UPDATE.equals( GlobalSettings.settingProperties.getUpdateSign())){
-           ToastUtils.showDisplay("软件有更新，可在右上角菜单中自行更新");
+        if(!updateSign&&CustomProperties.UPDATE.equals( GlobalSettings.settingProperties.getUpdateSign())){
+           ToastUtils.showLong("软件有更新哦，可在右上角菜单中自行更新");
             updateSign=true;
         }
 
@@ -237,22 +238,12 @@ public  abstract class BaseActivity extends AppCompatActivity {
     }
 
      int getViewIemWidth(int divide,Context context) {
-        //获取屏幕高度
-        DisplayMetrics dm = new DisplayMetrics();
-        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getMetrics(dm);
-        //屏幕宽度
-        int mScreenWidth = dm.widthPixels;
-        return (mScreenWidth)/divide;
-    }
+         return UtilBox.box().ui.getViewIemWidth(divide,context);
+
+     }
 
      int getViewIemHeight(int divide ,Context context) {
-        //获取屏幕高度
-        DisplayMetrics dm = new DisplayMetrics();
-        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getMetrics(dm);
-        int mScreenHeight = dm.heightPixels;//屏幕高度
-        return (mScreenHeight)/divide;
+       return UtilBox.box().ui.getViewIemHeight(divide,context);
     }
 
 

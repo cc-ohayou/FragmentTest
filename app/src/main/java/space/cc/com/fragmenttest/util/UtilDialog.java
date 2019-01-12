@@ -1,6 +1,7 @@
 package space.cc.com.fragmenttest.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -60,7 +61,7 @@ public class UtilDialog {
      * @description
      *
      */
-    public  void showMaterialDialogSimleDefault(Activity activity, String title, String content, MaterialDialog.SingleButtonCallback callbackAction) {
+    public  void showMaterialDialogSimleDefault(Context activity, String title, String content, MaterialDialog.SingleButtonCallback callbackAction) {
 
         showMaterialDialog(activity,title,content,DEAFULT_POSITIVE_TEXT,DEFAULT_NEGATIVE_TEXT,callbackAction);
 
@@ -73,7 +74,7 @@ public class UtilDialog {
      * @description
      *
      */
-    public  void showMaterialDialog(final Activity activity,String title,String content,String positiveText,String negativeText,MaterialDialog.SingleButtonCallback callBackAction) {
+    public  void showMaterialDialog(final Context activity, String title, String content, String positiveText, String negativeText, MaterialDialog.SingleButtonCallback callBackAction) {
 
 //        简单的diaolog，同意和不同意的字体颜色是默认是R.color.colorAccent
         new MaterialDialog.Builder(activity)

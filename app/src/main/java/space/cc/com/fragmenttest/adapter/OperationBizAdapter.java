@@ -2,6 +2,7 @@ package space.cc.com.fragmenttest.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class OperationBizAdapter extends BaseQuickAdapter<OperateBiz, BaseViewHo
             }
             holder.getConvertView().setLayoutParams(linearParams);
             holder.itemView.setLayoutParams(linearParams);
+
 //            holder.itemView.findViewById(R.id.manga_title);
 //            Color.parseColor("#865955")  将string转化为 int 型color
 //          int color=Color.rgb(red, green, blue)   将RGB转化为int 型colorcolor
@@ -73,15 +75,23 @@ public class OperationBizAdapter extends BaseQuickAdapter<OperateBiz, BaseViewHo
     @Override
     protected void convert(BaseViewHolder holder, OperateBiz item) {
         try {
-            holder.setText(R.id.item_oper_content, item.getDesc());
+            holder.setText(R.id.item_oper_name, "名称： " + item.getOperName() );
+            holder.setText(R.id.item_oper_content, "描述："+item.getDesc());
+            holder.setText(R.id.item_oper_url, "url："+item.getUrl());
+            holder.setText(R.id.item_oper_env, "环境: " + item.getEnvType() );
             holder.setText(R.id.item_oper_create_time, "创建时间: " + item.getCreateTime() );
-            holder.addOnClickListener(R.id.manga_cover);
+            holder.setImageResource(R.id.item_oper_but,R.drawable.press_but);
+            holder.addOnClickListener(R.id.item_oper_but);
             holder.addOnLongClickListener(R.id.item_oper_but);
             /*UtilBox.box().picasso.loadUrlResIntoView((ImageView) holder.getView(R.id.manga_cover),
                     item.getCoverImage());
+
 */
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
+
 }

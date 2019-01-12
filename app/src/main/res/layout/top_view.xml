@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/mangaTopViewBack"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -42,14 +43,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stateListAnimator="@drawable/lift_on_touch"
-        android:layout_marginLeft="@dimen/dp_4"
-        android:layout_marginRight="@dimen/dp_4"
+        android:layout_margin="4dp"
         android:id="@+id/cv_cardview"
         android:clickable="true"
+        android:padding="4dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/dp_10"
         app:cardElevation="10dp"
-        app:cardUseCompatPadding="true"
         app:cardPreventCornerOverlap="false">
         <ImageView
             android:id="@+id/top_header_view_bac_image"
