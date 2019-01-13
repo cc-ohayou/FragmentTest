@@ -102,5 +102,5 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 //    下拉刷新 上拉刷新框架
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
-
+    implementation 'com.github.yalantis:ucrop:2.2.2'
 }

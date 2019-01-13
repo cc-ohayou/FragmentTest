@@ -1,32 +1,25 @@
 package space.cc.com.fragmenttest.activity.media;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-
-import java.io.File;
-
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.activity.BaseActivity;
+import space.cc.com.fragmenttest.util.UtilBox;
 
 public class CameraAlbumActivity extends BaseActivity implements View.OnClickListener {
 
@@ -88,38 +81,15 @@ public class CameraAlbumActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void takePhoto() {
-    /*此处使用应用关联缓存存放图片 android6.0开始 读写SD卡被列为了危险权限
-   任何直接存储到sd卡的操作都需要申请运行时权限  使用应用关联目录则可以跳过这一步
+        String picName="photo_out_put_image.jpg";
+        imageUri=UtilBox.box().want.getFileUriByName(picName);
 
-     * */
-        File outPutImage = new File(getExternalCacheDir(), "out_put_image.jpg");
-        try {
-            if (outPutImage.exists()) {
-                outPutImage.delete();
-            }
-            outPutImage.createNewFile();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (Build.VERSION.SDK_INT >= 24) {
-/*
-            低于android7.0的设备需要用Uri的fromFile方法将File对象转换为Uri对象
-            Uri对象标识着output_image.jpg这张图片的本地真实路径
-            7.0以后直接使用本地真实路径被认为是不安全的 所以通过getUriForFile
-            获取一个转换过的不是本地真实路径但可以关联到真实路径的Uri对象
-            总之一切为了更加安全
-*/
-            imageUri = FileProvider.getUriForFile(CameraAlbumActivity.this,
-                    getString(R.string.fileProvider), outPutImage);
-        } else {
-            imageUri = Uri.fromFile(outPutImage);
-        }
         Intent intent = new Intent(cameraAction);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, TAKE_PHOTO);
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -155,49 +125,23 @@ public class CameraAlbumActivity extends BaseActivity implements View.OnClickLis
             case SELECT_LOCAL_IMAGE:
                 toastSimple("SELECT_LOCAL_IMAGE click success version="
                         +Build.VERSION.SDK_INT+",resultCode="+resultCode );
-
+                String imagePath="";
                 if (resultCode == RESULT_OK) {
                     //判断手机系统版本号
                     if (Build.VERSION.SDK_INT >= 19) {
                         //4.4以及以上版本使用这个方法处理图片
-                        handleImageOnKitKat(data);
+                        imagePath= UtilBox.box().want.handleImageOnKitKat(data);
+                        //根据图片路径展示图片
 
                     } else {
-                        handleImageBeforeKitKat(data);
+                        imagePath=  UtilBox.box().want.handleImageBeforeKitKat(data);
                     }
+                    displayImage(imagePath);
                 }
         }
     }
 
-    @TargetApi(19)
-    private void handleImageOnKitKat(Intent data) {
-        String imagePath = "";
-        Uri uri = data.getData();
-        if (DocumentsContract.isDocumentUri(this, uri)) {
-            String docId = DocumentsContract.getDocumentId(uri);
-            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
-                toastSimple("media.documents");
-                //解析出数字格式的id
-                String id = docId.split(":")[1];
-                String selection = MediaStore.Images.Media._ID + "=" + id;
-                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
 
-            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content:" +
-                        "//downloads/public_downloads"), Long.valueOf(docId));
-                imagePath = getImagePath(contentUri, null);
-            }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            //contnet类型普通方式处理
-            imagePath = getImagePath(uri, null);
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            //file类型直接获取图片路径
-            imagePath = uri.getPath();
-        }
-        //根据图片路径展示图片
-        displayImage(imagePath);
-
-    }
   /**
      * @description 展示图片
      * @author CF
@@ -211,38 +155,6 @@ public class CameraAlbumActivity extends BaseActivity implements View.OnClickLis
            }else{
                toastSimple("failed to get image");
            }
-    }
-  /**
-     * @description  获取图片路径
-     * @author CF
-     * created at 2018/11/26/026  0:11
-     */
-    private String getImagePath(Uri uri, String selection) {
-        String path = "";
-        //通过Uri和selection来获取真实图片路径
-        Cursor cursor=getContentResolver().query(uri,null,selection,
-                null,null);
-        if(cursor!=null){
-            if(cursor.moveToNext()){
-                path=cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-
-            }
-            cursor.close();
-        }
-        return path;
-    }
-  /**
-     * @description
-     * @author CF
-     * created at 2018/11/26/026  0:15
-     */
-    private void handleImageBeforeKitKat(Intent data) {
-        toastSimple(" handleImageBeforeKitKat");
-
-        Uri uri=data.getData();
-           String imagePath=getImagePath(uri,null);
-           displayImage(imagePath);
-
     }
 
 

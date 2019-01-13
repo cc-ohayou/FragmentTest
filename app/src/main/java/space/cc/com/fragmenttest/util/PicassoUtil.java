@@ -1,6 +1,7 @@
 package space.cc.com.fragmenttest.util;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -12,6 +13,7 @@ public class PicassoUtil {
     private static Picasso picassoInst = Picasso.get();
     private static final int DEF_WIDTH = 50;
     private static int DEF_HEIGHT =50;
+    int defaultResId = R.drawable.manga_default;
    /* 对于不透明的图片可以使用RGB_565来优化内存。
 
             Picasso.with( imageView.getContext() )
@@ -69,7 +71,6 @@ RGB_565:每个像素占用2byte内存
      * created at 2019/1/5/005  21:50
      */
     public void loadDrawResReSize(ImageView targetView, int drawableResId,int width,int height) {
-
 
         picassoInst.load(drawableResId)
 //                .resize和centerCrop()需要一起使用
@@ -134,7 +135,7 @@ RGB_565:每个像素占用2byte内存
      */
     public void loadDrawResIntoViewWithDefault(ImageView targetView, int drawableResId, Integer defaultId) {
 //        picassoInst.setIndicatorsEnabled(true);
-        int defaultResId = R.drawable.manga_default;
+
         if (defaultId != null) {
             defaultResId = defaultId;
         }
@@ -165,4 +166,31 @@ RGB_565:每个像素占用2byte内存
     }
 
 
+    /**
+     * @author CF
+     * @date 2019/1/4
+     * @description
+     */
+    public void loadUriResWithDefault(ImageView targetView, Uri resUri, int defaultResId) {
+
+        picassoInst.load(resUri)
+//                .resize和centerCrop()需要一起使用
+//                     .resize(50, 50)
+//                     中心修剪
+//                .centerCrop()
+                .placeholder(defaultResId)
+                .config(Bitmap.Config.RGB_565)
+                .error(R.drawable.manga_default_error)
+//                     此处使用 helper.getView获取对应位置的view对象
+                .into(targetView);
+
+    }
+      /**
+         * @description
+         * @author CF
+         * created at 2019/1/13/013  22:54
+         */
+    public void loadUriRes(ImageView targetView, Uri resUri) {
+        loadUriResWithDefault(targetView,resUri,defaultResId);
+    }
 }

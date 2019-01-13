@@ -1,12 +1,8 @@
 package space.cc.com.fragmenttest.adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,7 +50,7 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
             linearParams.width=width;
         }*/
 //        view.setLayoutParams(linearParams);
-            ViewGroup.LayoutParams linearParams = holder.getConvertView().getLayoutParams();
+            ViewGroup.LayoutParams linearParams = holder.itemView.getLayoutParams();
             if (height > 0) {
                 linearParams.height = height;
             }
@@ -68,7 +64,8 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
 //          int color=Color.rgb(red, green, blue)   将RGB转化为int 型colorcolor
 // 如果需要透明度
 // int color=Color.argb(a,red, green, blue)
-//            holder.itemView.setBackgroundColor(R.color.mangaItemBack);
+//            holder.itemView.setBackgroundColor(Color.parseColor("#26000000"));
+            holder.itemView.getBackground().mutate().setAlpha(60);
         } catch (Exception e) {
             e.printStackTrace();
         }

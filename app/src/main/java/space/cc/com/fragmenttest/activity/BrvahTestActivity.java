@@ -2,9 +2,9 @@ package space.cc.com.fragmenttest.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
@@ -23,7 +22,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.yalantis.ucrop.UCrop;
 
 import java.util.List;
 
@@ -46,7 +45,6 @@ import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
-import space.cc.com.fragmenttest.listener.HidingScrollListener;
 import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.CustomScrollView;
@@ -54,6 +52,7 @@ import space.cc.com.fragmenttest.util.UtilBox;
 
 
 public class BrvahTestActivity extends BaseActivity implements View.OnClickListener ,CustomScrollView.OnScrollChangeListener {
+
     private static final String TAG = "BrvahTestActivity";
     private List<Manga> mangaList;
     private static List<Manga> defaultList;
@@ -69,9 +68,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     FloatingActionButton floatBackToTopBut;
     private ScrollView scrollerView;
     RecyclerView.LayoutManager layoutManager;
-    
+    private  CircleImageView headImageView;
     int popMenuYoffset;
-    
+    //头像来源uri对象
+    Uri sourceHeadImageUri;
+//    头像目标存储uri
+    Uri destinationHeadUri;
     private static String defaultData = "[{\"area\":\"中国大陆\",\"arealimit\":317,\"attention\":352150,\"bangumi_id\":0,\"nowEpisode\":\"11\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8f19c704a6516bab4716931db10621c1b6c6e4bf.jpg\",\"danmaku_count\":105072,\"ep_id\":258700,\"favorites\":352150,\"is_finish\":0,\"lastupdate\":1545883200,\"lastupdate_at\":\"2018-12-27 12:00:00\",\"isNew\":false,\"play_count\":8263731,\"pub_time\":\"\",\"season_id\":25823,\"season_status\":13,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/67a851a5cd87fef2ddd6f9bd6cf691781a1d8b95.jpg\",\"title\":\"画江湖之不良人 第三季\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":12083,\"bangumi_id\":0,\"nowEpisode\":\"4\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8df12fc092928ba57069eb16e077f9d719f345e5.jpg\",\"danmaku_count\":10022,\"ep_id\":258686,\"favorites\":12083,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":486760,\"pub_time\":\"\",\"season_id\":26176,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\"title\":\"通灵妃 河南话版\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":151420,\"bangumi_id\":0,\"nowEpisode\":\"10\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/57dc8fdf8373f8c1facfc2911d50be1cfc6da18a.jpg\",\"danmaku_count\":26706,\"ep_id\":258689,\"favorites\":151420,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":2023158,\"pub_time\":\"\",\"season_id\":24888,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/ef2f039b71564cc469b2cac9d8f2879e1259a74f.jpg\",\"title\":\"山河社稷图\",\"viewRank\":0,\"weekday\":4}]";
 
     static {
@@ -187,9 +189,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private void setNavigationViewListener() {
         navView = findViewById(R.id.nav_view);
 //        navView.setCheckedItem(R.id.nav_collect);
+        headImageView=navView.getHeaderView(0).findViewById(R.id.head_image);
         UtilBox.box().picasso.loadDrawResReSize(
-                (CircleImageView) navView.getHeaderView(0).findViewById(R.id.head_image),
+                headImageView,
                 R.drawable.default_head,0,0);
+        headImageView.setOnClickListener(this);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -202,7 +206,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 }else if(menuItem.getItemId()==R.id.nav_collect){
                     startAction(BrvahTestActivity.this,null,TabTestActivity.class);
                 }else{
-                    ToastUtils.showDisplay(menuItem.getTitle());
+                    ToastUtils.showDisplay(String.valueOf(menuItem.getTitle()));
                 }
                 return true;
             }
@@ -362,10 +366,10 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_item1:
-                ToastUtils.showDisplay(popItem1TextView.getText());
+                ToastUtils.showDisplay(String.valueOf(popItem1TextView.getText()));
                 break;
             case R.id.ll_item2:
-                ToastUtils.showDisplay(popItem2TextView.getText());
+                ToastUtils.showDisplay(String.valueOf(popItem2TextView.getText()));
 
                if(CustomProperties.UPDATE.equals(settingProperties.getUpdateSign())){
                    //下载更新
@@ -375,6 +379,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                    ToastUtils.showDisplay("暂未发现新的版本哦^^");
                }
                 break;
+            case R.id.head_image:
+                openAlbum();
+                break;
 
         }
         //点击PopWindow的item后,关闭此PopWindow
@@ -383,7 +390,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, SELECT_LOCAL_IMAGE);
+    }
 
     @Override
     public void requestPermission() {
@@ -412,14 +423,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     @SuppressLint("ResourceAsColor")
     private void initAdapter() {
         homeAdapter = new MyQuickAdapter(R.layout.manga_item, mangaList, 0, getViewIemHeight(5, this));
-//         homeAdapter = new MyQuickAdapter(R.layout.manga_item, mangaList);
-//        homeAdapter.openLoadAnimation();
         //放大动画
 //        homeAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         homeAdapter.openLoadAnimation();
 //        homeAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
 //        BaseQuickAdapter.SLIDEIN_LEFT 左边划入动画
-//        CardView
         topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
                 R.drawable.manga_top_view_bg);
@@ -544,16 +552,39 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     private void hideViews() {
 //        显示toolbar
-//        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-
+        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        ToastUtils.showDisplay(String.valueOf(toolbar.getTranslationY()));
         CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) floatBackToTopBut.getLayoutParams();
         int fabBottomMargin = lp.bottomMargin;
         floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
     private void showViews() {
-//        mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+//        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+
         floatBackToTopBut.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
+            UtilBox.box().picasso.loadUriRes(
+                    headImageView,resultUri);
+            ToastUtils.showDisplay(resultUri.getPath());
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+        } else if(resultCode == RESULT_OK &&requestCode==SELECT_LOCAL_IMAGE){
+            sourceHeadImageUri= data.getData();
+            if(destinationHeadUri==null){
+                destinationHeadUri=UtilBox.box().want.getFileUriByName("cc_head_cache.jpg");
+            }
+            UCrop.of(sourceHeadImageUri, destinationHeadUri)
+                    .withAspectRatio(16, 9)
+                    .withMaxResultSize(100, 100)
+                    .start(this);
+
+        }
     }
 
     public static void main(String[] args) {

@@ -3,28 +3,23 @@ package space.cc.com.fragmenttest.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import butterknife.ButterKnife;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.TabLayoutAdapter;
-import space.cc.com.fragmenttest.domain.util.ToastUtils;
-import space.cc.com.fragmenttest.fragment.BaseFragment;
-import space.cc.com.fragmenttest.fragment.DynamicFragment;
-import space.cc.com.fragmenttest.fragment.OperationListFragment;
+import space.cc.com.fragmenttest.util.UtilBox;
 
 public class TabTestActivity extends AppCompatActivity {
 
@@ -37,27 +32,25 @@ public class TabTestActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     TabLayout tabLayout;
-    private SmartRefreshLayout srl_home;
-
-    private List<Fragment> tabFragments;
+//    private SmartRefreshLayout srl_home;
     private String[] tabTitles = {"列表", "动态"};
-    FragmentManager fManager;
-    BaseFragment dynamicFragment;
-    BaseFragment operListFragment;
-
+    FloatingActionButton floatBackToTopBut;
+    RecyclerView.LayoutManager layoutManager;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_tab_test);
-            Toolbar toolbar = findViewById(R.id.tab_toolbar);
+            toolbar = findViewById(R.id.tab_toolbar);
             setSupportActionBar(toolbar);
             intiViewPagerAndAdapter();
 //            mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
 
             initTabLayout();
 //           stateCheck(savedInstanceState);
+            layoutManager=new LinearLayoutManager(this);
 
             initFloatBut();
         } catch (Exception e) {
@@ -69,14 +62,26 @@ public class TabTestActivity extends AppCompatActivity {
 
 
     private void initFloatBut() {
-     /*   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        floatBackToTopBut = findViewById(R.id.tab_fab);
+
+        floatBackToTopBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                UtilBox.box().ui.MoveToPosition((LinearLayoutManager) layoutManager,0);
+//               显示toolbar
+//                toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
+                hideViews();
+
             }
-        });*/
+        });
+    }
+    private void hideViews() {
+//        显示toolbar
+        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) floatBackToTopBut.getLayoutParams();
+        int fabBottomMargin = lp.bottomMargin;
+        floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
     private void initTabLayout() {

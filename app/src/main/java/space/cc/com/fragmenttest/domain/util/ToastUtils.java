@@ -155,7 +155,7 @@ public class ToastUtils {
      * @description  默认短时间显示
      *
      */
-    public static void showDisplay(CharSequence errMsg) {
+    public static void showDisplay(String errMsg) {
 
 
         showText(Utils.getApp(),errMsg);

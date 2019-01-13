@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -17,6 +18,7 @@ public class PermissinUtils {
                     1);
         }
     }
+
 
     public static void requestContactPermission(Activity activity){
         if( ContextCompat.checkSelfPermission(Utils.getApp(), Manifest.permission.READ_CONTACTS)

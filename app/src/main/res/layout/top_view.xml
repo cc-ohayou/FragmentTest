@@ -39,11 +39,10 @@
     -->
 
     <androidx.cardview.widget.CardView
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stateListAnimator="@drawable/lift_on_touch"
-        android:layout_margin="4dp"
+        android:layout_margin="8dp"
         android:id="@+id/cv_cardview"
         android:clickable="true"
         android:padding="4dp"

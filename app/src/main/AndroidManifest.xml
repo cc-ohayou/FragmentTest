@@ -150,7 +150,14 @@
         <activity android:name=".activity.OkGoTestActivity" />
         <activity android:name=".activity.MyServiceActivity" />
         <activity android:name=".activity.MapLocationActivity" />
+
+
         <activity android:name=".activity.MaterialDesignActivity" />
+<!--图片裁剪-->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".activity.BrvahTestActivity"
             android:theme="@style/AppTheme">

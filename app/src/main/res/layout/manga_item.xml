@@ -2,20 +2,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/manga_item"
-    android:alpha="0.3"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    android:background="@color/mangaItemBack"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:stateListAnimator="@drawable/lift_on_touch"
-    android:padding="4dp"
+    android:padding="8dp"
     app:cardCornerRadius="@dimen/dp_10"
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="false"
   >
-    <!--app:cardUseCompatPadding="true"-->
+    <!--app:cardUseCompatPadding="true"
+      android:alpha="0.3"
+    android:layout_margin="8dp"
+    -->
     <!--android:background="@color/mangaItemBack"-->
 
     <!--alpha  android:alpha的值为0~1之间的数。数字越大，越不透明。1表示完全不透明，0表示完全透明-->
@@ -24,18 +24,19 @@
     <!--android:background="@drawable/b3_christmas"-->
     <!--android:background="@drawable/bg01"-->
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:layout_gravity="left"
         >
         <!--封面-->
         <ImageView
             android:id="@+id/manga_cover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    </FrameLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"

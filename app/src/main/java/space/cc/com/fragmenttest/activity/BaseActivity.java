@@ -10,13 +10,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,7 +28,6 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -39,21 +35,18 @@ import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
-import space.cc.com.fragmenttest.domain.RequestParams;
-import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
-import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
-import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.CloseUtils;
 import space.cc.com.fragmenttest.domain.util.NotificationUtil;
 import space.cc.com.fragmenttest.domain.util.PermissinUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
-import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.util.UtilBox;
 
 public  abstract class BaseActivity extends AppCompatActivity {
+    public final int SELECT_LOCAL_IMAGE = 2;
+
     private static final String TAG = "BaseActivity";
     static final Map EMPTY_MAP = new HashMap();
     private ForceOffLineReceiver receiver;
@@ -77,7 +70,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
         PermissinUtils.requestStoragePermission(this,BaseActivity.this);
         NotificationUtil.gotoOpenNotificationActivity(this,this);
 
-       /* ActionBar actionBar=getSupportActionBar();
+     /*   ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
             actionBar.hide();
         }*/
@@ -249,7 +242,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
 
 
     public void toastSimple(String msg) {
-        Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+        ToastUtils.showDisplay(msg);
     }
 
 
