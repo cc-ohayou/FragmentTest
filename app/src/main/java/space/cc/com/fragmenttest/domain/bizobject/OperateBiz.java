@@ -20,6 +20,10 @@ public class OperateBiz {
     private String label;
     //环境类型
     private String envType;
+    /**
+     * 项目归属
+     */
+    private String project;
     private String url;
     private String createTime;
     private String updateTime;

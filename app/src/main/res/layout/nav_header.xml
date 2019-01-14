@@ -21,16 +21,16 @@
         />
 
 <TextView
-    android:id="@+id/username"
+    android:id="@+id/nav_nick_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_above="@+id/mail"
-    android:text="CC"
+    android:layout_above="@+id/nav_mail"
+    android:text=""
     android:textColor="#FFF"
     android:textSize="15sp"
     />
     <TextView
-        android:id="@+id/mail"
+        android:id="@+id/nav_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

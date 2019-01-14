@@ -34,19 +34,33 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:text="操作名称" />
+            <!--省略号在结尾-->
             <TextView
                 android:id="@+id/item_oper_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
+                style="@style/singleText"
+                android:textStyle="bold"
                 android:text="操作描述" />
             <TextView
                 android:id="@+id/item_oper_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textStyle="bold"
+                style="@style/singleText"
                 android:textColor="@color/colorAccent"
                 android:text="目标url" />
+
+            <TextView
+                android:id="@+id/item_oper_pro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorAccent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                />
 
             <TextView
                 android:id="@+id/item_oper_env"
@@ -60,11 +74,11 @@
 
 
             </TextView>
-            <TextView
+            <!--<TextView
                 android:id="@+id/item_oper_create_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="创建时间" />
+                android:text="创建时间" />-->
         </LinearLayout>
 
         <LinearLayout

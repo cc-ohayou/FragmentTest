@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.yalantis.ucrop.UCrop;
+
 import java.lang.reflect.Field;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import space.cc.com.fragmenttest.domain.util.Utils;
@@ -184,5 +187,76 @@ public class UtilUI {
         wm.getDefaultDisplay().getMetrics(dm);
         int mScreenHeight = dm.heightPixels;//屏幕高度
         return (mScreenHeight)/divide;
+    }
+
+
+    /**
+     * Sometimes you want to adjust more options, it's done via {@link com.yalantis.ucrop.UCrop.Options} class.
+     *
+     * @param uCrop - ucrop builder instance
+     * @return - ucrop builder instance
+     */
+    public UCrop advancedConfig(@NonNull UCrop uCrop) {
+        UCrop.Options options = new UCrop.Options();
+//        压缩格式 默认jpeg
+//         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+//        设置压缩质量 0-100 可用一个进度条控制
+//        options.setCompressionQuality(mSeekBarQuality.getProgress());
+//        隐藏底部选项只有一个选择框 简洁
+//        options.setHideBottomControls(mCheckBoxHideBottomControls.isChecked());
+//        自由模式 选择框大小自由可调节 地步选项全有
+         options.setFreeStyleCropEnabled(true);
+//         设置这个参数 则裁剪区域为16:9长方形  其它选项不再显示 一般不用设置
+        options.withAspectRatio(1, 1);
+
+        /*
+        If you want to configure how gestures work for all UCropActivity tabs
+
+        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
+        * */
+
+        /*
+        This sets max size for bitmap that will be decoded from source Uri.
+        More size - more memory allocation, default implementation uses screen diagonal.
+
+        options.setMaxBitmapSize(640);
+        * */
+
+
+       /*
+
+        Tune everything (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
+        options.setMaxScaleMultiplier(5);
+        options.setImageToCropBoundsAnimDuration(666);
+        options.setDimmedLayerColor(Color.CYAN);
+        options.setCircleDimmedLayer(true);
+        options.setShowCropFrame(false);
+        options.setCropGridStrokeWidth(20);
+        options.setCropGridColor(Color.GREEN);
+        options.setCropGridColumnCount(2);
+        options.setCropGridRowCount(1);
+        options.setToolbarCropDrawable(R.drawable.your_crop_icon);
+        options.setToolbarCancelDrawable(R.drawable.your_cancel_icon);
+
+        // Color palette
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.your_color_res));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.your_color_res));
+        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
+        options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
+        options.setRootViewBackgroundColor(ContextCompat.getColor(this, R.color.your_color_res));
+
+        // Aspect ratio options
+        options.setAspectRatioOptions(1,
+            new AspectRatio("WOW", 1, 2),
+            new AspectRatio("MUCH", 3, 4),
+            new AspectRatio("RATIO", CropImageView.DEFAULT_ASPECT_RATIO, CropImageView.DEFAULT_ASPECT_RATIO),
+            new AspectRatio("SO", 16, 9),
+            new AspectRatio("ASPECT", 1, 1));
+
+       */
+
+        return uCrop.withOptions(options);
     }
 }

@@ -1,10 +1,12 @@
 package space.cc.com.fragmenttest.activity;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,11 +21,18 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.alibaba.fastjson.JSON;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.lzy.okgo.OkGo;
+import com.nanchen.compresshelper.CompressHelper;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropFragment;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -39,12 +48,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
+import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
+import space.cc.com.fragmenttest.domain.util.SDCardUtils;
+import space.cc.com.fragmenttest.domain.util.StringUtil;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
+import space.cc.com.fragmenttest.domain.util.Utils;
 import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.CustomScrollView;
@@ -53,7 +67,9 @@ import space.cc.com.fragmenttest.util.UtilBox;
 
 public class BrvahTestActivity extends BaseActivity implements View.OnClickListener ,CustomScrollView.OnScrollChangeListener {
 
+
     private static final String TAG = "BrvahTestActivity";
+    private static final String HEAD_CACHE_FILE_NAME ="cc_head_cache" ;
     private List<Manga> mangaList;
     private static List<Manga> defaultList;
     private RecyclerView mRecyclerView;
@@ -73,7 +89,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     //头像来源uri对象
     Uri sourceHeadImageUri;
 //    头像目标存储uri
-    Uri destinationHeadUri;
+    TextView nickName;
+    TextView mail;
+    private UCrop uCrop;
+    private String nickNameInput="";
+
     private static String defaultData = "[{\"area\":\"中国大陆\",\"arealimit\":317,\"attention\":352150,\"bangumi_id\":0,\"nowEpisode\":\"11\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8f19c704a6516bab4716931db10621c1b6c6e4bf.jpg\",\"danmaku_count\":105072,\"ep_id\":258700,\"favorites\":352150,\"is_finish\":0,\"lastupdate\":1545883200,\"lastupdate_at\":\"2018-12-27 12:00:00\",\"isNew\":false,\"play_count\":8263731,\"pub_time\":\"\",\"season_id\":25823,\"season_status\":13,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/67a851a5cd87fef2ddd6f9bd6cf691781a1d8b95.jpg\",\"title\":\"画江湖之不良人 第三季\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":12083,\"bangumi_id\":0,\"nowEpisode\":\"4\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8df12fc092928ba57069eb16e077f9d719f345e5.jpg\",\"danmaku_count\":10022,\"ep_id\":258686,\"favorites\":12083,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":486760,\"pub_time\":\"\",\"season_id\":26176,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\"title\":\"通灵妃 河南话版\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":151420,\"bangumi_id\":0,\"nowEpisode\":\"10\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/57dc8fdf8373f8c1facfc2911d50be1cfc6da18a.jpg\",\"danmaku_count\":26706,\"ep_id\":258689,\"favorites\":151420,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":2023158,\"pub_time\":\"\",\"season_id\":24888,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/ef2f039b71564cc469b2cac9d8f2879e1259a74f.jpg\",\"title\":\"山河社稷图\",\"viewRank\":0,\"weekday\":4}]";
 
     static {
@@ -189,11 +209,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private void setNavigationViewListener() {
         navView = findViewById(R.id.nav_view);
 //        navView.setCheckedItem(R.id.nav_collect);
-        headImageView=navView.getHeaderView(0).findViewById(R.id.head_image);
-        UtilBox.box().picasso.loadDrawResReSize(
-                headImageView,
-                R.drawable.default_head,0,0);
-        headImageView.setOnClickListener(this);
+
+
+
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -211,6 +229,20 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 return true;
             }
         });
+    }
+
+    private void initNavHeaderViewValue() {
+        headImageView=navView.getHeaderView(0).findViewById(R.id.head_image);
+        headImageView.setOnClickListener(this);
+        UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
+                headImageView,GlobalSettings.userInfo.getHeadImage(),
+                R.drawable.default_head);
+        nickName=navView.getHeaderView(0).findViewById(R.id.nav_nick_name);
+        nickName.setText(GlobalSettings.userInfo.getNickName());
+        nickName.setOnClickListener(this);
+        mail=navView.getHeaderView(0).findViewById(R.id.nav_mail);
+        mail.setText(GlobalSettings.userInfo.getMail());
+        mail.setOnClickListener(this);
     }
 
     private void setToolbarStyle(Toolbar toolbar) {
@@ -265,6 +297,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         toolbar.findViewById(R.id.nav_topLeft_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                initNavHeaderViewValue();
+
                 drawerLayout.openDrawer(GravityCompat.START);
 //                ToastUtils.showDisplay("点击自定义图标");
             }
@@ -301,6 +335,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                initNavHeaderViewValue();
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
            /* case R.id.action_share:
@@ -367,32 +402,88 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.ll_item1:
                 ToastUtils.showDisplay(String.valueOf(popItem1TextView.getText()));
+                closePoupWindow();
                 break;
             case R.id.ll_item2:
                 ToastUtils.showDisplay(String.valueOf(popItem2TextView.getText()));
-
-               if(CustomProperties.UPDATE.equals(settingProperties.getUpdateSign())){
-                   //下载更新
-                   Intent startDownload = new Intent(this, DownLoadService.class);
-                   startServiceCustom(this,startDownload);
-               }else{
-                   ToastUtils.showDisplay("暂未发现新的版本哦^^");
-               }
+                if (CustomProperties.UPDATE.equals(settingProperties.getUpdateSign())) {
+                    //下载更新
+                    Intent startDownload = new Intent(this, DownLoadService.class);
+                    startServiceCustom(this, startDownload);
+                } else {
+                    ToastUtils.showDisplay("暂未发现新的版本哦^^");
+                }
+                closePoupWindow();
                 break;
             case R.id.head_image:
                 openAlbum();
                 break;
-
+            case R.id.nav_nick_name:
+                UtilBox.box().dialog.showInputMaterialDialogSimple(BrvahTestActivity.this,
+                        "修改昵称", "请输入昵称：", "", String.valueOf(nickName.getText())
+                        , new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                if (which == DialogAction.POSITIVE) {
+//                            前往设置页面
+                                    changeNickName();
+                                }
+                            }
+                        }, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                nickNameInput = String.valueOf(input);
+                                Log.i(TAG, "输入的是：" + input);
+                            }
+                        });
         }
+
+    }
+
+    private void closePoupWindow() {
         //点击PopWindow的item后,关闭此PopWindow
         if (null != mPopupWindow && mPopupWindow.isShowing()) {
             mPopupWindow.dismiss();
         }
     }
 
+    /**
+     *更改昵称
+     *
+     */
+    private void changeNickName() {
+        RequestParams params=new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        if(StringUtil.isEmpty(nickNameInput)){
+            ToastUtils.showDisplay("昵称不可为空");
+        }
+//        校验 非法字符这些
+        nickNameCheck();
+        params.put("userid",GlobalSettings.userInfo.getUid());
+        params.put("nickName",nickNameInput);
+        ClientUtlis.post(true,UrlConfig.MODIFY_USER_INFO.getValue(),params,this,new JsonCallback<String>() {
+            @Override
+            public void onSuccess(String info, String msg) {
+               ToastUtils.showDisplay("修改成功!");
+            }
+            @Override
+            public void onError(String msg, int code) {
+                ToastUtils.showDisplay("昵称修改失败!");
+            }
+            });
+    }
+
+    private void nickNameCheck() {
+
+    }
+
     private void openAlbum() {
-        Intent intent = new Intent("android.intent.action.GET_CONTENT");
-        intent.setType("image/*");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*")
+         .addCategory(Intent.CATEGORY_OPENABLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String[] mimeTypes = {"image/jpeg", "image/png"};
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        }
         startActivityForResult(intent, SELECT_LOCAL_IMAGE);
     }
 
@@ -533,9 +624,13 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //                  返回false表示不能往下滑动，即代表到顶部了
 //                  隐藏到顶部的浮动按钮
                     hideViews();
+//                    ToastUtils.showDisplay(String.valueOf(toolbar.getTranslationY()));
+
                 }else{
 //                    显示浮动按钮
                     showViews();
+//                    ToastUtils.showDisplay(String.valueOf(toolbar.getTranslationY()));
+
                 }
 //                recyclerView.computeVerticalScrollOffset()
 
@@ -552,8 +647,13 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     private void hideViews() {
 //        显示toolbar
-        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        ToastUtils.showDisplay(String.valueOf(toolbar.getTranslationY()));
+        float curY = toolbar.getTranslationY();
+        ObjectAnimator oa = ObjectAnimator.ofFloat(toolbar,"translationY",curY,0f);//toolbar原位置是0
+        oa.setDuration(2000);
+        oa.start();
+
+//        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Log.d(TAG,String.valueOf(toolbar.getTranslationY()));
         CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) floatBackToTopBut.getLayoutParams();
         int fabBottomMargin = lp.bottomMargin;
         floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
@@ -567,24 +667,83 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ToastUtils.showLong(requestCode+",resultCode="+resultCode);
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
-            UtilBox.box().picasso.loadUriRes(
-                    headImageView,resultUri);
-            ToastUtils.showDisplay(resultUri.getPath());
+            String  path= resultUri.getPath();
+            String  realPath="";
+            try {
+//                realPath=UtilBox.box().want.getImageRealPathFromIntent(data);
+                List<File> files = new ArrayList<>();
+                files.add(CompressHelper.getDefault(this).compressToFile(new File(path)));
+                Log.d(TAG, "changeHead: " + files.get(0).length());
+                ToastUtils.showLong("start loadUriToView");
+                UtilBox.box().picasso.loadUriRes(
+                        headImageView,resultUri);
+                modifyHeadImageReq(files);
+            } catch (Exception e) {
+                e.getStackTrace();
+                ToastUtils.showLong("修改头像失败 1,"+e.getMessage()+"path="+path+",realPath="+realPath);
+
+            }
+
+
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
+            ToastUtils.showLong("修改头像失败 2,"+cropError.getMessage());
+
         } else if(resultCode == RESULT_OK &&requestCode==SELECT_LOCAL_IMAGE){
             sourceHeadImageUri= data.getData();
-            if(destinationHeadUri==null){
-                destinationHeadUri=UtilBox.box().want.getFileUriByName("cc_head_cache.jpg");
+            try {
+//            Uri realDestUri=new Uri.Builder().path(realPath).build();
+                cropImage();
+            } catch (Exception e) {
+                Log.e(TAG, " UCrop.of failed", e);
             }
-            UCrop.of(sourceHeadImageUri, destinationHeadUri)
-                    .withAspectRatio(16, 9)
-                    .withMaxResultSize(100, 100)
-                    .start(this);
-
         }
+    }
+
+    private void cropImage() {
+        uCrop= UCrop.of(sourceHeadImageUri, Uri.fromFile(new File(getCacheDir(), HEAD_CACHE_FILE_NAME)));
+        uCrop = UtilBox.box().ui.advancedConfig (uCrop);
+        uCrop.start(BrvahTestActivity.this);
+
+     /*   if (requestMode == REQUEST_SELECT_PICTURE_FOR_FRAGMENT) {       //if build variant = fragment
+            setupFragment(uCrop);
+        } else {                                                        // else start uCrop Activity
+            uCrop.start(BrvahTestActivity.this);
+        }*/
+
+
+    }
+
+
+
+
+    /**
+     * @author  CF
+     * @date   2019/1/14
+     * @description
+     *
+     */
+    private void modifyHeadImageReq(List<File> files) {
+        RequestParams params = new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        OkGo.getInstance().getCommonHeaders().put("userid","1");
+        ClientUtlis.uploadFiles(this, UrlConfig.MODIFY_HEAD_IMG.getValue(), params, "file", files, this, new JsonCallback<String>() {
+            @Override
+            public void onSuccess(String imagePath, String msg) {
+                super.onSuccess(imagePath, msg);
+                ToastUtils.showDisplay("修改成功！");
+
+            }
+
+            @Override
+            public void onError(String msg, int code) {
+                super.onError(msg, code);
+                ToastUtils.showDisplay(msg);
+
+            }
+        });
     }
 
     public static void main(String[] args) {

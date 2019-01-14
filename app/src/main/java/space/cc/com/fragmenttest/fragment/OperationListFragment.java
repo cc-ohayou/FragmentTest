@@ -89,7 +89,7 @@ public class OperationListFragment extends BaseFragment {
         mRecyclerView.setAdapter(adapter);
         initSmartRefreshLayoutListener((RefreshLayout) rootView);
 
-//        loadOperationBizList(true);
+        loadOperationBizList(true);
         return rootView;
     }
 /**
@@ -104,15 +104,15 @@ public class OperationListFragment extends BaseFragment {
         refreshLayout.setEnableScrollContentWhenLoaded(true);
         refreshLayout.setEnableAutoLoadMore(true);//开启自动加载功能（非必须）
         //触发自动刷新 进入页面就开始刷新 不需要手动发起请求数据  setOnRefreshListener监听到请求自会加载数据
-        refreshLayout.autoRefresh();
+//        refreshLayout.autoRefresh();
 //        属性设置参考文档 https://github.com/scwang90/SmartRefreshLayout/blob/master/art/md_property.md
         //设置 Header 为 贝塞尔雷达 样式
         BezierRadarHeader refreshHeader=new BezierRadarHeader(parentActivity).setEnableHorizontalDrag(true);
         refreshHeader.setAccentColorId(R.color.white);//设置强调颜色
-        refreshHeader.setPrimaryColorId(R.color.colorPrimary);//设置主题颜色
-        refreshLayout.setRefreshHeader(new BezierRadarHeader(parentActivity).setEnableHorizontalDrag(true));
+        refreshHeader.setPrimaryColorId(R.color.refreshHeaderBack);//设置主题颜色 刷新布局的背景色
+        refreshLayout.setRefreshHeader(refreshHeader);
 
-//设置 Footer 为 球脉冲 样式
+//      设置 Footer 为 球脉冲 样式
         refreshLayout.setRefreshFooter(new BallPulseFooter(parentActivity).setSpinnerStyle(SpinnerStyle.Scale));
         //是否启用上拉加载功能
         refreshLayout.setEnableLoadMore(true);
@@ -139,7 +139,7 @@ public class OperationListFragment extends BaseFragment {
                     @Override
                     public void run() {
                         if (adapter.getItemCount() >=operPage.getTotalCount()) {
-                            ToastUtils.showDisplay( "operList数据全部加载完毕");
+                            ToastUtils.showDisplay( "没有更多了");
                             refreshLayout.finishLoadMoreWithNoMoreData();//将不会再次触发加载更多事件
                         } else {
                             loadOperationBizList(false);
@@ -227,7 +227,7 @@ public class OperationListFragment extends BaseFragment {
     }
 
     private void requestDialogShow(String content, final OperateBiz operateBiz) {
-        UtilBox.box().dialog.showMaterialDialogSimleDefault(Utils.getApp(), "操作请求",
+        UtilBox.box().dialog.showMaterialDialogSimleDefault(getActivity(), "操作请求",
                 content, new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

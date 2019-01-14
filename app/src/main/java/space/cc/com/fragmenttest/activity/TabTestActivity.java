@@ -70,7 +70,7 @@ public class TabTestActivity extends AppCompatActivity {
                 UtilBox.box().ui.MoveToPosition((LinearLayoutManager) layoutManager,0);
 //               显示toolbar
 //                toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
-                hideViews();
+//                hideViews();
 
             }
         });

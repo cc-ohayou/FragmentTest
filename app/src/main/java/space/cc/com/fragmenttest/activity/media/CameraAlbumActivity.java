@@ -75,7 +75,7 @@ public class CameraAlbumActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void openAlbum() {
-        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, SELECT_LOCAL_IMAGE);
     }

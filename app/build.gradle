@@ -102,5 +102,8 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 //    下拉刷新 上拉刷新框架
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
+//    图片裁剪
     implementation 'com.github.yalantis:ucrop:2.2.2'
+//    文件压缩
+    implementation 'com.github.nanchen2251:CompressHelper:1.0.5'
 }

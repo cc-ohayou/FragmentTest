@@ -85,5 +85,6 @@
     <color name="mangaItemBack">#26000000</color>
     <color name="mangaTopViewBack">#2F000000</color>
     <color name="popMenuBack">#FF6C9F</color>
+    <color name="refreshHeaderBack">#FF86B0</color>
 
 </resources>

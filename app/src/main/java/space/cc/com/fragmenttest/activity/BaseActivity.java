@@ -46,7 +46,8 @@ import space.cc.com.fragmenttest.util.UtilBox;
 
 public  abstract class BaseActivity extends AppCompatActivity {
     public final int SELECT_LOCAL_IMAGE = 2;
-
+     static final int REQUEST_SELECT_PICTURE = 0x01;
+     static final int REQUEST_SELECT_PICTURE_FOR_FRAGMENT = 0x02;
     private static final String TAG = "BaseActivity";
     static final Map EMPTY_MAP = new HashMap();
     private ForceOffLineReceiver receiver;

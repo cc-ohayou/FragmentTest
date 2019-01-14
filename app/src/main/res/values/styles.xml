@@ -62,6 +62,23 @@
 
     </style>
 
+
+    <style name="singleText">
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <!--textView 单行 多余的结尾省略号-->
+
+   <!--     android:ellipsize = "end"　　 省略号在结尾
+
+        android:ellipsize = "start" 　　省略号在开头
+
+        android:ellipsize = "middle" 省略号在中间
+
+        android:ellipsize = "marquee" 跑马灯
+-->
+
+    </style>
     <!--Status bar color-->
     <color name="statusColor">#3C3F41</color>
     <!-- toolBar color -->
@@ -70,6 +87,8 @@
     <color name="editColor">#FD87A9</color>
     <!--Window color-->
     <color name="widowColor">#ffffff</color>
+
+
 
 
     <color name="textGlobal">#595B5D</color>

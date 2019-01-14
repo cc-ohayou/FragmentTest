@@ -1,8 +1,11 @@
 package space.cc.com.fragmenttest.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.InputType;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -111,6 +114,44 @@ public class UtilDialog {
                 .onAny(callBackAction).show();
 
     }
+
+    /**
+         * @author  CF
+         * @date   2019/1/14
+         * @description
+         *
+         */
+ public  void showInputMaterialDialogSimple(final Context activity, String title,String content,String inputHint,
+                                  String inputPrefill, MaterialDialog.SingleButtonCallback callBackAction,MaterialDialog.InputCallback inputCallback){
+        showInputMaterialDialog(activity,title,content,inputHint,inputPrefill,"ok","cancel",callBackAction,inputCallback);
+    }
+    /**
+         * @author  CF
+         * @date   2019/1/14
+         * @description
+         *
+         */
+@SuppressLint("ResourceAsColor")
+public  void showInputMaterialDialog(final Context activity, String title, String content, String inputHint,
+                                     String inputPrefill, String positiveText, String negativeText,
+                                     MaterialDialog.SingleButtonCallback callBackAction, MaterialDialog.InputCallback inputCallBack){
+    new MaterialDialog.Builder(activity)
+            .title(title)
+            .iconRes(R.drawable.cc_dialog)
+            .content(content)
+//                                .widgetColor(Color.BLUE)//输入框光标的颜色
+            .positiveText(positiveText)
+            .negativeText(negativeText)
+            //可以输入的类型-电话号码-人名 邮箱等等
+            .inputType(InputType.TYPE_CLASS_TEXT)
+            //前2个一个是hint 一个是预输入的文字
+            .input(inputHint, inputPrefill,inputCallBack)
+            .inputRange(3, 40, R.color.colorAccent)
+            //点击事件添加 方式1
+            .onAny(callBackAction)
+            .show();
+}
+
 
 
 }

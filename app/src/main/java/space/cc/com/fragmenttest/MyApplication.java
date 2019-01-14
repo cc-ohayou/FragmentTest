@@ -17,6 +17,7 @@ import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
+import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
@@ -51,7 +52,31 @@ private static Context context;
         SDKInitializer.setCoordType(CoordType.BD09LL);
 //
         initCustomProperties();
+        login();
 
+    }
+
+    private void login() {
+        RequestParams params=new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        params.put("userName","13758080693");
+        params.put("pwd","123123ee");
+        ClientUtlis.post(true, UrlConfig.USER_LOGIN.getValue(),params,
+                this,new JsonCallback<UserInfo>() {
+                    @Override
+                    public void onSuccess(UserInfo info, String msg) {
+                        if(info!=null){
+                            GlobalSettings.userInfo = info;
+                        }else{
+                            Log.d(TAG,"");
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(String msg, int code) {
+                        ToastUtils.showDisplay(msg);
+                    }
+                });
     }
 
 
