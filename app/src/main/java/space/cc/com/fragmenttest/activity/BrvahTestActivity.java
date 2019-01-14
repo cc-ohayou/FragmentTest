@@ -29,7 +29,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.lzy.okgo.OkGo;
 import com.nanchen.compresshelper.CompressHelper;
 import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.UCropFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,10 +54,8 @@ import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
-import space.cc.com.fragmenttest.domain.util.SDCardUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
-import space.cc.com.fragmenttest.domain.util.Utils;
 import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.CustomScrollView;
@@ -85,6 +82,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private ScrollView scrollerView;
     RecyclerView.LayoutManager layoutManager;
     private  CircleImageView headImageView;
+    private  CircleImageView navTopLeftCircleImageView;
     int popMenuYoffset;
     //头像来源uri对象
     Uri sourceHeadImageUri;
@@ -111,6 +109,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_brvah_test);
+            initAllView();
             scrollerView=findViewById(R.id.scrollBar);
             toolbar = findViewById(R.id.manga_toolbar);
 //        toolbar.setLogo(R.drawable.app_icon2);
@@ -122,9 +121,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             appBarToggleSet();
             //侧边栏菜单 监听
             setNavigationViewListener();
+            login();
+
 //            initActionBar();
             //初始化recycleView
-            initView();
+            initRecycleView();
 //            初始化homeAdapter
             initAdapter();
 //      远端加载数据
@@ -139,6 +140,16 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         }
 //        int standardHeight=getViewIemWidth(4,BrvahTestActivity.this);
 
+
+    }
+
+    private void initAllView() {
+        navView = findViewById(R.id.nav_view);
+        navTopLeftCircleImageView =  findViewById(R.id.nav_topLeft_image);
+        headImageView = navView.getHeaderView(0).findViewById(R.id.head_image);
+        nickName = navView.getHeaderView(0).findViewById(R.id.nav_nick_name);
+        mail = navView.getHeaderView(0).findViewById(R.id.nav_mail);
+        floatBackToTopBut = findViewById(R.id.float_but);
 
     }
 
@@ -171,7 +182,6 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initFloatBut() {
-       floatBackToTopBut = findViewById(R.id.float_but);
 
         floatBackToTopBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,7 +217,6 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void setNavigationViewListener() {
-        navView = findViewById(R.id.nav_view);
 //        navView.setCheckedItem(R.id.nav_collect);
 
 
@@ -232,19 +241,41 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initNavHeaderViewValue() {
-        headImageView=navView.getHeaderView(0).findViewById(R.id.head_image);
+        UtilBox.box().picasso.loadUrlResIntoViewWithDefault(navTopLeftCircleImageView,GlobalSettings.userInfo.getHeadImage(), R.drawable.a2_profile);
         headImageView.setOnClickListener(this);
         UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
                 headImageView,GlobalSettings.userInfo.getHeadImage(),
                 R.drawable.default_head);
-        nickName=navView.getHeaderView(0).findViewById(R.id.nav_nick_name);
+
         nickName.setText(GlobalSettings.userInfo.getNickName());
         nickName.setOnClickListener(this);
-        mail=navView.getHeaderView(0).findViewById(R.id.nav_mail);
+
         mail.setText(GlobalSettings.userInfo.getMail());
         mail.setOnClickListener(this);
     }
+    private void login() {
+        RequestParams params=new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        params.put("userName","13758080693");
+        params.put("pwd","123123ee");
+        ClientUtlis.post(true, UrlConfig.USER_LOGIN.getValue(),params,
+                this,new JsonCallback<UserInfo>() {
+                    @Override
+                    public void onSuccess(UserInfo info, String msg) {
+                        if(info!=null){
+                            GlobalSettings.userInfo = info;
+                            initNavHeaderViewValue();
+                        }else{
+                            Log.d(TAG,"");
+                        }
 
+                    }
+
+                    @Override
+                    public void onError(String msg, int code) {
+                        ToastUtils.showDisplay(msg);
+                    }
+                });
+    }
     private void setToolbarStyle(Toolbar toolbar) {
 
 
@@ -293,12 +324,10 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             }
         });*/
 
-        UtilBox.box().picasso.loadDrawResIntoView((CircleImageView) findViewById(R.id.nav_topLeft_image), R.drawable.a2_profile);
         toolbar.findViewById(R.id.nav_topLeft_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initNavHeaderViewValue();
-
+                login();
                 drawerLayout.openDrawer(GravityCompat.START);
 //                ToastUtils.showDisplay("点击自定义图标");
             }
@@ -335,7 +364,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                initNavHeaderViewValue();
+                login();
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
            /* case R.id.action_share:
@@ -458,6 +487,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         }
 //        校验 非法字符这些
         nickNameCheck();
+        OkGo.getInstance().getCommonHeaders().put("userid",GlobalSettings.userInfo.getUid());
         params.put("userid",GlobalSettings.userInfo.getUid());
         params.put("nickName",nickNameInput);
         ClientUtlis.post(true,UrlConfig.MODIFY_USER_INFO.getValue(),params,this,new JsonCallback<String>() {
@@ -608,7 +638,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 });
     }
 
-    private void initView() {
+    private void initRecycleView() {
         mRecyclerView = findViewById(R.id.brvah_book_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setBackgroundResource(R.drawable.default_head);
@@ -667,30 +697,27 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ToastUtils.showLong(requestCode+",resultCode="+resultCode);
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
             String  path= resultUri.getPath();
-            String  realPath="";
             try {
-//                realPath=UtilBox.box().want.getImageRealPathFromIntent(data);
                 List<File> files = new ArrayList<>();
                 files.add(CompressHelper.getDefault(this).compressToFile(new File(path)));
                 Log.d(TAG, "changeHead: " + files.get(0).length());
-                ToastUtils.showLong("start loadUriToView");
                 UtilBox.box().picasso.loadUriRes(
                         headImageView,resultUri);
                 modifyHeadImageReq(files);
             } catch (Exception e) {
-                e.getStackTrace();
-                ToastUtils.showLong("修改头像失败 1,"+e.getMessage()+"path="+path+",realPath="+realPath);
+                Log.e(TAG,"修改头像失败",e);
+                ToastUtils.showLong("修改头像失败!");
 
             }
 
 
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
-            ToastUtils.showLong("修改头像失败 2,"+cropError.getMessage());
+            Log.e(TAG,"修改头像失败 2 "+cropError.getMessage());
+            ToastUtils.showLong("修改头像失败!");
 
         } else if(resultCode == RESULT_OK &&requestCode==SELECT_LOCAL_IMAGE){
             sourceHeadImageUri= data.getData();
