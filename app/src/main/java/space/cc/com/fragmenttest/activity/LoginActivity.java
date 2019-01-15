@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -38,7 +37,6 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import space.cc.com.fragmenttest.R;
-import space.cc.com.fragmenttest.broadcast.BroadcastTestActivity;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.LoginConstants;
@@ -359,7 +357,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             try {
 
                 // Simulate network access.
-                ClientUtlis.post(true, UrlConfig.USER_LOGIN.getValue(),reqParam,
+                ClientUtlis.post(true, UrlConfig.USER_LOGIN,reqParam,
                         this,new JsonCallback<UserInfo>() {
                             @Override
                             public void onSuccess(UserInfo info, String msg) {

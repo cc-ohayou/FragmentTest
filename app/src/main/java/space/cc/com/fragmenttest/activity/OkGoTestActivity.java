@@ -37,7 +37,7 @@ public class OkGoTestActivity extends BaseActivity  implements View.OnClickListe
         RequestParams params=new RequestParams(1);
         switch(v.getId()){
             case R.id.send_request:
-                ClientUtlis.post(true, UrlConfig.TEST_URL.getValue(),params,
+                ClientUtlis.post(true, UrlConfig.TEST_URL,params,
                         this,new JsonCallback<List>() {
                             @Override
                             public void onSuccess(List result, String msg) {

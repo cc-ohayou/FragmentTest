@@ -5,18 +5,14 @@ import android.util.Log;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
+import com.lzy.okgo.model.HttpHeaders;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import okhttp3.MediaType;
 import space.cc.com.fragmenttest.MyApplication;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
-import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
@@ -41,7 +37,7 @@ public class ClientUtlis<Y> {
     */
     public  List<Y> getBizList(RequestParams params, UrlConfig url, Object tag, final String errMsg, final List<Y> defaultList) {
         final List<Y>[] listResult = null;
-        ClientUtlis.post(true, url.getValue(), params,
+        ClientUtlis.post(true, url, params,
                 tag, new JsonCallback<List<Y>>() {
                     @Override
                     public void onSuccess(List<Y> list, String msg) {
@@ -69,7 +65,7 @@ public class ClientUtlis<Y> {
  */
     public static <Y> Y getSingleBiz(RequestParams params, UrlConfig url, Object obj, final String errMsg, final Y defaultBiz) {
         final Y[] result = null;
-        ClientUtlis.post(true, url.getValue(), params,
+        ClientUtlis.post(true, url, params,
                 obj, new JsonCallback<Y>() {
                     @Override
                     public void onSuccess(Y res, String msg) {
@@ -115,14 +111,19 @@ public class ClientUtlis<Y> {
                 .execute(callback);
     }
 
-
+  /**
+     * @description
+     * @author CF
+     * created at 2019/1/15/015  23:27
+     */
     public static void post(boolean isLoop, UrlConfig url, RequestParams params, Object tag, AbsCallback callback) {
 
 
         if(url.isNeedSession()){
-           OkGo.getInstance().getCommonHeaders().put("sid", ClientConfiguration.getInstance().getSid());
+            String sid=ClientConfiguration.getInstance().getSid();
         }
-        OkGo.getInstance().getCommonHeaders().put("uid", ClientConfiguration.getInstance().getUid());
+        OkGo.getInstance().getCommonHeaders().put("sid",ClientConfiguration.getInstance().getSid() );
+        OkGo.getInstance().getCommonHeaders().put("userid", ClientConfiguration.getInstance().getUid());
 
         if (NetworkUtils.isConnected()) {
             MyApplication.canRequest = true;
@@ -140,7 +141,7 @@ public class ClientUtlis<Y> {
         }
 
         if (MyApplication.isConnected) return;
-
+        HttpHeaders headers= OkGo.getInstance().getCommonHeaders();
         OkGo.post(url.getValue())
                 .tag(tag)
                 .upString(params.getParamsString(), MediaType.parse("application/x-www-form-urlencoded"))

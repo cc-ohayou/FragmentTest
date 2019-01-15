@@ -1,14 +1,9 @@
 package space.cc.com.fragmenttest.domain;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.alibaba.fastjson.JSON;
-
-
 import java.util.Calendar;
-import java.util.List;
 
 import space.cc.com.fragmenttest.MyApplication;
 import space.cc.com.fragmenttest.domain.util.StringUtils;

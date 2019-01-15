@@ -83,13 +83,14 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         MyPublicParams.onRefresh();
         String now = TimeUtils.getNowMills() + "";
         request.headers("Time", now);
-        request.headers("systemtype", "ddy");
+        request.headers("systemtype", "cc");
         request.headers("SignVersion", "1");//签名算法版本
         request.headers("Sign", EncryptUtils.encryptMD5ToString(now + "moc.89ddy"));//签名算法版本
 //        request.headers("PushClientId", PushManager.getInstance().getClientid(Utils.getApp()));//cid
-        request.headers("UserId", MyPublicParams.v_userId);
-        request.headers("Token", MyPublicParams.v_sid);
-        request.headers("sid", MyPublicParams.v_sid);
+//        request.headers("UserId", MyPublicParams.v_userId);
+//        request.headers("Token", MyPublicParams.v_sid);
+        request.headers("sid", ClientConfiguration.getInstance().getSid());
+        request.headers("userid", ClientConfiguration.getInstance().getUid());
     }
 
     /**

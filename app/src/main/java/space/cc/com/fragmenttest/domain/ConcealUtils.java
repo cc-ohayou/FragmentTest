@@ -1,7 +1,5 @@
 package space.cc.com.fragmenttest.domain;
 
-import android.util.Base64;
-
 import com.facebook.android.crypto.keychain.AndroidConceal;
 import com.facebook.android.crypto.keychain.SharedPrefsBackedKeyChain;
 import com.facebook.crypto.Crypto;
@@ -39,7 +37,8 @@ public class ConcealUtils {
     public static String encrypt(String content){
         if(StringUtils.isEmpty(content))
             return "";
-        return Base64.encodeToString(encrypt(content.getBytes(),ENTITY), Base64.DEFAULT);
+//        return Base64.encodeToString(encrypt(content.getBytes(),ENTITY), Base64.DEFAULT);
+        return content;
     }
 
     /**
@@ -80,7 +79,8 @@ public class ConcealUtils {
     public static String decrypt(String ciphertext){
         if (StringUtils.isEmpty(ciphertext))
             return "";
-        return new String(decrypt(Base64.decode(ciphertext, Base64.DEFAULT),ENTITY));
+        return    ciphertext;
+//        return new String(decrypt(Base64.decode(ciphertext, Base64.DEFAULT),ENTITY));
     }
 
     /**
@@ -197,5 +197,6 @@ public class ConcealUtils {
         }
 
     }
+
 
 }

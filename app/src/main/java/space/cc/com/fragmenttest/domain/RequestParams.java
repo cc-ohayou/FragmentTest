@@ -25,6 +25,15 @@ public class RequestParams {
 		this(paramType, new HashMap<String, Object>());
 	}
 
+	public static RequestParams getJsonParam(int compacity){
+		return new RequestParams(PARAM_TYPE_JSON, new HashMap<String, Object>(compacity));
+	}
+	public static RequestParams getFormDataParam(int compacity){
+		return new RequestParams(PARAM_TYPE_FORM, new HashMap<String, Object>(compacity));
+	}
+
+
+
 	public RequestParams(int paramType, Map<String, Object> params) {
 		setParamType(paramType);
 		mParams = params;

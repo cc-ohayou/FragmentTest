@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -50,7 +48,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
-import space.cc.com.fragmenttest.broadcast.BroadcastTestActivity;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
@@ -186,11 +183,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         navLoginText.setVisibility(View.VISIBLE);
 //        导航头像更换
         UtilBox.box().picasso.loadDrawResIntoView(navTopLeftCircleImageView,
-                R.drawable.vector_drawable_nav_profile_grey___);
+                R.drawable.default_head);
 //        侧边栏头像更换
         UtilBox.box().picasso.loadDrawResIntoView(
                 headImageView,
-                R.drawable.vector_drawable_nav_profile_grey___);
+                R.drawable.default_head);
 //        昵称
         nickName.setVisibility(View.INVISIBLE);
 //        手机
@@ -328,8 +325,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     private void getUserInfo() {
 
-
-        ClientUtlis.post(true, UrlConfig.GET_USER_INFO,null,
+        RequestParams params=RequestParams.getFormDataParam(2);
+        ClientUtlis.post(true, UrlConfig.GET_USER_INFO,params,
                 this,new JsonCallback<UserInfo>() {
                     @Override
                     public void onSuccess(UserInfo info, String msg) {
@@ -435,7 +432,6 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                getUserInfo();
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
            /* case R.id.action_share:
@@ -580,7 +576,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         OkGo.getInstance().getCommonHeaders().put("userid",GlobalSettings.userInfo.getUid());
         params.put("userid",GlobalSettings.userInfo.getUid());
         params.put("nickName",nickNameInput);
-        ClientUtlis.post(true,UrlConfig.MODIFY_USER_INFO.getValue(),params,this,new JsonCallback<String>() {
+        ClientUtlis.post(true,UrlConfig.MODIFY_USER_INFO,params,this,new JsonCallback<String>() {
             @Override
             public void onSuccess(String info, String msg) {
                 nickName.setText(nickNameInput);
@@ -709,7 +705,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
 
     private void getBizList(RequestParams params, UrlConfig url, Object tag, final String errMsg) {
-        ClientUtlis.post(true, url.getValue(), params,
+        ClientUtlis.post(true, url, params,
                 tag, new JsonCallback<List<Manga>>() {
                     @Override
                     public void onSuccess(List<Manga> list, String msg) {

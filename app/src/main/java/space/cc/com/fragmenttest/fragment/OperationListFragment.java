@@ -272,7 +272,7 @@ public class OperationListFragment extends BaseFragment {
      * created at 2019/1/13/013  20:29
      */
     private void getBizList(RequestParams params, UrlConfig url, Object tag, final String errMsg, final boolean refreshFlag) {
-        ClientUtlis.post(true, url.getValue(), params,
+        ClientUtlis.post(true, url, params,
                 tag, new JsonCallback<PsPage<OperateBiz>>() {
                     @Override
                     public void onSuccess(PsPage<OperateBiz> page, String msg) {
