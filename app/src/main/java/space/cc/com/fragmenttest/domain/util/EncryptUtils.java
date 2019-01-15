@@ -152,4 +152,8 @@ public class EncryptUtils {
         return true;
     }
 
+
+    public static void main(String[] args) {
+        System.out.printf(encryptMD5ToString("123123ee"));
+    }
 }

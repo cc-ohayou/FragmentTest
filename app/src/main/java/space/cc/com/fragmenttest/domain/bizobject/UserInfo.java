@@ -25,4 +25,5 @@ public class UserInfo {
     private String roleCode;
     private String createTime;
     private String updateTime;
+    private String sid;
 }

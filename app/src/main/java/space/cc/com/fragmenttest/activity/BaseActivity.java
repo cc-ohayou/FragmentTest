@@ -35,9 +35,11 @@ import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
+import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
 import space.cc.com.fragmenttest.domain.util.CloseUtils;
+import space.cc.com.fragmenttest.domain.util.EncryptUtils;
 import space.cc.com.fragmenttest.domain.util.NotificationUtil;
 import space.cc.com.fragmenttest.domain.util.PermissinUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
@@ -142,6 +144,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
             Set<Map.Entry<String, String>> set = map.entrySet();
             for (Map.Entry<String, String> entry : set) {
                 intent.putExtra(entry.getKey(), entry.getValue());
+
             }
         }
         context.startActivity(intent);
@@ -297,7 +300,12 @@ public  abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-
+    public RequestParams getLoginRequestParams(String userName, String mPassword) {
+        RequestParams reqParam=new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        reqParam.put("userName",userName);
+        reqParam.put("pwd",EncryptUtils.encryptMD5ToString(mPassword));
+        return reqParam;
+    }
 
 
 

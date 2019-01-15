@@ -106,4 +106,7 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.2'
 //    文件压缩
     implementation 'com.github.nanchen2251:CompressHelper:1.0.5'
+
+    implementation 'com.facebook.conceal:conceal:2.0.1@aar'//conceal加密
+
 }

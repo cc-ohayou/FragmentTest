@@ -15,7 +15,13 @@
  */
 package space.cc.com.fragmenttest.domain.callback;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
+import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.request.base.Request;
@@ -24,10 +30,13 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import okhttp3.Response;
+import space.cc.com.fragmenttest.activity.LoginActivity;
 import space.cc.com.fragmenttest.domain.BaseResponse;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.MyPublicParams;
 import space.cc.com.fragmenttest.domain.util.EncryptUtils;
 import space.cc.com.fragmenttest.domain.util.TimeUtils;
+import space.cc.com.fragmenttest.domain.util.Utils;
 
 /**
  * ================================================
@@ -40,9 +49,11 @@ import space.cc.com.fragmenttest.domain.util.TimeUtils;
  */
 public abstract class JsonCallback<T> extends AbsCallback<T> {
 
+    private static final String TAG = "JsonCallback";
     private Type type;
     private Class<T> clazz;
     private BaseResponse baseResponse;
+    private Activity activity;
     public JsonCallback() {
     }
     public JsonCallback(Type type) {
@@ -51,6 +62,9 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
 
     public JsonCallback(Class<T> clazz) {
         this.clazz = clazz;
+    }
+    public JsonCallback(Activity activity) {
+        this.activity = activity;
     }
 
 
@@ -208,6 +222,20 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
     }
 
     public void onLoginError(String msg, int code) {
+        Log.i(TAG, msg);
+        OkGo.getInstance().cancelAll();
+        if(Utils.getApp() == null ) return;
+
+        ClientConfiguration.getInstance().setSid("");
+        ClientConfiguration.getInstance().setUid("");
+        ClientConfiguration.getInstance().setLoginState(false);
+//        Intent intent = new Intent(activity, RegisterOrLoginActivity.class);
+        Intent intent = new Intent(Utils.getApp(), LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("backurl","main");
+        intent.putExtras(bundle);
+        Utils.getApp().startActivity(intent);
+
     }
 
     public void onVersionControl(String msg, String data) {

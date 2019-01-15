@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,7 +39,15 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.broadcast.BroadcastTestActivity;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.LoginConstants;
+import space.cc.com.fragmenttest.domain.RequestParams;
+import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
+import space.cc.com.fragmenttest.domain.callback.JsonCallback;
+import space.cc.com.fragmenttest.domain.util.ClientUtlis;
+import space.cc.com.fragmenttest.domain.util.ToastUtils;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -51,21 +60,15 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private static final String TAG = "LoginActivity";
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView userNameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -73,7 +76,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private CheckBox rememberPass;
-
+    private Button signInButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,16 +84,24 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         //获取存储对象
         pref= PreferenceManager.getDefaultSharedPreferences(this);
         rememberPass = findViewById(R.id.remember_pass);
-
-
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        userNameView =  findViewById(R.id.login_account);
+        signInButton =  findViewById(R.id.sign_in_button);
         populateAutoComplete();
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView =  findViewById(R.id.password);
         //如果设置过记住密码的则进行账号密码信息的填充 正式的肯定要加密处理
         ifRememberPassSetAccountInfo();
+        initListener();
 
-
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+    }
+    /**
+         * @author  CF
+         * @date   2019/1/15
+         * @description  输入和按钮的监听
+         *
+         */
+    private void initListener() {
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -103,16 +114,12 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        signInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
     @Override
@@ -128,7 +135,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private void ifRememberPassSetAccountInfo() {
         boolean isRemember=pref.getBoolean(LoginConstants.REM_PASS,false);
         if(isRemember){
-            mEmailView.setText(pref.getString(LoginConstants.ACCOUNT,""));
+            userNameView.setText(pref.getString(LoginConstants.ACCOUNT,""));
             mPasswordView.setText(pref.getString(LoginConstants.PASS,""));
             rememberPass.setChecked(true);
         }
@@ -152,7 +159,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(userNameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -189,18 +196,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         if (mAuthTask != null) {
             return;
         }
-
         // Reset errors.
-        mEmailView.setError(null);
+        userNameView.setError(null);
         mPasswordView.setError(null);
-
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String userName = userNameView.getText().toString();
         String password = mPasswordView.getText().toString();
-
         boolean cancel = false;
         View focusView = null;
-
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
@@ -208,14 +211,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        // Check for a valid userName address.
+        if (TextUtils.isEmpty(userName)) {
+            userNameView.setError(getString(R.string.error_field_required));
+            focusView = userNameView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (!isPhoneValid(userName)) {
+            userNameView.setError(getString(R.string.error_invalid_userName));
+            focusView = userNameView;
             cancel = true;
         }
 
@@ -229,14 +232,15 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(userName, password);
             mAuthTask.execute((Void) null);
         }
     }
 
-    private boolean isEmailValid(String email) {
+    private boolean isPhoneValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
@@ -320,7 +324,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
+        userNameView.setAdapter(adapter);
     }
 
 
@@ -340,52 +344,74 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
+        private final String userName;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
+        UserLoginTask(String name, String password) {
+            userName = name;
             mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
+            RequestParams reqParam = getLoginRequestParams(userName,mPassword);
             try {
 
                 // Simulate network access.
-                afterLoginSuccc();
-                //后台登录校验通过后
-                editor=pref.edit();
-                if(rememberPass.isChecked()){
-                    editor.putBoolean(LoginConstants.REM_PASS,true);
-                    editor.putString(LoginConstants.ACCOUNT,mEmail);
-                    editor.putString(LoginConstants.PASS,mPassword);
-                }else{
-                    editor.clear();
-                }
-                //提交修改到本地存储中
-                editor.apply();
-            } catch (InterruptedException e) {
+                ClientUtlis.post(true, UrlConfig.USER_LOGIN.getValue(),reqParam,
+                        this,new JsonCallback<UserInfo>() {
+                            @Override
+                            public void onSuccess(UserInfo info, String msg) {
+                                if(info!=null){
+                                    GlobalSettings.userInfo = info;
+                                    ClientConfiguration.getInstance().setSid(info.getSid());
+                                    ClientConfiguration.getInstance().setUid(info.getUid());
+                                    ClientConfiguration.getInstance().setLoginState(true);
+                                    saveLoginParamIntoPref();
+                                }else{
+                                    ToastUtils.showDisplay("用户名或密码不存在");
+                                    Log.d(TAG,"userInfo is null 用户名或密码不存在");
+                                }
+
+                            }
+
+                            @Override
+                            public void onError(String msg, int code) {
+                                ToastUtils.showDisplay(msg);
+                            }
+                        });
+
+
+
+            } catch (Exception e) {
+                Log.e(TAG,"登录异常",e);
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+
 
             // TODO: register the new account here.
             return true;
         }
 
-        private void afterLoginSuccc() throws InterruptedException {
-            Thread.sleep(2000);
+
+
+        private void saveLoginParamIntoPref() {
+            //后台登录校验通过后
+            editor=pref.edit();
+            if(rememberPass.isChecked()){
+                editor.putBoolean(LoginConstants.REM_PASS,true);
+                editor.putString(LoginConstants.ACCOUNT,userName);
+                editor.putString(LoginConstants.PASS,mPassword);
+            }else{
+                editor.clear();
+            }
+            //提交修改到本地存储中
+            editor.apply();
         }
+
+
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -395,7 +421,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             //异步任务执行完毕 成功则退出程序 当然不行的了 改造为跳转向test活动页
             if (success) {
 //                finish();
-                BroadcastTestActivity.actionStart(getBaseContext(),null);
+
+                BrvahTestActivity.actionStart(getBaseContext(),null);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

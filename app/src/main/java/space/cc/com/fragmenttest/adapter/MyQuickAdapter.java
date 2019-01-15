@@ -1,6 +1,7 @@
 package space.cc.com.fragmenttest.adapter;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -67,7 +68,7 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
 //            holder.itemView.setBackgroundColor(Color.parseColor("#26000000"));
             holder.itemView.getBackground().mutate().setAlpha(60);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG,e.getMessage());
         }
         return holder;
 

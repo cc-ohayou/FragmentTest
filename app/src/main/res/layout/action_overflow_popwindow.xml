@@ -10,7 +10,7 @@
         android:id="@+id/ll_item1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="left">
 
         <ImageView
             android:id="@+id/ll_item1_img"
@@ -34,8 +34,8 @@
         android:id="@+id/ll_item2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center">
+        android:layout_marginTop="10dp"
+        android:gravity="left">
 
 
         <ImageView
@@ -43,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/update_16"
+
             />
 
         <TextView
@@ -54,6 +55,34 @@
             android:textColor="#ffffff"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setting_menu_bg_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="left">
+
+
+        <ImageView
+            android:id="@+id/setting_menu_bg_change_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:src="@drawable/bg_change"
+            />
+
+        <TextView
+            android:id="@+id/setting_menu_bg_change_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_horizontal"
+            android:text="更改背景"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+    </LinearLayout>
+
 
    <!-- <LinearLayout
         android:id="@+id/ll_item3"

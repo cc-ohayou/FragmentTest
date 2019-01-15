@@ -26,10 +26,6 @@ public class TabTestActivity extends AppCompatActivity {
     private static final String TAG_TAB_ONE = "dynamic";
     private static final String TAG_TAB_TWO = "operList";
     private TabLayoutAdapter mPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     TabLayout tabLayout;
 //    private SmartRefreshLayout srl_home;

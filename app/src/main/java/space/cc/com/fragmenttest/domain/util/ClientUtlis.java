@@ -15,6 +15,8 @@ import java.util.List;
 
 import okhttp3.MediaType;
 import space.cc.com.fragmenttest.MyApplication;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
@@ -89,6 +91,7 @@ public class ClientUtlis<Y> {
 
 
     public static void post(boolean isLoop, String url, RequestParams params, Object tag, AbsCallback callback) {
+
         if (NetworkUtils.isConnected()) {
             MyApplication.canRequest = true;
         } else {
@@ -111,6 +114,39 @@ public class ClientUtlis<Y> {
                 .upString(params.getParamsString(), MediaType.parse("application/x-www-form-urlencoded"))
                 .execute(callback);
     }
+
+
+    public static void post(boolean isLoop, UrlConfig url, RequestParams params, Object tag, AbsCallback callback) {
+
+
+        if(url.isNeedSession()){
+           OkGo.getInstance().getCommonHeaders().put("sid", ClientConfiguration.getInstance().getSid());
+        }
+        OkGo.getInstance().getCommonHeaders().put("uid", ClientConfiguration.getInstance().getUid());
+
+        if (NetworkUtils.isConnected()) {
+            MyApplication.canRequest = true;
+        } else {
+            if (isLoop) {
+                if (MyApplication.canRequest) {
+                    ToastUtils.showDisplay("当前网络较差，请检查网络设置");
+                    MyApplication.canRequest = false;
+                }
+            } else {
+                ToastUtils.showDisplay("当前网络较差，请检查网络设置");
+                MyApplication.canRequest = false;
+            }
+            return;
+        }
+
+        if (MyApplication.isConnected) return;
+
+        OkGo.post(url.getValue())
+                .tag(tag)
+                .upString(params.getParamsString(), MediaType.parse("application/x-www-form-urlencoded"))
+                .execute(callback);
+    }
+
 
     public static void post(Activity activity, String url, RequestParams params, Object tag, AbsCallback callback) {
         if (NetworkUtils.isConnected()) {
