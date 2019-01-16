@@ -78,10 +78,10 @@ public class PicassoUtil {
 
         picassoInst.load(drawableResId)
 //                .resize和centerCrop()需要一起使用
-                .resize(width <= 0 ? DEF_WIDTH : width, height <= 0 ? DEF_HEIGHT : height)
+//                .resize(width <= 0 ? DEF_WIDTH : width, height <= 0 ? DEF_HEIGHT : height)
 //               中心修剪
-                .centerCrop()
                 .centerInside()
+                .fit()
                 .config(Bitmap.Config.RGB_565)
                 .placeholder(R.drawable.manga_default)
                 .error(R.drawable.manga_default_error)
@@ -124,13 +124,13 @@ public class PicassoUtil {
 //                .resize和centerCrop()需要一起使用
 //                     .resize(50, 50)
 //                     中心修剪
-//                .centerCrop()
                 .placeholder(defaultResId)
                 .error(R.drawable.manga_default_error)
                 .config(Bitmap.Config.RGB_565)
 //                上面的centerCrop是可能看不到全部图片的，如果你想让View将图片展示完全，可以用centerInside，
 //               但是如果图片尺寸小于View尺寸的话，是不能充满View边界的。
                 .centerInside()
+                .fit()
 //                     此处使用 helper.getView获取对应位置的view对象
                 .into(targetView);
     }
@@ -179,6 +179,7 @@ public class PicassoUtil {
 //                     .resize(50, 50)
 //                     中心修剪
 //                .centerCrop()
+                .fit()
                 .placeholder(defaultResId)
                 .config(Bitmap.Config.RGB_565)
                 .centerInside()
@@ -199,11 +200,12 @@ public class PicassoUtil {
         picassoInst.load(resUri)
 //                .resize和centerCrop()需要一起使用
 //                     .resize(50, 50)
-//                     中心修剪
+//                     中心修剪 和centerInside 不兼容
 //                .centerCrop()
                 .placeholder(defaultResId)
                 .config(Bitmap.Config.RGB_565)
                 .centerInside()
+                .fit()
                 .error(R.drawable.manga_default_error)
 //                     此处使用 helper.getView获取对应位置的view对象
                 .into(targetView);
