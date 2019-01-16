@@ -47,6 +47,13 @@ public class ClientConfiguration {
     private String SHARED_USERINFO = "shared_userinfo";
 
     private String MsgPullPeriod = "msg_pull_period";
+    /**
+     * 主页背景图
+     */
+    private String mainBgUrl = "mainBgUrl";
+
+
+
 
     private ClientConfiguration() {
         mSharedPreferences = MyApplication.getAppContext().getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -183,6 +190,14 @@ public class ClientConfiguration {
         editor.commit();
     }
 
+    public String getMainBgUrl() {
+        String str = mSharedPreferences.getString(mainBgUrl, "http://img.zcool.cn/community/017e605a86d239a8012045b37bf119.jpg");
 
+        return ConcealUtils.decrypt(str);
+    }
 
+    public void setMainBgUrl(String url) {
+        editor.putString(mainBgUrl, ConcealUtils.encrypt(url));
+        editor.commit();
+    }
 }

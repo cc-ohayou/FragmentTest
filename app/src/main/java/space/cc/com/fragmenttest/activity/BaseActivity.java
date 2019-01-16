@@ -47,13 +47,16 @@ import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.util.UtilBox;
 
 public  abstract class BaseActivity extends AppCompatActivity {
-    public final int SELECT_LOCAL_IMAGE = 2;
+//  本地选择照片更改头像
+    public final int CHANGE_HEAD_OPEN_LOCAL_ALBUM = 1002;
+//   本地选择照片更改背景
+    public final int CHANGE_BACK_OPEN_LOCAL_ALBUM = 1001;
+
      static final int REQUEST_SELECT_PICTURE = 0x01;
      static final int REQUEST_SELECT_PICTURE_FOR_FRAGMENT = 0x02;
     private static final String TAG = "BaseActivity";
     static final Map EMPTY_MAP = new HashMap();
     private ForceOffLineReceiver receiver;
-    public static CustomProperties settingProperties = GlobalSettings.settingProperties;
     private static boolean updateSign=false;
 
     @Override
@@ -109,6 +112,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollector.removeActivity(this);
+//        unregisterReceiver(receiver);
 
     }
 

@@ -208,7 +208,7 @@ public class UtilUI {
 //        自由模式 选择框大小自由可调节 地步选项全有
          options.setFreeStyleCropEnabled(true);
 //         设置这个参数 则裁剪区域为16:9长方形  其它选项不再显示 一般不用设置
-        options.withAspectRatio(1, 1);
+         options.withAspectRatio(1, 1);
 
         /*
         If you want to configure how gestures work for all UCropActivity tabs
@@ -256,6 +256,26 @@ public class UtilUI {
             new AspectRatio("ASPECT", 1, 1));
 
        */
+
+        return uCrop.withOptions(options);
+    }
+
+
+
+    public UCrop advancedConfigWithFreeStyle(@NonNull UCrop uCrop) {
+
+        UCrop.Options options = new UCrop.Options();
+//        压缩格式 默认jpeg
+//         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+//        设置压缩质量 0-100 可用一个进度条控制
+//        options.setCompressionQuality(mSeekBarQuality.getProgress());
+//        隐藏底部选项只有一个选择框 简洁
+//        options.setHideBottomControls(mCheckBoxHideBottomControls.isChecked());
+//        自由模式 选择框大小自由可调节 地步选项全有
+        options.setFreeStyleCropEnabled(true);
+//         设置这个参数 则裁剪区域为16:9长方形  其它选项不再显示 一般不用设置
+
 
         return uCrop.withOptions(options);
     }

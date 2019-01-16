@@ -185,7 +185,8 @@ public class ClientUtlis<Y> {
     }
 
 
-    public static void uploadFiles(Activity activity, String url, RequestParams params, String fileKey, List<File> files, Object tag, AbsCallback callback) {
+    public static void uploadFiles(Activity activity, UrlConfig url, RequestParams params, String fileKey, List<File> files, Object tag, AbsCallback callback) {
+
         if (NetworkUtils.isConnected()) {
             MyApplication.canRequest = true;
 
@@ -197,7 +198,7 @@ public class ClientUtlis<Y> {
 
         if (MyApplication.isConnected) return;
 
-        OkGo.post(url)
+        OkGo.post(url.getValue())
                 .tag(tag)
                 .addFileParams(fileKey, files)
                 .execute(callback);

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import space.cc.com.fragmenttest.BuildConfig;
@@ -12,25 +13,27 @@ import space.cc.com.fragmenttest.R;
 public class PicassoUtil {
     private static Picasso picassoInst = Picasso.get();
     private static final int DEF_WIDTH = 50;
-    private static int DEF_HEIGHT =50;
+    private static int DEF_HEIGHT = 50;
     int defaultResId = R.drawable.manga_default;
-   /* 对于不透明的图片可以使用RGB_565来优化内存。
 
-            Picasso.with( imageView.getContext() )
-            .load(url)
-.config(Bitmap.Config.RGB_565)
-.into(imageView);
-默认情况下，Android使用ARGB_8888
+    /* 对于不透明的图片可以使用RGB_565来优化内存。
 
-Android中有四种，分别是：
-ALPHA_8：每个像素占用1byte内存
-ARGB_4444:每个像素占用2byte内存
-ARGB_8888:每个像素占用4byte内存
-RGB_565:每个像素占用2byte内存
-*/
+             Picasso.with( imageView.getContext() )
+             .load(url)
+ .config(Bitmap.Config.RGB_565)
+ .into(imageView);
+ 默认情况下，Android使用ARGB_8888
+
+ Android中有四种，分别是：
+ ALPHA_8：每个像素占用1byte内存
+ ARGB_4444:每个像素占用2byte内存
+ ARGB_8888:每个像素占用4byte内存
+ RGB_565:每个像素占用2byte内存
+ */
     static {
         if (BuildConfig.DEBUG) {
             picassoInst.setIndicatorsEnabled(true);
+
         }
 
 
@@ -65,18 +68,20 @@ RGB_565:每个像素占用2byte内存
         loadWork(targetView, drawableResId, R.drawable.manga_default);
 
     }
-  /**
+
+    /**
      * @description
      * @author CF
      * created at 2019/1/5/005  21:50
      */
-    public void loadDrawResReSize(ImageView targetView, int drawableResId,int width,int height) {
+    public void loadDrawResReSize(ImageView targetView, int drawableResId, int width, int height) {
 
         picassoInst.load(drawableResId)
 //                .resize和centerCrop()需要一起使用
-                .resize(width<=0?DEF_WIDTH:width, height<=0?DEF_HEIGHT:height)
+                .resize(width <= 0 ? DEF_WIDTH : width, height <= 0 ? DEF_HEIGHT : height)
 //               中心修剪
                 .centerCrop()
+                .centerInside()
                 .config(Bitmap.Config.RGB_565)
                 .placeholder(R.drawable.manga_default)
                 .error(R.drawable.manga_default_error)
@@ -92,12 +97,11 @@ RGB_565:每个像素占用2byte内存
      */
     public void loadUrlResIntoView(ImageView targetView, String imageUrl) {
 
-        loadUrlResWork(targetView, imageUrl);
-
+        loadUrlResWork(targetView, imageUrl,R.drawable.manga_default);
 
     }
 
-    private void loadUrlResWork(ImageView targetView, String imageUrl) {
+    public void loadUrlResIntoView(ImageView targetView, String imageUrl, String tag) {
 
         picassoInst.load(imageUrl)
 //                .resize和centerCrop()需要一起使用
@@ -107,7 +111,26 @@ RGB_565:每个像素占用2byte内存
                 .placeholder(R.drawable.manga_default)
                 .error(R.drawable.manga_default_error)
                 .config(Bitmap.Config.RGB_565)
+                .tag(tag)
+                .centerInside()
+//                     此处使用 helper.getView获取对应位置的view对象
+                .into(targetView);
 
+    }
+
+    private void loadUrlResWork(ImageView targetView, String imageUrl,int defaultResId) {
+
+        picassoInst.load(imageUrl)
+//                .resize和centerCrop()需要一起使用
+//                     .resize(50, 50)
+//                     中心修剪
+//                .centerCrop()
+                .placeholder(defaultResId)
+                .error(R.drawable.manga_default_error)
+                .config(Bitmap.Config.RGB_565)
+//                上面的centerCrop是可能看不到全部图片的，如果你想让View将图片展示完全，可以用centerInside，
+//               但是如果图片尺寸小于View尺寸的话，是不能充满View边界的。
+                .centerInside()
 //                     此处使用 helper.getView获取对应位置的view对象
                 .into(targetView);
     }
@@ -122,7 +145,7 @@ RGB_565:每个像素占用2byte内存
         if (defaultRes != null) {
             defaultResId = defaultRes;
         }
-        loadUrlResWork(targetView, imageUrl);
+        loadUrlResWork(targetView, imageUrl,defaultResId);
 
 
     }
@@ -158,7 +181,7 @@ RGB_565:每个像素占用2byte内存
 //                .centerCrop()
                 .placeholder(defaultResId)
                 .config(Bitmap.Config.RGB_565)
-
+                .centerInside()
                 .error(R.drawable.manga_default_error)
 //                     此处使用 helper.getView获取对应位置的view对象
                 .into(targetView);
@@ -180,17 +203,44 @@ RGB_565:每个像素占用2byte内存
 //                .centerCrop()
                 .placeholder(defaultResId)
                 .config(Bitmap.Config.RGB_565)
+                .centerInside()
                 .error(R.drawable.manga_default_error)
 //                     此处使用 helper.getView获取对应位置的view对象
                 .into(targetView);
 
     }
-      /**
-         * @description
-         * @author CF
-         * created at 2019/1/13/013  22:54
-         */
+
+    /**
+     * @description
+     * @author CF
+     * created at 2019/1/13/013  22:54
+     */
     public void loadUriRes(ImageView targetView, Uri resUri) {
-        loadUriResWithDefault(targetView,resUri,defaultResId);
+        loadUriResWithDefault(targetView, resUri, defaultResId);
+    }
+
+
+    /**
+     * @author CF
+     * @date 2019/1/4
+     * @description
+     */
+    public void loadBigUrlImg(ImageView targetView, String url, int defaultResId) {
+//参考文章 https://blog.csdn.net/mawei7510/article/details/80580097
+        picassoInst.load(url)
+//                .resize和centerCrop()需要一起使用
+//                     .resize(50, 50)
+//                     中心修剪
+//                .centerCrop()
+                .placeholder(defaultResId)
+                .config(Bitmap.Config.RGB_565)
+                //静止内存缓存  针对大图 不要在内存中占用空间  放到磁盘缓存中
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+//                .networkPolicy(NetworkPolicy.NO_CACHE)//跳过磁盘缓存
+
+                .error(R.drawable.manga_default_error)
+//                     此处使用 helper.getView获取对应位置的view对象
+                .into(targetView);
+
     }
 }

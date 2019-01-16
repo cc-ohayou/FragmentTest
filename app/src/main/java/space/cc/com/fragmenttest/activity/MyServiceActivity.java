@@ -8,6 +8,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
@@ -115,7 +117,7 @@ public class MyServiceActivity extends BaseActivity implements View.OnClickListe
 //                downloadBinder.reDownLoad(downloadUrl);
                 break;
             case R.id.addProgress:
-                    ToastUtils.showDisplay(settingProperties.getDownLoadUrl());
+                    ToastUtils.showDisplay(GlobalSettings.settingProperties.getDownLoadUrl());
                     break;
             default:
                 break;
