@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@drawable/a2_profile"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.LoginActivity">
+    <!-- 通过引入时间编写好的自定义标题布局  （标题布局自我实现布局中的按钮事件
+    避免了在引入布局处编写重复代码的问题） -->
+    <space.cc.com.fragmenttest.activity.common.TitleLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        />
+
 
     <!-- Login progress -->
     <ProgressBar
@@ -20,6 +22,15 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="@drawable/a2_profile"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    >
 
     <ScrollView
         android:id="@+id/login_form"
@@ -92,5 +103,6 @@
 
     </ScrollView>
 
+</LinearLayout>
 
 </LinearLayout>

@@ -53,6 +53,8 @@
             android:id="@+id/nav_login_out"
             android:icon="@drawable/nav_login_out"
             android:orderInCategory="100"
-            android:title="@string/nav_setting" />
+            android:title="@string/nav_login_out"
+            android:visible="false"
+            />
     </group>
 </menu>

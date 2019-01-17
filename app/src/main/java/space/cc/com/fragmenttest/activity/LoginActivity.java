@@ -37,6 +37,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.activity.common.TitleLayout;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.LoginConstants;
@@ -77,21 +78,27 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private Button signInButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        //获取存储对象
-        pref= PreferenceManager.getDefaultSharedPreferences(this);
-        rememberPass = findViewById(R.id.remember_pass);
-        userNameView =  findViewById(R.id.login_account);
-        signInButton =  findViewById(R.id.sign_in_button);
-        populateAutoComplete();
-        mPasswordView =  findViewById(R.id.password);
-        //如果设置过记住密码的则进行账号密码信息的填充 正式的肯定要加密处理
-        ifRememberPassSetAccountInfo();
-        initListener();
+        try {
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
+            TitleLayout.titleText.setText("登录");
+            //获取存储对象
+            pref = PreferenceManager.getDefaultSharedPreferences(this);
+            rememberPass = findViewById(R.id.remember_pass);
+            userNameView = findViewById(R.id.login_account);
+            signInButton = findViewById(R.id.sign_in_button);
+            populateAutoComplete();
+            mPasswordView = findViewById(R.id.password);
+            //如果设置过记住密码的则进行账号密码信息的填充 正式的肯定要加密处理
+            ifRememberPassSetAccountInfo();
+            initListener();
+
+            mLoginFormView = findViewById(R.id.login_form);
+            mProgressView = findViewById(R.id.login_progress);
+        } catch (Exception e) {
+            Log.e(TAG, "login error", e);
+        }
     }
     /**
          * @author  CF
@@ -353,32 +360,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-            RequestParams reqParam = getLoginRequestParams(userName,mPassword);
             try {
-
-                // Simulate network access.
-                ClientUtlis.post(true, UrlConfig.USER_LOGIN,reqParam,
-                        this,new JsonCallback<UserInfo>() {
-                            @Override
-                            public void onSuccess(UserInfo info, String msg) {
-                                if(info!=null){
-                                    GlobalSettings.userInfo = info;
-                                    ClientConfiguration.getInstance().setSid(info.getSid());
-                                    ClientConfiguration.getInstance().setUid(info.getUid());
-                                    ClientConfiguration.getInstance().setLoginState(true);
-                                    saveLoginParamIntoPref();
-                                }else{
-                                    ToastUtils.showDisplay("用户名或密码不存在");
-                                    Log.d(TAG,"userInfo is null 用户名或密码不存在");
-                                }
-
-                            }
-
-                            @Override
-                            public void onError(String msg, int code) {
-                                ToastUtils.showDisplay(msg);
-                            }
-                        });
+//                doLoginWork();
 
 
 
@@ -393,8 +376,41 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             return true;
         }
 
+        private void doLoginWork() {
+            RequestParams reqParam = getLoginRequestParams(userName,mPassword);
+            // Simulate network access.
+            ClientUtlis.post(true, UrlConfig.USER_LOGIN,reqParam,
+                    this,new JsonCallback<UserInfo>() {
+                        @Override
+                        public void onSuccess(UserInfo info, String msg) {
+                            if(info!=null){
+                                GlobalSettings.userInfo = info;
+                                ClientConfiguration.getInstance().setSid(info.getSid());
+                                ClientConfiguration.getInstance().setUid(info.getUid());
+                                ClientConfiguration.getInstance().setLoginState(true);
+//                                记住密码信息保存
+                                saveLoginParamIntoPref();
+//                                保证信息初始化完成再启动主界面
+                                BrvahTestActivity.actionStart(getBaseContext(),null);
 
+                            }else{
+                                ToastUtils.showDisplay("用户名或密码不存在");
+                                Log.d(TAG,"userInfo is null 用户名或密码不存在");
+                            }
 
+                        }
+
+                        @Override
+                        public void onError(String msg, int code) {
+                            ToastUtils.showDisplay(msg);
+                        }
+                    });
+        }
+
+/**
+ *
+ *
+ */
         private void saveLoginParamIntoPref() {
             //后台登录校验通过后
             editor=pref.edit();
@@ -419,8 +435,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             //异步任务执行完毕 成功则退出程序 当然不行的了 改造为跳转向test活动页
             if (success) {
 //                finish();
-
-                BrvahTestActivity.actionStart(getBaseContext(),null);
+                doLoginWork();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

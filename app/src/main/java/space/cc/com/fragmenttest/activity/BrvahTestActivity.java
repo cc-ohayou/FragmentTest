@@ -103,6 +103,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private UCrop uCrop;
     private String nickNameInput="";
 
+    MenuItem loginItem;
+
     private static String defaultData = "[{\"area\":\"中国大陆\",\"arealimit\":317,\"attention\":352150,\"bangumi_id\":0,\"nowEpisode\":\"11\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8f19c704a6516bab4716931db10621c1b6c6e4bf.jpg\",\"danmaku_count\":105072,\"ep_id\":258700,\"favorites\":352150,\"is_finish\":0,\"lastupdate\":1545883200,\"lastupdate_at\":\"2018-12-27 12:00:00\",\"isNew\":false,\"play_count\":8263731,\"pub_time\":\"\",\"season_id\":25823,\"season_status\":13,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/67a851a5cd87fef2ddd6f9bd6cf691781a1d8b95.jpg\",\"title\":\"画江湖之不良人 第三季\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":12083,\"bangumi_id\":0,\"nowEpisode\":\"4\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8df12fc092928ba57069eb16e077f9d719f345e5.jpg\",\"danmaku_count\":10022,\"ep_id\":258686,\"favorites\":12083,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":486760,\"pub_time\":\"\",\"season_id\":26176,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\"title\":\"通灵妃 河南话版\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":151420,\"bangumi_id\":0,\"nowEpisode\":\"10\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/57dc8fdf8373f8c1facfc2911d50be1cfc6da18a.jpg\",\"danmaku_count\":26706,\"ep_id\":258689,\"favorites\":151420,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":2023158,\"pub_time\":\"\",\"season_id\":24888,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/ef2f039b71564cc469b2cac9d8f2879e1259a74f.jpg\",\"title\":\"山河社稷图\",\"viewRank\":0,\"weekday\":4}]";
 
     static {
@@ -156,11 +158,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
      *
      *    在线状态获取远端用户信息
      *    离线状态使用默认布局 和默认的头像
-     *
-     *    进入页面 判断是否已登录 登录状态是否已失效  借助必然访问的customProperties接口来实现 sid没有过期则设置登录状态true
-     *    过期则设置false
-     *
-     *    非登录态      用户相关信息初始化为默认值
+     * 1、登录状态   隐藏点击登录view    获取用户最新信息 显示昵称 显示电话 载入头像  背景加载 显示登出按钮
+     * 2、退出状态  显示点击登录view   隐藏昵称和电话 使用默认头像 默认背景 隐藏登出按钮
      *
      */
     private void initUserInfoRelViewValueByLoginState() {
@@ -180,7 +179,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
      *
      */
     private void initUserInfoRelViewValueWithNotLogin() {
-        //           未登录显示 点击登录 提示语
+        //           未登录 显示 点击登录
         navLoginText.setVisibility(View.VISIBLE);
 //        导航头像更换
         UtilBox.box().picasso.loadDrawResIntoView(navTopLeftCircleImageView,
@@ -193,6 +192,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         nickName.setVisibility(View.INVISIBLE);
 //        手机
         mail.setVisibility(View.INVISIBLE);
+//        登出item隐藏
+        loginItem.setVisible(false);
 //      初始化背景图片
         initMainBgImg();
 
@@ -218,6 +219,10 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         navLoginText.setOnClickListener(this);
 
         floatBackToTopBut = findViewById(R.id.float_but);
+
+
+
+        loginItem= navView.getMenu().findItem(R.id.nav_login_out);
 
     }
 
@@ -325,6 +330,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         mail.setText(GlobalSettings.userInfo.getPhone());
         mail.setVisibility(View.VISIBLE);
 
+        loginItem.setVisible(true);
+
+        initMainBgImg();
 
     }
 
@@ -337,6 +345,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                     public void onSuccess(UserInfo info, String msg) {
                         if(info!=null){
                             GlobalSettings.userInfo = info;
+                            ClientConfiguration.getInstance().setMainBgUrl(info.getMainBgUrl());
                             initNavHeaderViewValueWithLoginState();
                         }else{
                             Log.d(TAG,"");
@@ -421,6 +430,13 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        initUserInfoRelViewValueByLoginState();
+
     }
 
     @Override
