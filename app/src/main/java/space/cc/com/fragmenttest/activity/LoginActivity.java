@@ -392,7 +392,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                                 saveLoginParamIntoPref();
 //                                保证信息初始化完成再启动主界面
                                 BrvahTestActivity.actionStart(getBaseContext(),null);
-
+                                finish();
                             }else{
                                 ToastUtils.showDisplay("用户名或密码不存在");
                                 Log.d(TAG,"userInfo is null 用户名或密码不存在");
