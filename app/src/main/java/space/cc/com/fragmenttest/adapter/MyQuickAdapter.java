@@ -66,7 +66,7 @@ public class MyQuickAdapter extends BaseQuickAdapter<Manga, BaseViewHolder> {
 // 如果需要透明度
 // int color=Color.argb(a,red, green, blue)
 //            holder.itemView.setBackgroundColor(Color.parseColor("#26000000"));
-            holder.itemView.getBackground().mutate().setAlpha(60);
+//            holder.itemView.getBackground().mutate().setAlpha(160);
         } catch (Exception e) {
             Log.e(TAG,e.getMessage());
         }

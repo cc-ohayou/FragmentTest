@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:background="@color/white"
     android:foreground="?android:attr/selectableItemBackground"
     android:stateListAnimator="@drawable/lift_on_touch"
     android:padding="8dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="10dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
 
@@ -29,27 +28,30 @@
     <!--android:background="@drawable/b3_christmas"-->
     <!--android:background="@drawable/bg01"-->
 
-    <LinearLayout
+ <!--   <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:layout_gravity="left"
-        >
-        <!--封面-->
-        <ImageView
-            android:id="@+id/manga_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        android:padding="5dp">
+        &lt;!&ndash;封面&ndash;&gt;
 
-    </LinearLayout>
+
+    </FrameLayout>-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:padding="5dp"
+        android:layout_margin="5dp"
+
         android:layout_gravity="right">
+        <ImageView
+            android:id="@+id/manga_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            />
         <!--名称-->
+
         <TextView
             android:id="@+id/manga_title"
             android:layout_width="wrap_content"

@@ -1,6 +1,5 @@
 package space.cc.com.fragmenttest.activity;
 
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +20,12 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.alibaba.fastjson.JSON;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.lzy.okgo.OkGo;
@@ -52,7 +51,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
-import com.google.android.material.appbar.AppBarLayout;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
@@ -654,7 +652,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
      */
     @SuppressLint("ResourceAsColor")
     private void initAdapter() {
-        homeAdapter = new MyQuickAdapter(R.layout.manga_item, mangaList, 0, getViewIemHeight(5, this));
+        homeAdapter = new MyQuickAdapter(R.layout.manga_item, mangaList, 0, getViewIemHeight(6, this));
         //放大动画
 //        homeAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         homeAdapter.openLoadAnimation();
@@ -890,6 +888,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
 
     private class DownloadImageTask extends AsyncTask<String, Void, Drawable> {
+        View view ;
         @Override
         protected Drawable doInBackground(String... urls) {
             return loadImageFromNetwork(urls[0]);

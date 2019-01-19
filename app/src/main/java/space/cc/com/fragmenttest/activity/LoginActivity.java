@@ -47,6 +47,7 @@ import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
+import space.cc.com.fragmenttest.task.ChangeViewBackgroundTask;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -71,6 +72,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View thisActivity;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -82,6 +84,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
+            thisActivity= findViewById(R.id.login_layout);
             TitleLayout.titleText.setText("登录");
             //获取存储对象
             pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -96,6 +99,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
             mLoginFormView = findViewById(R.id.login_form);
             mProgressView = findViewById(R.id.login_progress);
+            new ChangeViewBackgroundTask(thisActivity,"login_bg,png").execute(ClientConfiguration.getInstance().getMainBgUrl()) ;
+
         } catch (Exception e) {
             Log.e(TAG, "login error", e);
         }
