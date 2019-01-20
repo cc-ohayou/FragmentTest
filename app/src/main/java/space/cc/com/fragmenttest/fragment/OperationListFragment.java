@@ -2,6 +2,7 @@ package space.cc.com.fragmenttest.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +25,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.activity.BrvahTestActivity;
+import space.cc.com.fragmenttest.activity.OperBizDetailActivity;
 import space.cc.com.fragmenttest.adapter.OperationBizAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.bizobject.IntentExtraKey;
 import space.cc.com.fragmenttest.domain.bizobject.OperateBiz;
 import space.cc.com.fragmenttest.domain.bizobject.PsPage;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
@@ -43,6 +47,15 @@ public class OperationListFragment extends BaseFragment {
     private static final boolean GRID_LAYOUT = false;
     private static final String TAG = "OperationListFragment";
     private RecyclerView mRecyclerView;
+
+    public RecyclerView getmRecyclerView() {
+        return mRecyclerView;
+    }
+
+    public void setmRecyclerView(RecyclerView mRecyclerView) {
+        this.mRecyclerView = mRecyclerView;
+    }
+
     private Activity parentActivity;
     private PsPage<OperateBiz> operPage;
     private List<OperateBiz> operList;
@@ -60,16 +73,23 @@ public class OperationListFragment extends BaseFragment {
         this.parentActivity = activity;
     }
 
+    private static class  Instance{
+        private static OperationListFragment fragment;
+        public static OperationListFragment getInstance(String tabTitle,Activity activity){
+            fragment=new OperationListFragment(tabTitle,activity);
+            return fragment;
+        }
+    }
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static synchronized OperationListFragment newInstance(String tabTitle,Activity activity) {
+    public static  OperationListFragment newInstance(String tabTitle,Activity activity) {
 
     /*        Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);*/
-        return  new OperationListFragment(tabTitle,activity);
+        return  Instance.getInstance(tabTitle,activity);
     }
 
     @Override
@@ -84,12 +104,40 @@ public class OperationListFragment extends BaseFragment {
         } else {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(Utils.getApp()));
         }
-        mRecyclerView.setBackgroundResource(R.drawable.default_head);
+//        mRecyclerView.setBackgroundResource(R.drawable.default_head);
         initAdapter();
         mRecyclerView.setAdapter(adapter);
         initSmartRefreshLayoutListener((RefreshLayout) rootView);
 
         loadOperationBizList(true);
+
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(!recyclerView.canScrollVertically(-1)){
+//                  返回false表示不能往下滑动，即代表到顶部了
+//                  隐藏到顶部的浮动按钮
+                    ((BrvahTestActivity)parentActivity).hideViews();
+//                    ToastUtils.showDisplay("到顶部了");
+                }else{
+//                    显示浮动按钮
+                    ((BrvahTestActivity)parentActivity).showViews();
+//                    ToastUtils.showDisplay("非顶部 显示按钮");
+
+                }
+//                recyclerView.computeVerticalScrollOffset()
+
+//                判断是否滑动到底部， recyclerView.canScrollVertically(1);返回false表示不能往上滑动，即代表到底部了；
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
         return rootView;
     }
 /**
@@ -183,8 +231,9 @@ public class OperationListFragment extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                Intent intent = new Intent(HomeActivity.this, ACTIVITY[position]);
-//                startActivity(intent);
+                Intent intent = new Intent(getContext(),OperBizDetailActivity.class);
+                intent.putExtra(IntentExtraKey.OPER_BIZ_DETAIL.getValue(),operList.get(position));
+                startActivity(intent);
 //                ToastUtils.showDisplay("ItemClick:" + operList.get(position).getOperId());
             }
         });
@@ -300,6 +349,9 @@ public class OperationListFragment extends BaseFragment {
                     }
                 });
     }
+
+
+
 
 }
 

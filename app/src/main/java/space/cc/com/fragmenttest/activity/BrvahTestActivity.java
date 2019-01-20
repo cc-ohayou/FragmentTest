@@ -28,6 +28,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.lzy.okgo.OkGo;
 import com.nanchen.compresshelper.CompressHelper;
 import com.yalantis.ucrop.UCrop;
@@ -43,13 +44,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
+import space.cc.com.fragmenttest.adapter.TabLayoutAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
@@ -61,6 +67,7 @@ import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
+import space.cc.com.fragmenttest.fragment.OperationListFragment;
 import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.CustomScrollView;
@@ -103,6 +110,15 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     MenuItem loginItem;
 
+
+    private static final String TAG_TAB_ONE = "dynamic";
+    private static final String TAG_TAB_TWO = "operList";
+    private TabLayoutAdapter mPagerAdapter;
+    private ViewPager mViewPager;
+    TabLayout tabLayout;
+    //    private SmartRefreshLayout srl_home;
+    private String[] tabTitles = {"列表", "动态"};
+
     private static String defaultData = "[{\"area\":\"中国大陆\",\"arealimit\":317,\"attention\":352150,\"bangumi_id\":0,\"nowEpisode\":\"11\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8f19c704a6516bab4716931db10621c1b6c6e4bf.jpg\",\"danmaku_count\":105072,\"ep_id\":258700,\"favorites\":352150,\"is_finish\":0,\"lastupdate\":1545883200,\"lastupdate_at\":\"2018-12-27 12:00:00\",\"isNew\":false,\"play_count\":8263731,\"pub_time\":\"\",\"season_id\":25823,\"season_status\":13,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/67a851a5cd87fef2ddd6f9bd6cf691781a1d8b95.jpg\",\"title\":\"画江湖之不良人 第三季\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":12083,\"bangumi_id\":0,\"nowEpisode\":\"4\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/8df12fc092928ba57069eb16e077f9d719f345e5.jpg\",\"danmaku_count\":10022,\"ep_id\":258686,\"favorites\":12083,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":486760,\"pub_time\":\"\",\"season_id\":26176,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\"title\":\"通灵妃 河南话版\",\"viewRank\":0,\"weekday\":4},{\"area\":\"中国大陆\",\"arealimit\":316,\"attention\":151420,\"bangumi_id\":0,\"nowEpisode\":\"10\",\"cover\":\"http://i0.hdslb.com/bfs/bangumi/57dc8fdf8373f8c1facfc2911d50be1cfc6da18a.jpg\",\"danmaku_count\":26706,\"ep_id\":258689,\"favorites\":151420,\"is_finish\":0,\"lastupdate\":1545876000,\"lastupdate_at\":\"2018-12-27 10:00:00\",\"isNew\":false,\"play_count\":2023158,\"pub_time\":\"\",\"season_id\":24888,\"season_status\":2,\"spid\":0,\"coverImage\":\"http://i0.hdslb.com/bfs/bangumi/ef2f039b71564cc469b2cac9d8f2879e1259a74f.jpg\",\"title\":\"山河社稷图\",\"viewRank\":0,\"weekday\":4}]";
 
     static {
@@ -134,11 +150,16 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             initUserInfoRelViewValueByLoginState();
 //            initActionBar();
             //初始化recycleView
-            initRecycleView();
+//            initRecycleView();
 //            初始化homeAdapter
-            initAdapter();
+//            initAdapter();
 //      远端加载数据
-            initData();
+//            initData();
+
+            intiViewPagerAndAdapter();
+//          abLayout.setupWithViewPager(mViewPager);放在adapter之后 官方的一个坑爹bug 会导致tab不显示
+//          详细说明见  https://blog.csdn.net/sundy_tu/article/details/52682246
+            initTabLayout();
             initFloatBut();
 
         } catch (Exception e) {
@@ -147,6 +168,75 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         }
 //        int standardHeight=getViewIemWidth(4,BrvahTestActivity.this);
 
+
+    }
+    private void initTabLayout() {
+        tabLayout = findViewById(R.id.operList__tabs);
+//        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        //设置tab标题字体颜色
+        tabLayout.setTabTextColors(ContextCompat.getColor(this, R.color.bg_gray), ContextCompat.getColor(this, R.color.white));
+        //设置选中区域背景色
+//        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
+        ViewCompat.setElevation(tabLayout, 10);
+//            setupWithViewPager(mViewPager); 内部完成了下面注释的两行代码的功能 以及adapter监听器的添加
+//             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+//            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    private void intiViewPagerAndAdapter() {
+        mPagerAdapter = new TabLayoutAdapter(getSupportFragmentManager(), tabTitles,BrvahTestActivity.this);
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = findViewById(R.id.operList_vp);
+
+        mViewPager.setAdapter(mPagerAdapter);
+        //设置ViewPager的切换监听
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected ( int position){
+//                ToastUtils.showDisplay("switch to "+position);
+                switch (position) {
+                    case 0:
+                        selectTab(position);
+                        break;
+                    case 1:
+                        selectTab(position);
+
+                        break;
+                    case 2:
+                        selectTab(position);
+                        break;
+                }
+            }
+            //页面滚动事件
+            @Override
+            public void onPageScrolled ( int arg0, float arg1, int arg2){
+            }
+            //页面滚动状态改变事件
+            @Override
+            public void onPageScrollStateChanged ( int arg0){
+            }
+        });
+
+    }
+
+    /**
+     * @author  CF
+     * @date   2019/1/11
+     * @description   选中tab  切换图标选中状态和viewPager的当前item
+     *
+     */
+    private void selectTab(int position) {
+        if(position==0){
+            List<Fragment> fragments= getSupportFragmentManager().getFragments();
+
+//            Fragment fragment=getSupportFragmentManager().findFragmentById(R.id.oper_list);
+            Fragment fragment=fragments.get(0);
+            layoutManager =((OperationListFragment)fragment).getmRecyclerView().getLayoutManager();
+        }
+        mViewPager.setCurrentItem(position);
+//        ToastUtils.showDisplay("position selected "+position);
 
     }
     /**
@@ -260,7 +350,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initFloatBut() {
-
+//        layoutManager = mRecyclerView.getLayoutManager();
         floatBackToTopBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -747,12 +837,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 });
     }
 
-    private void initRecycleView() {
+    /*private void initRecycleView() {
         mRecyclerView = findViewById(R.id.brvah_book_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setBackgroundResource(R.drawable.default_head);
 
-       layoutManager = mRecyclerView.getLayoutManager();
+
 
         //setting up our OnScrollListener
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -777,10 +867,10 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-    }
+    }*/
 
 
-    private void hideViews() {
+    public  void hideViews() {
 //      显示toolbar
         appBarLayout.setExpanded(true,true);
               /*  a.getBoolean(com.google.android.material.R.styleable.AppBarLayout_expanded, false),
@@ -793,7 +883,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
-    private void showViews() {
+    public void showViews() {
 //        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
 
         floatBackToTopBut.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
@@ -896,7 +986,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(Drawable result) {
-            mRecyclerView.setBackground(result);
+            drawerLayout.setBackground(result);
         }
     }
 

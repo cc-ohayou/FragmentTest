@@ -17,14 +17,18 @@
 
         <include layout="@layout/appbar_layout" />
 
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/operList_vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-
-            <LinearLayout
+           <!-- <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--android:paddingTop="?attr/actionBarSize"-->
+                &lt;!&ndash;android:paddingTop="?attr/actionBarSize"&ndash;&gt;
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -35,8 +39,8 @@
                     android:clipToPadding="false"
                     android:paddingTop="?attr/actionBarSize"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-                <!--//             android:clipToPadding="false" 若没有这句在隐藏ToolBar的时候会出现空白，如下所示-->
-            </LinearLayout>
+                &lt;!&ndash;//             android:clipToPadding="false" 若没有这句在隐藏ToolBar的时候会出现空白，如下所示&ndash;&gt;
+            </LinearLayout>-->
         <!--
 
          http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0317/2612.html
@@ -53,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
+            android:visibility="invisible"
             app:srcCompat="@drawable/bak_to_top" />
         <!-- 常用系统自带图标  @android:drawable/ic_dialog_email  -->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

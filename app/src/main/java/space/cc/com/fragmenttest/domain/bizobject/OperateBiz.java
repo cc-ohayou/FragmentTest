@@ -1,15 +1,15 @@
 package space.cc.com.fragmenttest.domain.bizobject;
 
-import lombok.Data;
+import java.io.Serializable;
 
-import java.util.Date;
+import lombok.Data;
 
 /**
  * @AUTHOR CF
  * @DATE Created on 2019/1/10 10:40.
  */
 @Data
-public class OperateBiz {
+public class OperateBiz implements Serializable {
     private String operId;
     //操作简称 比如 递延
     private String operName;

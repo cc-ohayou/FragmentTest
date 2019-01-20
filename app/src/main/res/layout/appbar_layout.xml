@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:theme="@style/AppTheme.AppBarOverlay"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--android:theme="@style/AppTheme.AppBarOverlay"-->
+
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content">-->
 
@@ -19,11 +21,13 @@
         app:layout_scrollFlags="scroll|enterAlways"
         android:id="@+id/manga_toolbar"
         android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorAccent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         >
+        <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/nav_topLeft_image"
             android:layout_width="30dp"
@@ -41,5 +45,33 @@
             android:textSize="20sp" />
 
     </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_weight="1"
+        android:id="@+id/operList__tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/operList_tabItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+
+            android:text="@string/tab_text_1" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/operList_tabItem2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_text_2" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/operList_tabItem3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_text_3" />
+
+    </com.google.android.material.tabs.TabLayout>
     <!--android.support.design.widget.AppBarLayout-->
 </com.google.android.material.appbar.AppBarLayout>
