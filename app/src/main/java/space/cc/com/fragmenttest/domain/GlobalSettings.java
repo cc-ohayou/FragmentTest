@@ -5,6 +5,6 @@ import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
 
 public class GlobalSettings {
 
-    public static CustomProperties settingProperties=CustomProperties.getInstance();
+    public static CustomProperties settingProperties;
     public static UserInfo userInfo;
 }

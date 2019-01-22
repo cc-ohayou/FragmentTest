@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--实线边框-->
+    <solid android:color="#ffffff" />
+    <!--边框线属性   -->
+    <stroke android:width="1dip" android:color="#fefefe" />
+    <!--圆角半径    - 圆角半径是高度的一般就是一个圆弧了-->
+    <corners android:radius="20dp"/>
+
+    <padding android:bottom="10dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp"/>
+
+<!--shape 可以定义四种类型的几何图形，由 android:shape 属性指定
+
+      line - 线
+
+      rectangle - 矩形（圆角矩形）
+
+      oval -椭圆，圆
+
+      ring - 圆环
+
+    -->
+
+</shape>
+
+
+

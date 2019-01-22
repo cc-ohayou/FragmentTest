@@ -43,6 +43,7 @@ import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.LoginConstants;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
@@ -99,7 +100,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
             mLoginFormView = findViewById(R.id.login_form);
             mProgressView = findViewById(R.id.login_progress);
-            new ChangeViewBackgroundTask(thisActivity,"login_bg,png").execute(ClientConfiguration.getInstance().getMainBgUrl()) ;
+            new ChangeViewBackgroundTask(thisActivity,"login_bg,png")
+                    .execute(ClientConfiguration.getInstance().getCustomProperties().getLoginBgUrl()) ;
 
         } catch (Exception e) {
             Log.e(TAG, "login error", e);

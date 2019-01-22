@@ -2,10 +2,14 @@ package space.cc.com.fragmenttest.domain;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
 
 import java.util.Calendar;
 
 import space.cc.com.fragmenttest.MyApplication;
+import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.util.StringUtils;
 
 /**
@@ -20,6 +24,7 @@ public class ClientConfiguration {
     private static ClientConfiguration clientConfiguration;
     private static SharedPreferences.Editor editor;
 
+    private static final String TAG = "ClientConfiguration";
     /**
      * 登录账号
      */
@@ -45,6 +50,7 @@ public class ClientConfiguration {
      * user数据
      */
     private String SHARED_USERINFO = "shared_userinfo";
+    private String SHARED_CUSTOM_PROPERTIES = "custom_properties";
 
     private String MsgPullPeriod = "msg_pull_period";
     /**
@@ -127,7 +133,22 @@ public class ClientConfiguration {
         editor.putBoolean(SHARED_LOGIN_STATE, state);
         editor.commit();
     }
-
+    public void setCustomProperties(CustomProperties customProperties) {
+        editor.putString(SHARED_CUSTOM_PROPERTIES, JSON.toJSONString(customProperties));
+        editor.commit();
+    }
+    public CustomProperties getCustomProperties() {
+        CustomProperties properties;
+        try {
+            properties = JSON.parseObject(
+                    mSharedPreferences.getString(SHARED_CUSTOM_PROPERTIES, ""),
+                    CustomProperties.class);
+        } catch (Exception e) {
+            properties=CustomProperties.getInstance();
+            Log.e(TAG, "defaultData transfer error");
+        }
+        return properties ;
+    }
     public boolean getLoginState() {
         return mSharedPreferences.getBoolean(SHARED_LOGIN_STATE, false);
     }

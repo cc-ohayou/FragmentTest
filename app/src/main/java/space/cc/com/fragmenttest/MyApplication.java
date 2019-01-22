@@ -13,6 +13,7 @@ import org.litepal.LitePal;
 import org.litepal.tablemanager.Connector;
 
 import androidx.multidex.MultiDexApplication;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
@@ -67,10 +68,10 @@ public class MyApplication extends MultiDexApplication {
                 this,new JsonCallback<CustomProperties>() {
                     @Override
                     public void onSuccess(CustomProperties customProperties, String msg) {
+                        ClientConfiguration.getInstance().setCustomProperties(customProperties);
                         if(customProperties!=null){
-                            GlobalSettings.settingProperties = customProperties;
+                            GlobalSettings.settingProperties = ClientConfiguration.getInstance().getCustomProperties();
                         }
-
                     }
 
                     @Override

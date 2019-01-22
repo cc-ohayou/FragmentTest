@@ -37,6 +37,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+//            取消混肴  以免debug安装到手机失败
+// 另外android-studio2.0以上版本的 InstantRun问题  https://blog.csdn.net/u012588160/article/details/80447922
+//
+            minifyEnabled false
+        }
     }
 
 //百度sdk lib扫描 同时要手动的将jar包 add进来

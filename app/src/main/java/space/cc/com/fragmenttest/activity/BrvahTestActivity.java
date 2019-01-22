@@ -12,12 +12,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.lzy.okgo.OkGo;
 import com.nanchen.compresshelper.CompressHelper;
@@ -52,6 +56,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.adapter.MyQuickAdapter;
@@ -72,6 +78,8 @@ import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.CustomScrollView;
 import space.cc.com.fragmenttest.util.UtilBox;
+
+import static android.view.View.FOCUSABLE;
 
 
 public class BrvahTestActivity extends BaseActivity implements View.OnClickListener ,CustomScrollView.OnScrollChangeListener {
@@ -99,6 +107,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private TextView popBgChangeText;
 
     private  CircleImageView navTopLeftCircleImageView;
+
+    @BindView(R.id.manga_toolbar_search_input)
+    EditText searchText;
     int popMenuYoffset;
     //头像来源uri对象
     Uri sourceHeadImageUri;
@@ -129,6 +140,14 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    public RecyclerView.LayoutManager getLayoutManager() {
+        return layoutManager;
+    }
+
+    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -136,6 +155,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_brvah_test);
+            ButterKnife.bind(this);
             initAllView();
             toolbar = findViewById(R.id.manga_toolbar);
 //        toolbar.setLogo(R.drawable.app_icon2);
@@ -161,7 +181,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //          详细说明见  https://blog.csdn.net/sundy_tu/article/details/52682246
             initTabLayout();
             initFloatBut();
-
+            initSearchinputListener();
         } catch (Exception e) {
             Log.e(TAG, "onCreate error", e);
 
@@ -170,6 +190,44 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
 
     }
+
+    private void initSearchinputListener() {
+//        searchText.setFocusable(false);
+        searchText.setOnClickListener(this);
+
+        // editText 离开监听
+        searchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // hasFocus 为false时表示点击了别的控件，离开当前editText控件
+                if (!hasFocus) {
+                    searchText.setFocusable(false);
+                } else {
+                    searchText.setFocusable(true);
+                }
+            }
+        });
+
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent event) {
+                searchText.setFocusable(true);
+                //搜索框输入就绪点击回车换行时 刷新
+                if (id == EditorInfo.IME_ACTION_SEND
+                        || id == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    List<Fragment> fragments= getSupportFragmentManager().getFragments();
+                    OperationListFragment fragment=(OperationListFragment)fragments.get(0);
+                    fragment.loadOperationBizList(true);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
+
     private void initTabLayout() {
         tabLayout = findViewById(R.id.operList__tabs);
 //        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -236,7 +294,13 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             layoutManager =((OperationListFragment)fragment).getmRecyclerView().getLayoutManager();
         }
         mViewPager.setCurrentItem(position);
-//        ToastUtils.showDisplay("position selected "+position);
+
+        View  currentTab = tabLayout.getTabAt(position).getCustomView();
+
+        currentTab.animate().alphaBy(0.8f);
+//                .setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.white));
+//        tabLayout.getTabAt(position).setCustomView()
+        //        ToastUtils.showDisplay("position selected "+position);
 
     }
     /**
@@ -628,6 +692,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             case R.id.head_image:
                 clickHeadScopeWork();
                 break;
+            case R.id.manga_toolbar_search_input:
+                searchText.setFocusable(true);
+                break;
 
             case R.id.nav_login_text:
                 clickHeadScopeWork();
@@ -880,12 +947,13 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         Log.d(TAG,String.valueOf(toolbar.getTranslationY()));
         CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) floatBackToTopBut.getLayoutParams();
         int fabBottomMargin = lp.bottomMargin;
+        floatBackToTopBut.setVisibility(View.INVISIBLE);
         floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
     public void showViews() {
 //        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-
+        floatBackToTopBut.setVisibility(View.VISIBLE);
         floatBackToTopBut.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 

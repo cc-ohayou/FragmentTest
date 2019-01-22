@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,6 +19,7 @@ import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -60,6 +62,7 @@ public class OperationListFragment extends BaseFragment {
     private PsPage<OperateBiz> operPage;
     private List<OperateBiz> operList;
     private OperationBizAdapter adapter;
+    EditText searchText;
     private  String tabTitle;
     private  int currPage=1;
     private  int pageSize=10;
@@ -104,6 +107,7 @@ public class OperationListFragment extends BaseFragment {
         } else {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(Utils.getApp()));
         }
+
 //        mRecyclerView.setBackgroundResource(R.drawable.default_head);
         initAdapter();
         mRecyclerView.setAdapter(adapter);
@@ -111,7 +115,7 @@ public class OperationListFragment extends BaseFragment {
 
         loadOperationBizList(true);
 
-
+        parentOtherWork();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -119,11 +123,13 @@ public class OperationListFragment extends BaseFragment {
                 if(!recyclerView.canScrollVertically(-1)){
 //                  返回false表示不能往下滑动，即代表到顶部了
 //                  隐藏到顶部的浮动按钮
-                    ((BrvahTestActivity)parentActivity).hideViews();
+//                    Log.e
+                    hideView();
+
 //                    ToastUtils.showDisplay("到顶部了");
                 }else{
 //                    显示浮动按钮
-                    ((BrvahTestActivity)parentActivity).showViews();
+                    showView();
 //                    ToastUtils.showDisplay("非顶部 显示按钮");
 
                 }
@@ -140,7 +146,33 @@ public class OperationListFragment extends BaseFragment {
 
         return rootView;
     }
+
 /**
+     * @author  CF
+     * @date   2019/1/22
+     * @description
+     *
+     */
+    private void parentOtherWork() {
+        if(isBrvahtestActivity()) {
+            ((BrvahTestActivity) parentActivity).setLayoutManager(mRecyclerView.getLayoutManager());
+        }
+    }
+
+    private void showView() {
+        if(isBrvahtestActivity()) {
+            ((BrvahTestActivity) parentActivity).showViews();
+        }
+    }
+
+    private void hideView() {
+        if(isBrvahtestActivity()){
+            ((BrvahTestActivity)parentActivity).hideViews();
+        }
+
+    }
+
+    /**
  * @description
  * @author CF
  * created at 2019/1/13/013  19:52
@@ -164,7 +196,8 @@ public class OperationListFragment extends BaseFragment {
         refreshLayout.setRefreshFooter(new BallPulseFooter(parentActivity).setSpinnerStyle(SpinnerStyle.Scale));
         //是否启用上拉加载功能
         refreshLayout.setEnableLoadMore(true);
-//        刷新监听
+//        adapter.setEmptyView();
+        //        刷新监听
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
@@ -208,10 +241,13 @@ public class OperationListFragment extends BaseFragment {
      * @author CF
      * created at 2019/1/13/013  20:42
      */
-    private void loadOperationBizList(boolean refreshFlag) {
-
+    public void loadOperationBizList(boolean refreshFlag) {
         RequestParams params = new RequestParams(RequestParams.PARAM_TYPE_FORM);
         params.put("envType","sit");
+        if(isBrvahtestActivity()){
+            searchText = parentActivity.findViewById(R.id.manga_toolbar_search_input);
+            params.put("operName",searchText.getText().toString().trim());
+        }
         if(!refreshFlag) {
 //            加载下一页数据
             if (operPage != null && currPage < operPage.getTotalPageCount()) {
@@ -225,6 +261,11 @@ public class OperationListFragment extends BaseFragment {
 //        mangaList=(new ClientUtlis<Manga>()).getBizList(params,UrlConfig.MANGA_LIST,this,"列表获取异常",mangaList);
         getBizList(params, UrlConfig.OPER_LIST, this, "列表获取异常",refreshFlag);
     }
+
+    private boolean isBrvahtestActivity() {
+        return parentActivity instanceof BrvahTestActivity;
+    }
+
     private void initAdapter() {
         adapter = new OperationBizAdapter(R.layout.item_operation,operList,0,UtilBox.box().ui.getViewIemHeight(4));
         adapter.openLoadAnimation();
@@ -327,7 +368,8 @@ public class OperationListFragment extends BaseFragment {
                     public void onSuccess(PsPage<OperateBiz> page, String msg) {
                         operPage=page;
                         if (operPage.getItems().isEmpty()) {
-                            operList = null;
+                            operList = Collections.emptyList();
+                            adapter.setNewData(operList);
                         } else {
                             operList = operPage.getItems();
                             if(firstReqDatListSucc&&!refreshFlag){
