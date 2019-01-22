@@ -134,8 +134,13 @@ public class ClientConfiguration {
         editor.commit();
     }
     public void setCustomProperties(CustomProperties customProperties) {
-        editor.putString(SHARED_CUSTOM_PROPERTIES, JSON.toJSONString(customProperties));
-        editor.commit();
+        try {
+            editor.putString(SHARED_CUSTOM_PROPERTIES, JSON.toJSONString(customProperties));
+            editor.commit();
+        } catch (Exception e) {
+            Log.e(TAG, "setCustomProperties error", e);
+        }
+
     }
     public CustomProperties getCustomProperties() {
         CustomProperties properties;

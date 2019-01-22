@@ -71,6 +71,9 @@ public class MyApplication extends MultiDexApplication {
                         ClientConfiguration.getInstance().setCustomProperties(customProperties);
                         if(customProperties!=null){
                             GlobalSettings.settingProperties = ClientConfiguration.getInstance().getCustomProperties();
+                            if(CustomProperties.UPDATE.equals( GlobalSettings.settingProperties.getUpdateSign())){
+                                ToastUtils.showLong("软件有更新哦，可在右上角菜单中自行更新");
+                            }
                         }
                     }
 

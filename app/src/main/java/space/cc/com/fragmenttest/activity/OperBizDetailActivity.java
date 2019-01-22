@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.bizobject.IntentExtraKey;
 import space.cc.com.fragmenttest.domain.bizobject.OperateBiz;
 import space.cc.com.fragmenttest.util.UtilBox;
@@ -52,7 +53,7 @@ public class OperBizDetailActivity extends BaseActivity {
         initView();
         initToolBar();
         initCollapseToolBar(operateBiz);
-        UtilBox.box().picasso.loadDrawResIntoView(imageView, R.drawable.default_head);
+        UtilBox.box().picasso.loadUrlResIntoView(imageView,GlobalSettings.settingProperties.getOperBizDetailBgUrl());
         operBizDesc.setText("描述："+operateBiz.getDesc());
         operBiz_url.setText("Url："+operateBiz.getUrl());
         operBiz_pro.setText("项目："+operateBiz.getProject());

@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             mLoginFormView = findViewById(R.id.login_form);
             mProgressView = findViewById(R.id.login_progress);
             new ChangeViewBackgroundTask(thisActivity,"login_bg,png")
-                    .execute(ClientConfiguration.getInstance().getCustomProperties().getLoginBgUrl()) ;
+                    .execute(GlobalSettings.settingProperties.getLoginBgUrl()) ;
 
         } catch (Exception e) {
             Log.e(TAG, "login error", e);

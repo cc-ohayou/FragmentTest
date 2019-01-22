@@ -84,10 +84,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
 //        this.getWindow().setBackgroundDrawable(res);
         ActivityCollector.addActivity(this);
 
-        if(!updateSign&&CustomProperties.UPDATE.equals( GlobalSettings.settingProperties.getUpdateSign())){
-           ToastUtils.showLong("软件有更新哦，可在右上角菜单中自行更新");
-            updateSign=true;
-        }
+
 
     }
 
