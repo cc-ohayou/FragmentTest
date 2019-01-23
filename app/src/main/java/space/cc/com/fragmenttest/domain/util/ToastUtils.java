@@ -142,7 +142,7 @@ public class ToastUtils {
         }
     }
 
-    public void cancel() {
+    public static  void cancel() {
         if (mToast instanceof EToast) {
             ((EToast) mToast).cancel();
         } else if (mToast instanceof Toast) {

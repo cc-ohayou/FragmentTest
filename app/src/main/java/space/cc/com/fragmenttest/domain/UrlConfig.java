@@ -11,7 +11,9 @@ public enum UrlConfig {
     USER_LOGIN(UrlConstants.PREFIX+"v1/cc/user/login","登录",false),
     MODIFY_USER_INFO(UrlConstants.PREFIX+"v1/cc/update/userInfo","更新用户信息",true),
     GET_USER_INFO(UrlConstants.PREFIX+"v1/cc/user/info","获取用户信息",true),
-    MODIFY_BACKGROUND_IMG(UrlConstants.PREFIX+"v1/cc/modify/bgImg", "更改背景图");
+    MODIFY_BACKGROUND_IMG(UrlConstants.PREFIX+"v1/cc/modify/bgImg", "更改背景图"),
+    user_register(UrlConstants.PREFIX+"v1/cc/register", "注册"),
+    ;
 
     private String value;
     private String label;

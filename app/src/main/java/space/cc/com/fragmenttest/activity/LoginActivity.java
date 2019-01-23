@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.activity.common.TitleLayout;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
@@ -79,12 +81,16 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private SharedPreferences.Editor editor;
     private CheckBox rememberPass;
     private Button signInButton;
+
+    @BindView(R.id.login_reg)
+    TextView loginReg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
+            ButterKnife.bind(this);
             thisActivity= findViewById(R.id.login_layout);
             TitleLayout.titleText.setText("登录");
             //获取存储对象
@@ -92,7 +98,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             rememberPass = findViewById(R.id.remember_pass);
             userNameView = findViewById(R.id.login_account);
             signInButton = findViewById(R.id.sign_in_button);
-            populateAutoComplete();
+//            populateAutoComplete();
             mPasswordView = findViewById(R.id.password);
             //如果设置过记住密码的则进行账号密码信息的填充 正式的肯定要加密处理
             ifRememberPassSetAccountInfo();
@@ -132,6 +138,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 attemptLogin();
             }
         });
+
+        loginReg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAction(getBaseContext(),null,RegisterActivity.class);
+            }
+        });
+
     }
 
     @Override

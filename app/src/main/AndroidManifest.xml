@@ -161,6 +161,7 @@
         <activity
             android:name=".activity.BrvahTestActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -171,21 +172,26 @@
         <activity
             android:name=".activity.TabTestActivity"
             android:label="@string/title_activity_tab_test"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.DrawerDemoActivity"
             android:label="@string/title_activity_drawer_demo"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.OperBizDetailActivity"
-            android:theme="@style/CollapsingTheme"
-            >
-
-
-        </activity>
+        <activity
+            android:name=".activity.OperBizDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CollapsingTheme"></activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>

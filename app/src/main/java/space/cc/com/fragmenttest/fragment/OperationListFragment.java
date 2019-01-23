@@ -31,6 +31,7 @@ import space.cc.com.fragmenttest.activity.BrvahTestActivity;
 import space.cc.com.fragmenttest.activity.OperBizDetailActivity;
 import space.cc.com.fragmenttest.adapter.OperationBizAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.bizobject.IntentExtraKey;
@@ -310,6 +311,10 @@ public class OperationListFragment extends BaseFragment {
     private void doChildClickWorkById(View view, int position) {
         switch (view.getId()) {
             case R.id.item_oper_but:
+                if(!ClientConfiguration.getInstance().getLoginState()){
+                    ToastUtils.showDisplay("请先登录！");
+                    return;
+                }
                 String content = "确认发起" + operList.get(position).getOperName() +
                         ", (环境："+ operList.get(position).getEnvType() + ") 请求吗?";
                 requestDialogShow(content, operList.get(position));

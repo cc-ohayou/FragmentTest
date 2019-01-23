@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.LoginActivity">
     <!-- 通过引入时间编写好的自定义标题布局  （标题布局自我实现布局中的按钮事件
     避免了在引入布局处编写重复代码的问题） -->
     <space.cc.com.fragmenttest.activity.common.TitleLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        />
+        android:layout_height="wrap_content" />
 
 
     <!-- Login progress -->
@@ -22,96 +21,113 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
-<LinearLayout
-    android:id="@+id/login_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    >
 
-    <ScrollView
-        android:id="@+id/login_form"
+    <LinearLayout
+        android:id="@+id/login_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
+        <ScrollView
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:textColorHint="@color/white"
-                android:layout_height="wrap_content">
-<!--textPhonetic 拼音输入-->
-                <AutoCompleteTextView
-                    android:id="@+id/login_account"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_account"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <CheckBox
-                android:id="@+id/remember_pass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:text="记住密码"
-                android:textSize="18sp" />
-            <Button
-                android:id="@+id/sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:background="@color/colorAccent"
-                android:alpha="0.8"
+            <LinearLayout
+                android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/action_sign_in"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <!--textPhonetic 拼音输入-->
+                    <AutoCompleteTextView
+                        android:id="@+id/login_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_account"
 
-    </ScrollView>
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true" />
 
-</LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--android:textColor="@color/white"-->
+                <!--android:textColorHint="@color/white"-->
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content">
+
+                    <EditText
+
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password"
+                        android:imeActionId="6"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <CheckBox
+
+                        android:id="@+id/remember_pass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/remember_pass"
+                        android:text="记住密码"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:id="@+id/login_reg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:text="用户注册"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/sign_in_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:alpha="0.8"
+                    android:background="@color/colorAccent"
+                    android:text="@string/action_sign_in"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
 
 </LinearLayout>

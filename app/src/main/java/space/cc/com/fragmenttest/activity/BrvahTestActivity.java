@@ -295,9 +295,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         }
         mViewPager.setCurrentItem(position);
 
-        View  currentTab = tabLayout.getTabAt(position).getCustomView();
+      /*  View  currentTab = tabLayout.getTabAt(position).getCustomView();
 
-        currentTab.animate().alphaBy(0.8f);
+        currentTab.animate().alphaBy(0.8f);*/
 //                .setBackgroundColor(ContextCompat.getColor(getBaseContext(),R.color.white));
 //        tabLayout.getTabAt(position).setCustomView()
         //        ToastUtils.showDisplay("position selected "+position);
@@ -446,7 +446,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 }else if(menuItem.getItemId()==R.id.nav_history){
                     startAction(BrvahTestActivity.this,null,DrawerDemoActivity.class);
                 }else if(menuItem.getItemId()==R.id.nav_collect){
-                    startAction(BrvahTestActivity.this,null,TabTestActivity.class);
+                    if(!ClientConfiguration.getInstance().getLoginState()){
+                        ToastUtils.showDisplay("请先登录！");
+
+                    }else{
+                        startAction(BrvahTestActivity.this,null,TabTestActivity.class);
+                    }
                 }else if(menuItem.getItemId()==R.id.nav_login_out){
                     clearLoginStateAndUserInfo();
                     startAction(BrvahTestActivity.this,null,LoginActivity.class);

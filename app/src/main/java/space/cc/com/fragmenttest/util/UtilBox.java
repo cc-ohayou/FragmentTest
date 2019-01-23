@@ -1,5 +1,7 @@
 package space.cc.com.fragmenttest.util;
 
+import space.cc.com.fragmenttest.domain.util.Utils;
+
 /**
  * 工具箱，所有工具类均从这里取
  * <p>
@@ -37,6 +39,7 @@ public class UtilBox {
     public PicassoUtil picasso;
 
     public UtilDialog dialog;
+    public UtilVerifyCode verifyCode;
 
     /**
      * 私有化构造方法
@@ -62,6 +65,7 @@ public class UtilBox {
 //                anim = new UtilAnim();
                 log = new UtilLog();
                 bitmap = new UtilBitmap();
+                verifyCode = new UtilVerifyCode(Utils.getApp());
             }
         }).start();
     }

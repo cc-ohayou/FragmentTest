@@ -1,5 +1,6 @@
 package space.cc.com.fragmenttest.domain.bizobject;
 
+import java.util.Collections;
 import java.util.Map;
 
 import lombok.Data;
@@ -30,6 +31,7 @@ public class CustomProperties {
             customProperties.setEnv("sit");
             customProperties.setLoginBgUrl("https://ddy98.b0.upaiyun.com/user/bgImg/1547914325186.jpg");
             customProperties.setOperBizDetailBgUrl("https://ddy98.b0.upaiyun.com/user/headImages/1548152264892.jpg");
+            customProperties.setOtherProperties(Collections.emptyMap());
         }
 
     }
