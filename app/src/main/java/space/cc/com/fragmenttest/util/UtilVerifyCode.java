@@ -23,9 +23,9 @@ import space.cc.com.fragmenttest.R;
  * 创建者：lb
  */
 
-public class UtilVerifyCode extends View {
+public class UtilVerifyCode extends View  {
 
-    private String mCodeText;//文本内容
+    private static String mCodeText;//文本内容
     private int mCodeTextSize;//文本大小
     private int mCodeLength;//验证码长度
     private int mCodeBackground;//背景色
@@ -51,6 +51,8 @@ public class UtilVerifyCode extends View {
         initAttrValues(context, attrs);
         initData();
     }
+
+
 
     /**
      * 初始化属性集合
@@ -84,7 +86,7 @@ public class UtilVerifyCode extends View {
                 case R.styleable.VerifyCode_pointNum:
                     mPointNum = typedArray.getInteger(index, 100);
                     break;
-                case R.styleable.VerifyCode_linNum:
+                case R.styleable.VerifyCode_lineNum:
                     mLineNum = typedArray.getInteger(index, 4);
                     break;
             }
@@ -217,7 +219,7 @@ public class UtilVerifyCode extends View {
         //重新设置画笔
         mPaint.setARGB(255, mRandom.nextInt(200) + 20, mRandom.nextInt(200) + 20,
                 mRandom.nextInt(200) + 20);
-        mPaint.setStrokeWidth(1);
+        mPaint.setStrokeWidth(1.5f);
         //产生干扰效果1 －－ 干扰点
         for (int i = 0; i < mPointNum; i++) {
             drawPoint(canvas, mPaint);
@@ -282,7 +284,7 @@ public class UtilVerifyCode extends View {
     /**
      * 判断验证码是否一致 忽略大小写
      */
-    public Boolean isEqualsIgnoreCase(String CodeString) {
+    public static Boolean isEqualsIgnoreCase(String CodeString) {
         return mCodeText.equalsIgnoreCase(CodeString);
     }
 
@@ -301,4 +303,5 @@ public class UtilVerifyCode extends View {
         bitmap = createBitmapValidate();
         invalidate();
     }
+
 }

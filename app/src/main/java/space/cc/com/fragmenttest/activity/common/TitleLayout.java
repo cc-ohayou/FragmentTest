@@ -16,6 +16,7 @@ import space.cc.com.fragmenttest.R;
 
 public class TitleLayout extends RelativeLayout implements View.OnClickListener {
     ImageButton titleBack;
+    public static TextView register;
     public static TextView titleText;
     public TitleLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -23,6 +24,7 @@ public class TitleLayout extends RelativeLayout implements View.OnClickListener 
         LayoutInflater.from(context).inflate(R.layout.title,this);
         titleBack=findViewById(R.id.common_title_back);
         titleText=findViewById(R.id.common_title_text);
+        register=findViewById(R.id.login_reg);
 //        titleEdit.setImageDrawable(getResources().getDrawable(R.drawable.edit_b01));
         titleBack.setOnClickListener(this);
 
@@ -35,6 +37,12 @@ public class TitleLayout extends RelativeLayout implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.common_title_back:
                 ((Activity) getContext()).finish();
+                break;
+            case R.id.login_reg:
+
+                break;
+            default:
+                break;
 
         }
     }

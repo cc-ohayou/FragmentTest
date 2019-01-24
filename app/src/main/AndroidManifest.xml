@@ -110,9 +110,6 @@
             -->
         </receiver>
 
-        <activity
-            android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login" />
         <activity android:name=".activity.FileTestActivity" />
         <activity android:name=".activity.DBTestActivity" />
         <activity android:name=".activity.LitePalTestActivity" />
@@ -187,11 +184,20 @@
         <activity
             android:name=".activity.OperBizDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/CollapsingTheme"></activity>
+            android:theme="@style/CollapsingTheme" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:screenOrientation="portrait"
-            ></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <!--
+          活动的启动方式  singleInstance   singleTop   singleTask  standard
+          参考博客 https://www.cnblogs.com/xj626852095/p/3647969.html
+        -->
+
     </application>
 
 </manifest>

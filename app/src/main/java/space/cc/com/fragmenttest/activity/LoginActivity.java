@@ -57,7 +57,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends BaseActivity implements LoaderCallbacks<Cursor>,View.OnClickListener {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -109,6 +109,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             new ChangeViewBackgroundTask(thisActivity,"login_bg,png")
                     .execute(GlobalSettings.settingProperties.getLoginBgUrl()) ;
 
+//            TitleLayout.register.setOnClickListener(this);
+            loginReg.setVisibility(View.VISIBLE);
         } catch (Exception e) {
             Log.e(TAG, "login error", e);
         }
@@ -143,6 +145,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             @Override
             public void onClick(View view) {
                 startAction(getBaseContext(),null,RegisterActivity.class);
+//                finish();
             }
         });
 
@@ -353,6 +356,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         userNameView.setAdapter(adapter);
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -476,5 +484,17 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         startAction(context, map,LoginActivity.class);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loginReg.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loginReg.setVisibility(View.VISIBLE);
+    }
 }
 

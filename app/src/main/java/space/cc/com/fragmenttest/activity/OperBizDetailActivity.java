@@ -1,10 +1,7 @@
 package space.cc.com.fragmenttest.activity;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,18 +10,17 @@ import android.widget.TextView;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import space.cc.com.fragmenttest.R;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.bizobject.IntentExtraKey;
 import space.cc.com.fragmenttest.domain.bizobject.OperateBiz;
+import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.util.UtilBox;
 
-public class OperBizDetailActivity extends BaseActivity {
+public class OperBizDetailActivity extends MyBaseNew {
     private TextView operBizDesc;
     private TextView operBizCreateTime;
     private TextView operBizUpdateTime;
@@ -35,22 +31,33 @@ public class OperBizDetailActivity extends BaseActivity {
     TextView operBiz_env;
     @BindView(R.id.operBiz_pro)
     TextView operBiz_pro;
-
-    private FloatingActionButton floatingActionButton;
+    @BindView(R.id.oper_biz_detail_like_btn)
+    FloatingActionButton floatingActionButton;
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar oprBizToolBar;
     private ImageView imageView;
 
-    @SuppressLint("RestrictedApi")
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_oper_biz_detail);
-        ButterKnife.bind(this);
+    protected int setContentLayout() {
+        return R.layout.activity_oper_biz_detail;
+    }
+
+    @Override
+    public void initView() {
+        operBizDesc = findViewById(R.id.operBiz_desc);
+        operBizCreateTime = findViewById(R.id.operBiz_createTime);
+        operBizUpdateTime = findViewById(R.id.operBiz_updateTime);
+
+        collapsingToolbarLayout = findViewById(R.id.operBiz_collapingBar);
+        oprBizToolBar = findViewById(R.id.operBiz_toolbar);
+        imageView = findViewById(R.id.operBiz_image_view);
+        floatingActionButton.setOnClickListener(this);
         Intent intent = getIntent();
         OperateBiz operateBiz = (OperateBiz) intent.getSerializableExtra(IntentExtraKey.OPER_BIZ_DETAIL.getValue());
-        initView();
+//        initView();    java.lang.StackOverflowError: stack size 8MB  制造一个栈溢出错误
         initToolBar();
         initCollapseToolBar(operateBiz);
         UtilBox.box().picasso.loadUrlResIntoView(imageView,GlobalSettings.settingProperties.getOperBizDetailBgUrl());
@@ -85,14 +92,14 @@ public class OperBizDetailActivity extends BaseActivity {
 
 
 
-    private void initView() {
-        operBizDesc = findViewById(R.id.operBiz_desc);
-        operBizCreateTime = findViewById(R.id.operBiz_createTime);
-        operBizUpdateTime = findViewById(R.id.operBiz_updateTime);
 
-        collapsingToolbarLayout = findViewById(R.id.operBiz_collapingBar);
-        oprBizToolBar = findViewById(R.id.operBiz_toolbar);
-        imageView = findViewById(R.id.operBiz_image_view);
+    @Override
+    protected void initViewClick(int id) {
+          switch (id){
+              case R.id.oper_biz_detail_like_btn:
+                  ToastUtils.showDisplay("此功能暂未开放");
+                  break;
+          }
     }
 
 

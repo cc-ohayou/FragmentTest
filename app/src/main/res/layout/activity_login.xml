@@ -52,7 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_account"
-
+                        android:textColor="@color/mainTextColor"
                         android:inputType="text"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -77,6 +77,7 @@
                         android:imeActionLabel="@string/action_sign_in_short"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
+                        android:textColor="@color/mainTextColor"
                         android:maxLines="1"
                         android:singleLine="true" />
 
@@ -97,10 +98,11 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/remember_pass"
                         android:text="记住密码"
+                        android:textColor="@color/mainTextColor"
                         android:textSize="18sp" />
 
 
-                    <TextView
+                  <!--  <TextView
                         android:id="@+id/login_reg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -108,7 +110,7 @@
                         android:layout_marginRight="10dp"
                         android:text="用户注册"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textSize="16sp" />-->
 
                 </RelativeLayout>
 

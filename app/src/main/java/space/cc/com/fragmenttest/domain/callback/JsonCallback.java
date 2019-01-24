@@ -168,8 +168,8 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         T data = null;
         if (baseResponse.getCode() == 0) {
             if (baseResponse.getData() == null) {
-                data = (T) "";
-                onSuccess(data, baseResponse.getMsg());
+//                data = (T) "";
+                onSuccess(null, baseResponse.getMsg());
                 return;
             }
             if (!baseResponse.getData().contains(":") && !baseResponse.getData().contains("[")) {
@@ -227,6 +227,11 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         OkGo.getInstance().cancelAll();
         if(Utils.getApp() == null ) return;
 
+        inValidateLoginState();
+
+    }
+
+    public static void inValidateLoginState() {
         ClientConfiguration.getInstance().setSid("");
         ClientConfiguration.getInstance().setUid("");
         ClientConfiguration.getInstance().setLoginState(false);
@@ -236,7 +241,6 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         bundle.putString("backurl","main");
         intent.putExtras(bundle);
         Utils.getApp().startActivity(intent);
-
     }
 
     public void onVersionControl(String msg, String data) {

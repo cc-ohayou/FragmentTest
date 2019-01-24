@@ -247,6 +247,24 @@ public class RegexUtils {
     }
 
     /**
+     * 昵称校验：10位以内，不能有特殊字符 支持 emoji
+     *
+     * @return boolean
+     * @author zzg
+     */
+    public static boolean nickNameCheck(String nickName) {
+        boolean flag = false;
+        //是否含特殊字符 ，并且小于7位
+        String regEx = "[ _`~!@#$%^&()+=|{}':;/',\\[\\].<>/?~！@#￥%……&（）——+|{}【】‘；：”“’。，、？]|\n|\r|\t";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(nickName);
+        if (m.find() == false && nickName.length() <= 10) {
+            flag = true;
+        }
+        return flag;
+    }
+
+    /**
      * 验证密码
      */
     public static boolean isPassword(final CharSequence input) {

@@ -8,9 +8,11 @@ import android.view.View;
 import java.io.IOException;
 import java.net.URL;
 
-public class ChangeViewBackgroundTask  extends AsyncTask<String, Void, Drawable> {
-        private  View view ;
-        private String imgName ;
+import space.cc.com.fragmenttest.domain.util.StringUtils;
+
+public class ChangeViewBackgroundTask extends AsyncTask<String, Void, Drawable> {
+    private View view;
+    private String imgName;
 
     public ChangeViewBackgroundTask(View view, String imgName) {
         super();
@@ -19,18 +21,23 @@ public class ChangeViewBackgroundTask  extends AsyncTask<String, Void, Drawable>
     }
 
     @Override
-        protected Drawable doInBackground(String... urls) {
-            return loadImageFromNetwork(urls[0]);
-        }
+    protected Drawable doInBackground(String... urls) {
+        return loadImageFromNetwork(urls[0]);
+    }
 
-        @Override
-        protected void onPostExecute(Drawable result) {
+    @Override
+    protected void onPostExecute(Drawable result) {
+        if (result != null) {
             view.setBackground(result);
         }
+    }
 
     private Drawable loadImageFromNetwork(String imageUrl) {
         Drawable drawable = null;
         try {
+            if(StringUtils.isEmpty(imageUrl)){
+                return null;
+            }
             // 可以在这里通过文件名来判断，是否本地有此图片
             drawable = Drawable.createFromStream(
                     new URL(imageUrl).openStream(), imgName);
@@ -45,4 +52,4 @@ public class ChangeViewBackgroundTask  extends AsyncTask<String, Void, Drawable>
 
         return drawable;
     }
-    }
+}

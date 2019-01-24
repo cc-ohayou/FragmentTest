@@ -88,7 +88,7 @@
             android:layout_gravity="center_vertical"
             android:padding="5dp"
             android:layout_weight="3"
-
+            android:orientation="horizontal"
             >
 
             <ImageButton
@@ -96,10 +96,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:src="@drawable/oper_item_btn_selector"
                 android:background="@color/C100"
-                android:src="@drawable/press_but"
                 />
+<!--                android:background="@color/C100"
+                android:background="@drawable/oper_item_btn_selector"
 
+-->
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

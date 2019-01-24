@@ -33,8 +33,8 @@ public class DynamicFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dynamic_fragment, container, false);
-        TextView textView =  rootView.findViewById(R.id.dynamic_content);
-            textView.setText("敬请期待");
+        TextView textView = rootView.findViewById(R.id.dynamic_content);
+        textView.setText("敬请期待");
         return rootView;
     }
 }

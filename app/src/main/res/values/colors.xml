@@ -55,7 +55,7 @@
     <color name="blue">#03aaf3</color>
     <color name="green">#4ca92a</color><!--4fd86c-->
 
-    <color name="helf_white">#88ffffff</color>
+    <color name="half_white">#88ffffff</color>
     <color name="first_text_color">#333333</color>
     <color name="second_text_color">#aaaaaa</color>
     <color name="transparent">#00000000</color>
@@ -72,6 +72,8 @@
 
 
     <color name="toolbarBack">#FF4081</color>
+
+    <color name="mainTextColor">#FF4081</color>
     <!--Android中的颜色值一般格式是：#AARRGGBB。AA就是透明度值（这里我只聊透明度）。
     透明度计算转换公式
        double transparentRatio=0.85;
@@ -86,5 +88,6 @@
     <color name="mangaTopViewBack">#2F000000</color>
     <color name="popMenuBack">#FF6C9F</color>
     <color name="refreshHeaderBack">#FF86B0</color>
+    <color name="verifyCodeBg">#FDBBCC</color>
 
 </resources>

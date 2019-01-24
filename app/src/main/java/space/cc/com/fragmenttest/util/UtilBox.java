@@ -39,7 +39,6 @@ public class UtilBox {
     public PicassoUtil picasso;
 
     public UtilDialog dialog;
-    public UtilVerifyCode verifyCode;
 
     /**
      * 私有化构造方法
@@ -65,7 +64,6 @@ public class UtilBox {
 //                anim = new UtilAnim();
                 log = new UtilLog();
                 bitmap = new UtilBitmap();
-                verifyCode = new UtilVerifyCode(Utils.getApp());
             }
         }).start();
     }

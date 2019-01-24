@@ -81,7 +81,7 @@ public class OperationBizAdapter extends BaseQuickAdapter<OperateBiz, BaseViewHo
             holder.setText(R.id.item_oper_pro, "项目: " + item.getProject() );
             holder.setText(R.id.item_oper_env, "环境: " + item.getEnvType() );
 //            holder.setText(R.id.item_oper_create_time, "创建时间: " + item.getCreateTime() );
-            holder.setImageResource(R.id.item_oper_but,R.drawable.press_but);
+//            holder.setImageResource(R.id.item_oper_but,R.drawable.press_but);
             holder.addOnClickListener(R.id.item_oper_but);
             holder.addOnLongClickListener(R.id.item_oper_but);
             /*UtilBox.box().picasso.loadUrlResIntoView((ImageView) holder.getView(R.id.manga_cover),

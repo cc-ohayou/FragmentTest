@@ -34,6 +34,7 @@ import androidx.core.content.ContextCompat;
 import space.cc.com.fragmenttest.activity.media.VideoTestActivity;
 import space.cc.com.fragmenttest.broadcast.ForceOffLineReceiver;
 import space.cc.com.fragmenttest.broadcast.MyBroadCast;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
@@ -44,6 +45,8 @@ import space.cc.com.fragmenttest.domain.util.NotificationUtil;
 import space.cc.com.fragmenttest.domain.util.PermissinUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
+import space.cc.com.fragmenttest.domain.util.Utils;
+import space.cc.com.fragmenttest.util.SecurityUtil;
 import space.cc.com.fragmenttest.util.UtilBox;
 
 public  abstract class BaseActivity extends AppCompatActivity {
@@ -304,7 +307,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
     public RequestParams getLoginRequestParams(String userName, String mPassword) {
         RequestParams reqParam=new RequestParams(RequestParams.PARAM_TYPE_FORM);
         reqParam.put("userName",userName);
-        reqParam.put("pwd",EncryptUtils.encryptMD5ToString(mPassword));
+        reqParam.put("pwd", SecurityUtil.MD5(mPassword));
         return reqParam;
     }
 
@@ -318,5 +321,16 @@ public  abstract class BaseActivity extends AppCompatActivity {
         dealRequestResult(requestCode,grantResults);
     }
 
+    public static void inValidateLoginState() {
+        ClientConfiguration.getInstance().setSid("");
+        ClientConfiguration.getInstance().setUid("");
+        ClientConfiguration.getInstance().setLoginState(false);
+//        Intent intent = new Intent(activity, RegisterOrLoginActivity.class);
+        Intent intent = new Intent(Utils.getApp(), LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("backurl","main");
+        intent.putExtras(bundle);
+        Utils.getApp().startActivity(intent);
+    }
 }
 

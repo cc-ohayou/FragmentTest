@@ -72,6 +72,7 @@ import space.cc.com.fragmenttest.domain.bizobject.UserInfo;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
+import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.fragment.OperationListFragment;
 import space.cc.com.fragmenttest.litepals.Manga;
@@ -331,23 +332,24 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
      *
      */
     private void initUserInfoRelViewValueWithNotLogin() {
+        //      初始化背景图片
+        initMainBgImg();
         //           未登录 显示 点击登录
         navLoginText.setVisibility(View.VISIBLE);
 //        导航头像更换
         UtilBox.box().picasso.loadDrawResIntoView(navTopLeftCircleImageView,
-                R.drawable.default_head);
+                R.drawable.manga_default);
 //        侧边栏头像更换
         UtilBox.box().picasso.loadDrawResIntoView(
                 headImageView,
-                R.drawable.default_head);
+                R.drawable.manga_default);
 //        昵称
         nickName.setVisibility(View.INVISIBLE);
 //        手机
         mail.setVisibility(View.INVISIBLE);
 //        登出item隐藏
         loginItem.setVisible(false);
-//      初始化背景图片
-        initMainBgImg();
+
 
     }
 
@@ -371,9 +373,6 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         navLoginText.setOnClickListener(this);
 
         floatBackToTopBut = findViewById(R.id.float_but);
-
-
-
         loginItem= navView.getMenu().findItem(R.id.nav_login_out);
 
     }
@@ -473,21 +472,31 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private void initNavHeaderViewValueWithLoginState() {
 //        隐藏 点击登录提示语
         navLoginText.setVisibility(View.GONE);
-//        导航头像更换
-        UtilBox.box().picasso.loadUrlResIntoViewWithDefault(navTopLeftCircleImageView,GlobalSettings.userInfo.getHeadImage(),
-                R.drawable.vector_drawable_nav_profile_grey___);
-//        侧边栏头像更换
-        UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
-                headImageView,GlobalSettings.userInfo.getHeadImage(),
-                R.drawable.vector_drawable_nav_profile_grey___);
+        loginItem.setVisible(true);
 //        昵称
         nickName.setText(GlobalSettings.userInfo.getNickName());
         nickName.setVisibility(View.VISIBLE);
 //        手机
         mail.setText(GlobalSettings.userInfo.getPhone());
         mail.setVisibility(View.VISIBLE);
+        String headUrl= GlobalSettings.userInfo.getHeadImage();
+        if(!StringUtils.isEmpty(headUrl)) {
+//        导航头像更换
+            UtilBox.box().picasso.loadUrlResIntoViewWithDefault(navTopLeftCircleImageView,headUrl,
+                    R.drawable.manga_default);
+//        侧边栏头像更换
+            UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
+                    headImageView,headUrl,
+                    R.drawable.manga_default);
+        }else{
+            //        导航头像更换
+            UtilBox.box().picasso.loadDrawResIntoView(navTopLeftCircleImageView,
+                    R.drawable.manga_default);
+//        侧边栏头像更换
+            UtilBox.box().picasso.loadDrawResIntoView(headImageView,
+                    R.drawable.manga_default);
+        }
 
-        loginItem.setVisible(true);
 
         initMainBgImg();
 
@@ -502,9 +511,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                     public void onSuccess(UserInfo info, String msg) {
                         if(info!=null){
                             GlobalSettings.userInfo = info;
-                            ClientConfiguration.getInstance().setMainBgUrl(info.getMainBgUrl());
+                            if(!StringUtils.isEmpty(info.getMainBgUrl())){
+                                ClientConfiguration.getInstance().setMainBgUrl(info.getMainBgUrl());
+                            }
                             initNavHeaderViewValueWithLoginState();
                         }else{
+                            inValidateLoginState();
                             Log.d(TAG,"");
                         }
 
