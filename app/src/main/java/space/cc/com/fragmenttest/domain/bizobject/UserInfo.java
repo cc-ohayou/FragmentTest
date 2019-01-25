@@ -22,7 +22,10 @@ public class UserInfo {
      */
     private String mail;
     private String headImage;
-    private String roleCode;
+    /**
+     * 角色权限用于判断操作权限
+     */
+    private String roleCodes;
     private String createTime;
     private String updateTime;
     private String sid;

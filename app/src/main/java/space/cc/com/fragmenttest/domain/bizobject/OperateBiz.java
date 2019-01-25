@@ -27,6 +27,7 @@ public class OperateBiz implements Serializable {
     private String url;
     private String createTime;
     private String updateTime;
+    private String roleCode;
 
 
 }

@@ -19,6 +19,10 @@ import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +36,7 @@ import space.cc.com.fragmenttest.activity.OperBizDetailActivity;
 import space.cc.com.fragmenttest.adapter.OperationBizAdapter;
 import space.cc.com.fragmenttest.adapter.base.BaseQuickAdapter;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
+import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.UrlConfig;
 import space.cc.com.fragmenttest.domain.bizobject.IntentExtraKey;
@@ -39,6 +44,8 @@ import space.cc.com.fragmenttest.domain.bizobject.OperateBiz;
 import space.cc.com.fragmenttest.domain.bizobject.PsPage;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
+import space.cc.com.fragmenttest.domain.util.StringUtil;
+import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.domain.util.Utils;
 import space.cc.com.fragmenttest.util.UtilBox;
@@ -69,6 +76,8 @@ public class OperationListFragment extends BaseFragment {
     private  int pageSize=10;
 //    加载刷新后最新的position位置
     private  int lastPosition=10;
+    View rootView;
+    RefreshLayout refreshLayout;
 
     private boolean firstReqDatListSucc=false;
     @SuppressLint("ValidFragment")
@@ -97,12 +106,37 @@ public class OperationListFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+
+    }
+/**
+     * @author  CF
+     * @date   2019/1/25
+     * @description
+     *
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void doFloatToTopWork(String name){
+        if("floatButClick".equals(name)){
+//            UtilBox.box().ui.MoveToPosition((LinearLayoutManager) mRecyclerView.getLayoutManager(),0);
+              mRecyclerView.scrollToPosition(0);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_tab_test, container, false);
+         rootView = inflater.inflate(R.layout.fragment_tab_test, container, false);
          mRecyclerView =  rootView.findViewById(R.id.oper_list);
-
-
         if (GRID_LAYOUT) {
             mRecyclerView.setLayoutManager(new GridLayoutManager(Utils.getApp(), 2));
         } else {
@@ -173,13 +207,17 @@ public class OperationListFragment extends BaseFragment {
 
     }
 
+    public void refreshLayout(){
+        ((RefreshLayout) rootView).autoRefresh();
+    }
+
     /**
  * @description
  * @author CF
  * created at 2019/1/13/013  19:52
  */
     private void initSmartRefreshLayoutListener(RefreshLayout rootView) {
-        final RefreshLayout refreshLayout = rootView;
+        refreshLayout = rootView;
         refreshLayout.setEnableRefresh(true);
 //        是否在加载完成之后滚动内容显示新数据（默认-true）
         refreshLayout.setEnableScrollContentWhenLoaded(true);
@@ -205,10 +243,9 @@ public class OperationListFragment extends BaseFragment {
                 refreshLayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        refreshLayout.setEnableLoadMore(false);
                         loadOperationBizList(true);
-                        //延迟2000毫秒后结束刷新 这期间可用于更新recycleView的adapter数据 刷新列表
-                        refreshLayout.finishRefresh(/*2000,false*/);//传入false表示刷新失败
-                        refreshLayout.resetNoMoreData();//setNoMoreData(false);
+
                     }
                 }, 2000);
             }
@@ -222,7 +259,8 @@ public class OperationListFragment extends BaseFragment {
                     public void run() {
                         if (adapter.getItemCount() >=operPage.getTotalCount()) {
                             ToastUtils.showDisplay( "没有更多了");
-                            refreshLayout.finishLoadMoreWithNoMoreData();//将不会再次触发加载更多事件
+//                            refreshLayout.finishLoadMoreWithNoMoreData();//将不会再次触发加载更多事件
+                            refreshLayout.finishLoadMore();
                         } else {
                             loadOperationBizList(false);
                             refreshLayout.finishLoadMore();
@@ -309,15 +347,28 @@ public class OperationListFragment extends BaseFragment {
          *
          */
     private void doChildClickWorkById(View view, int position) {
+        try {
+
+
         switch (view.getId()) {
             case R.id.item_oper_but:
                 if(!ClientConfiguration.getInstance().getLoginState()){
                     ToastUtils.showDisplay("请先登录！");
                     return;
                 }
+                String  roleCodes=GlobalSettings.userInfo.getRoleCodes();
+                if(StringUtils.isEmpty(roleCodes)|| !roleCodes.contains(operList.get(position).getRoleCode())){
+                    ToastUtils.showDisplay("暂无此操作权限！");
+                    return;
+                }
                 String content = "确认发起" + operList.get(position).getOperName() +
                         ", (环境："+ operList.get(position).getEnvType() + ") 请求吗?";
                 requestDialogShow(content, operList.get(position));
+
+        }
+        } catch (Exception e) {
+            Log.e(TAG, "defaultData transfer error", e);
+            ToastUtils.showDisplay("操作异常:"+e.getMessage());
         }
     }
 
@@ -371,28 +422,44 @@ public class OperationListFragment extends BaseFragment {
                 tag, new JsonCallback<PsPage<OperateBiz>>() {
                     @Override
                     public void onSuccess(PsPage<OperateBiz> page, String msg) {
-                        operPage=page;
+                        operPage = page;
                         if (operPage.getItems().isEmpty()) {
                             operList = Collections.emptyList();
+
                             adapter.setNewData(operList);
+                            refreshLayout.finishRefresh(/*2000,false*/);//传入false表示刷新失败
                         } else {
                             operList = operPage.getItems();
                             if(firstReqDatListSucc&&!refreshFlag){
 //                                加载更多 不是刷新操作 刷新操作用add会不断添加同一批数据到data中
                                 adapter.addData(operList);
+
                             }else if(refreshFlag){
 //                                刷新 永远是只有一页数据且是最新数据
                                 adapter.setNewData(operList);
+                                //延迟2000毫秒后结束刷新 这期间可用于更新recycleView的adapter数据 刷新列表
+                                refreshLayout.finishRefresh(/*2000,false*/);//传入false表示刷新失败
                                 firstReqDatListSucc=true;
-                            }
-                            lastPosition=adapter.getItemCount()-1;
+                            }/*else if(firstReqDatListSucc&&refreshFlag){
+//                              更新数据 删除旧数据加载新数据
+                                int cou=adapter.getData().size();
+                                for(int i=cou-1;i>=0;i--){
+                                    adapter.remove(i);
+                                }
+                                adapter.setNewData(operList);
+                                //延迟2000毫秒后结束刷新 这期间可用于更新recycleView的adapter数据 刷新列表
+                                refreshLayout.finishRefresh(true);//传入false表示刷新失败
+                            }*/
+//                            lastPosition=adapter.getItemCount()-1;
                         }
+                        refreshLayout.setEnableLoadMore(true);
                     }
 
                     @Override
                     public void onError(String msg, int code) {
                         Log.i(TAG, "获取列表失败，reason:" + msg);
                         ToastUtils.showDisplay(errMsg);
+                        refreshLayout.setEnableLoadMore(true);
                     }
                 });
     }

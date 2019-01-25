@@ -10,16 +10,19 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -36,6 +39,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.lzy.okgo.OkGo;
 import com.nanchen.compresshelper.CompressHelper;
 import com.yalantis.ucrop.UCrop;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,6 +116,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     @BindView(R.id.manga_toolbar_search_input)
     EditText searchText;
+
+    ImageView navNickEditIcon;
+
     int popMenuYoffset;
     //头像来源uri对象
     Uri sourceHeadImageUri;
@@ -220,7 +228,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                         || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
                     List<Fragment> fragments= getSupportFragmentManager().getFragments();
                     OperationListFragment fragment=(OperationListFragment)fragments.get(0);
-                    fragment.loadOperationBizList(true);
+                    fragment.refreshLayout();
+                    searchText.clearFocus();
+                    hideKeyboard(searchText.getWindowToken());
                     return true;
                 }
                 return false;
@@ -364,10 +374,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         navTopLeftCircleImageView =  findViewById(R.id.nav_topLeft_image);
         headImageView = navView.getHeaderView(0).findViewById(R.id.head_image);
         nickName = navView.getHeaderView(0).findViewById(R.id.nav_nick_name);
+        navNickEditIcon = navView.getHeaderView(0).findViewById(R.id.nav_nick_edit_icon);
         mail = navView.getHeaderView(0).findViewById(R.id.nav_mail);
         navLoginText=navView.getHeaderView(0).findViewById(R.id.nav_login_text);
 
         nickName.setOnClickListener(this);
+        navNickEditIcon.setOnClickListener(this);
         headImageView.setOnClickListener(this);
         mail.setOnClickListener(this);
         navLoginText.setOnClickListener(this);
@@ -417,7 +429,18 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         floatBackToTopBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UtilBox.box().ui.MoveToPosition((LinearLayoutManager) layoutManager,0);
+        /**
+         * 利用eventBus发送事件到总线   其它自身注册到总线中的活动都可以获取到总线事件
+         * 根据自定义的业务规则来决定作出什么动作  此处是父级活动回到顶部按钮  点击传递事件到子activity
+         * 让子级活动或者fragment滚动内部recyclerView 到顶部
+         */
+               EventBus.getDefault().post("floatButClick");
+//                EventBus
+//                直接使用下面的 UIUtils.MoveToPosition( 方法利用了子级活动传递的元素
+//           由于此元素可能是时刻刷新变动的
+//           会产生不可预知的结果 不可使用 引以为戒 后面研究下eventBus的用法
+//                https://www.jianshu.com/p/f9ae5691e1bb
+
 //                UIUtils.MoveToPosition(new LinearLayoutManager(mContext), recyclerview, 0);
                 hideViews();
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
@@ -710,35 +733,49 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 clickHeadScopeWork();
                 break;
             case R.id.manga_toolbar_search_input:
-                searchText.setFocusable(true);
+                obtainFocus();
+                //获取焦点需要此三句代码
                 break;
 
             case R.id.nav_login_text:
                 clickHeadScopeWork();
                 break;
             case R.id.nav_nick_name:
-                UtilBox.box().dialog.showInputMaterialDialogSimple(BrvahTestActivity.this,
-                        "修改昵称", "请输入昵称：", "", String.valueOf(nickName.getText())
-                        , new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (which == DialogAction.POSITIVE) {
-//                            前往设置页面
-                                    changeNickName();
-                                }
-                            }
-                        }, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                nickNameInput = String.valueOf(input);
-                                Log.i(TAG, "输入的是：" + input);
-                            }
-                        });
-//            case R.id.nav_nick_name:
-           /* case R.id.:
-                break;*/
+                showNickEditDialog();
+                break;
+            case R.id.nav_nick_edit_icon:
+                showNickEditDialog();
+                break;
+            default:
+                break;
         }
 
+    }
+
+    private void obtainFocus() {
+        searchText .setFocusable(true);
+        searchText .setFocusableInTouchMode(true);
+        searchText .requestFocus();
+    }
+
+    private void showNickEditDialog() {
+        UtilBox.box().dialog.showInputMaterialDialogSimple(BrvahTestActivity.this,
+                "修改昵称", "请输入昵称：", "", String.valueOf(nickName.getText())
+                , new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (which == DialogAction.POSITIVE) {
+//                            前往设置页面
+                            changeNickName();
+                        }
+                    }
+                }, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        nickNameInput = String.valueOf(input);
+                        Log.i(TAG, "输入的是：" + input);
+                    }
+                });
     }
 
     private void clickHeadScopeWork() {
@@ -833,8 +870,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //        homeAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
 //        BaseQuickAdapter.SLIDEIN_LEFT 左边划入动画
         topView = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
-        UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
-                R.drawable.manga_top_view_bg);
+       /* UtilBox.box().picasso.loadDrawResIntoView(((ImageView) topView.findViewById(R.id.top_header_view_bac_image)),
+                R.drawable.manga_top_view_bg);*/
         homeAdapter.addHeaderView(topView);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -1187,4 +1224,98 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         Integer x = Integer.parseInt(hex.substring(2),16);//从第2个字符开始截取
         System.out.println(x);*/
     }
+
+    /**
+     * 重写事件分发
+     */
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+
+            View v = getCurrentFocus();
+
+            if (isShouldHideKeyboard(v, ev)) {
+                //清除Edittext的焦点从而让光标消失
+                /**
+                 * 上面代码实现后然而只能做到隐藏键盘，但是EditText的光标仍然未消去，原因并不是clearFocus()无效，
+                 * 而是虽然调用了clearFocus()方法，但是由于失去焦点后系统会重新获取焦点
+                 * ，此时焦点又重新给到了EditText，所以光标看上去就是没有消去，
+                 * 所以我们需要让一个在EditText之前的控件去抢焦点，这样子就不会出现上述问题。
+                 * 此处可以直接在layout中的根布局加入焦点属性说明：android:focusableInTouchMode="true"
+                 * ---------------------
+                 * 作者：赤色荆棘
+                 * 来源：CSDN
+                 * 原文：https://blog.csdn.net/qq_35658173/article/details/78653004
+                 * 版权声明：本文为博主原创文章，转载请附上博文链接！
+                 */
+                v.clearFocus();
+                hideKeyboard(v.getWindowToken());
+
+            }
+
+        }
+
+        return super.dispatchTouchEvent(ev);
+
+    }
+
+
+    /**
+     * 根据EditText所在坐标和用户点击的坐标相对比，来判断是否隐藏键盘，因为当用户点击EditText时则不能隐藏
+     *
+     * @param v
+     * @param event
+     * @return
+     */
+
+    private boolean isShouldHideKeyboard(View v, MotionEvent event) {
+
+        if (v != null && (v instanceof EditText)) {
+
+            int[] l = {0, 0};
+            v.getLocationOnScreen(l);
+            int left = l[0],
+                    top = l[1],
+                    bottom = top + v.getHeight(),
+                    right = left + v.getWidth();
+            if (event.getRawX() > left && event.getRawX() < right
+                    && event.getRawY() > top && event.getRawY() < bottom) {
+                //点击EditText的时候不做隐藏处理
+                return false;
+            } else {
+
+                return true;
+
+            }
+
+        }
+
+        //如果焦点不是EditText则忽略，这个发生在视图刚绘制完，第一个焦点不在EditText上，和用户用轨迹球选择其他的焦点
+
+        return false;
+
+    }
+
+
+    /**
+     * 获取InputMethodManager，隐藏软键盘
+     *
+     * @param token
+     */
+    private void hideKeyboard(IBinder token) {
+
+        if (token != null) {
+            //若token不为空则获取输入法管理器使其隐藏输入法键盘
+            InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+//            im.showSoftInput(token, InputMethodManager.SHOW_FORCED);
+
+        }
+
+    }
+
+
 }

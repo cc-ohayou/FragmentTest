@@ -53,7 +53,6 @@ android {
         }
     }
 }
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
@@ -115,4 +114,8 @@ dependencies {
 
     implementation 'com.facebook.conceal:conceal:2.0.1@aar'//conceal加密
 
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    //eventbus
+
 }
+

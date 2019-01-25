@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 import androidx.annotation.Nullable;
 import butterknife.ButterKnife;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;

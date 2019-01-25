@@ -84,6 +84,9 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
     @BindView(R.id.login_reg)
     TextView loginReg;
+
+    @BindView(R.id.login_forget_pwd)
+    TextView loginForgetPwd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -109,7 +112,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             new ChangeViewBackgroundTask(thisActivity,"login_bg,png")
                     .execute(GlobalSettings.settingProperties.getLoginBgUrl()) ;
 
-//            TitleLayout.register.setOnClickListener(this);
+//          TitleLayout.register.setOnClickListener(this);
             loginReg.setVisibility(View.VISIBLE);
         } catch (Exception e) {
             Log.e(TAG, "login error", e);
@@ -145,6 +148,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             @Override
             public void onClick(View view) {
                 startAction(getBaseContext(),null,RegisterActivity.class);
+//                finish();
+            }
+        });
+
+         loginForgetPwd.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showDisplay("暂未开放此功能");
 //                finish();
             }
         });

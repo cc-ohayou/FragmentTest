@@ -52,7 +52,7 @@
         android:layout_gravity="start"
         android:text="this is slide menu"
         android:textSize="30sp"
-        android:background="@drawable/image04"
+        android:background="@drawable/default_head"
         />
 
 </androidx.core.widget.DrawerLayout>

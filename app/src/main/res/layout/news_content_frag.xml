@@ -34,7 +34,7 @@
         android:id="@+id/news_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/robort"
+        android:background="@drawable/default_head"
         android:padding="15dp"
         android:textSize="18sp"
         />

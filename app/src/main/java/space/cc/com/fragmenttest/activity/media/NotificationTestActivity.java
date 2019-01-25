@@ -107,7 +107,7 @@ public class NotificationTestActivity extends BaseActivity implements View.OnCli
         return new NotificationCompat.BigPictureStyle()
                 .setBigContentTitle("Big picture style notification ~ Expand title")
                 .setSummaryText("Demo for big picture style notification ! ~ Expand summery")
-                .bigPicture(BitmapFactory.decodeResource(getResources(),R.mipmap.robort));
+                .bigPicture(BitmapFactory.decodeResource(getResources(),R.drawable.app_icon2));
 
 
     }
