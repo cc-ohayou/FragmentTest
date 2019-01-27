@@ -2,14 +2,11 @@ package space.cc.com.fragmenttest.adapter;
 
 import android.app.Activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import space.cc.com.fragmenttest.fragment.OperationListFragment;
 import space.cc.com.fragmenttest.fragment.DynamicFragment;
+import space.cc.com.fragmenttest.fragment.OperationListFragment;
 
 /**
      * @author  CF

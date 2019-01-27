@@ -34,7 +34,6 @@ import com.alibaba.fastjson.JSON;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.lzy.okgo.OkGo;
 import com.nanchen.compresshelper.CompressHelper;
@@ -58,7 +57,6 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -85,15 +83,13 @@ import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.CustomScrollView;
 import space.cc.com.fragmenttest.util.UtilBox;
 
-import static android.view.View.FOCUSABLE;
 
-
-public class BrvahTestActivity extends BaseActivity implements View.OnClickListener ,CustomScrollView.OnScrollChangeListener {
+public class BrvahTestActivity extends BaseActivity implements View.OnClickListener, CustomScrollView.OnScrollChangeListener {
 
 
     private static final String TAG = "BrvahTestActivity";
-    private static final String HEAD_CACHE_FILE_NAME ="cc_head_cache" ;
-    private static final String SET_MENU_BACK_CACHE_FILE_NAME ="cc_set_menu_back_cache" ;
+    private static final String HEAD_CACHE_FILE_NAME = "cc_head_cache";
+    private static final String SET_MENU_BACK_CACHE_FILE_NAME = "cc_set_menu_back_cache";
     private List<Manga> mangaList;
     private static List<Manga> defaultList;
     private RecyclerView mRecyclerView;
@@ -108,11 +104,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     TextView popItem2TextView;
     FloatingActionButton floatBackToTopBut;
     RecyclerView.LayoutManager layoutManager;
-    private  CircleImageView headImageView;
+    private CircleImageView headImageView;
     private TextView navLoginText;
     private TextView popBgChangeText;
 
-    private  CircleImageView navTopLeftCircleImageView;
+    private CircleImageView navTopLeftCircleImageView;
 
     @BindView(R.id.manga_toolbar_search_input)
     EditText searchText;
@@ -122,11 +118,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     int popMenuYoffset;
     //头像来源uri对象
     Uri sourceHeadImageUri;
-//    头像目标存储uri
+    //    头像目标存储uri
     TextView nickName;
     TextView mail;
     private UCrop uCrop;
-    private String nickNameInput="";
+    private String nickNameInput = "";
 
     MenuItem loginItem;
 
@@ -226,8 +222,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 if (id == EditorInfo.IME_ACTION_SEND
                         || id == EditorInfo.IME_ACTION_DONE
                         || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
-                    List<Fragment> fragments= getSupportFragmentManager().getFragments();
-                    OperationListFragment fragment=(OperationListFragment)fragments.get(0);
+                    List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                    OperationListFragment fragment = (OperationListFragment) fragments.get(0);
                     fragment.refreshLayout();
                     searchText.clearFocus();
                     hideKeyboard(searchText.getWindowToken());
@@ -254,7 +250,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void intiViewPagerAndAdapter() {
-        mPagerAdapter = new TabLayoutAdapter(getSupportFragmentManager(), tabTitles,BrvahTestActivity.this);
+        mPagerAdapter = new TabLayoutAdapter(getSupportFragmentManager(), tabTitles, BrvahTestActivity.this);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.operList_vp);
@@ -263,7 +259,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         //设置ViewPager的切换监听
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageSelected ( int position){
+            public void onPageSelected(int position) {
 //                ToastUtils.showDisplay("switch to "+position);
                 switch (position) {
                     case 0:
@@ -278,32 +274,33 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                         break;
                 }
             }
+
             //页面滚动事件
             @Override
-            public void onPageScrolled ( int arg0, float arg1, int arg2){
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
             }
+
             //页面滚动状态改变事件
             @Override
-            public void onPageScrollStateChanged ( int arg0){
+            public void onPageScrollStateChanged(int arg0) {
             }
         });
 
     }
 
     /**
-     * @author  CF
-     * @date   2019/1/11
-     * @description   选中tab  切换图标选中状态和viewPager的当前item
-     *
+     * @author CF
+     * @date 2019/1/11
+     * @description 选中tab  切换图标选中状态和viewPager的当前item
      */
     private void selectTab(int position) {
-        if(position==0){
+       /* if(position==0){
             List<Fragment> fragments= getSupportFragmentManager().getFragments();
 
 //            Fragment fragment=getSupportFragmentManager().findFragmentById(R.id.oper_list);
             Fragment fragment=fragments.get(0);
             layoutManager =((OperationListFragment)fragment).getmRecyclerView().getLayoutManager();
-        }
+        }*/
         mViewPager.setCurrentItem(position);
 
       /*  View  currentTab = tabLayout.getTabAt(position).getCustomView();
@@ -314,32 +311,30 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         //        ToastUtils.showDisplay("position selected "+position);
 
     }
+
     /**
-         * @author  CF
-         * @date   2019/1/15
-         * @description
-     *
-     *    在线状态获取远端用户信息
-     *    离线状态使用默认布局 和默认的头像
+     * @author CF
+     * @date 2019/1/15
+     * @description 在线状态获取远端用户信息
+     * 离线状态使用默认布局 和默认的头像
      * 1、登录状态   隐藏点击登录view    获取用户最新信息 显示昵称 显示电话 载入头像  背景加载 显示登出按钮
      * 2、退出状态  显示点击登录view   隐藏昵称和电话 使用默认头像 默认背景 隐藏登出按钮
-     *
      */
     private void initUserInfoRelViewValueByLoginState() {
-        if(ClientConfiguration.getInstance().getLoginState()){
+        if (ClientConfiguration.getInstance().getLoginState()) {
             getUserInfo();
-        }else{
+        } else {
             initUserInfoRelViewValueWithNotLogin();
 
         }
 
 
     }
-  /**
-     * @author  CF
-     * @date   2019/1/15
+
+    /**
+     * @author CF
+     * @date 2019/1/15
      * @description 未登录状态 初始化用户相关信息
-     *
      */
     private void initUserInfoRelViewValueWithNotLogin() {
         //      初始化背景图片
@@ -355,6 +350,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 R.drawable.manga_default);
 //        昵称
         nickName.setVisibility(View.INVISIBLE);
+        navNickEditIcon.setVisibility(View.INVISIBLE);
 //        手机
         mail.setVisibility(View.INVISIBLE);
 //        登出item隐藏
@@ -364,19 +360,19 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initMainBgImg() {
-        new DownloadImageTask().execute(ClientConfiguration.getInstance().getMainBgUrl()) ;
+        new DownloadImageTask().execute(ClientConfiguration.getInstance().getMainBgUrl());
     }
 
     private void initAllView() {
         drawerLayout = findViewById(R.id.manga_drawer_lay_out);
-        appBarLayout=findViewById(R.id.brvah_app_bar);
+        appBarLayout = findViewById(R.id.brvah_app_bar);
         navView = findViewById(R.id.nav_view);
-        navTopLeftCircleImageView =  findViewById(R.id.nav_topLeft_image);
+        navTopLeftCircleImageView = findViewById(R.id.nav_topLeft_image);
         headImageView = navView.getHeaderView(0).findViewById(R.id.head_image);
         nickName = navView.getHeaderView(0).findViewById(R.id.nav_nick_name);
         navNickEditIcon = navView.getHeaderView(0).findViewById(R.id.nav_nick_edit_icon);
         mail = navView.getHeaderView(0).findViewById(R.id.nav_mail);
-        navLoginText=navView.getHeaderView(0).findViewById(R.id.nav_login_text);
+        navLoginText = navView.getHeaderView(0).findViewById(R.id.nav_login_text);
 
         nickName.setOnClickListener(this);
         navNickEditIcon.setOnClickListener(this);
@@ -385,17 +381,17 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         navLoginText.setOnClickListener(this);
 
         floatBackToTopBut = findViewById(R.id.float_but);
-        loginItem= navView.getMenu().findItem(R.id.nav_login_out);
+        loginItem = navView.getMenu().findItem(R.id.nav_login_out);
 
     }
 
     private void appBarToggleSet() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
 
-               initUserInfoRelViewValueByLoginState();
+                initUserInfoRelViewValueByLoginState();
                 super.onDrawerOpened(drawerView);
             }
 
@@ -411,10 +407,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-
     @Override
     public void onScrollToStart() {
-       ToastUtils.showDisplay("滑动到顶部了");
+        ToastUtils.showDisplay("滑动到顶部了");
     }
 
     @Override
@@ -429,12 +424,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         floatBackToTopBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-        /**
-         * 利用eventBus发送事件到总线   其它自身注册到总线中的活动都可以获取到总线事件
-         * 根据自定义的业务规则来决定作出什么动作  此处是父级活动回到顶部按钮  点击传递事件到子activity
-         * 让子级活动或者fragment滚动内部recyclerView 到顶部
-         */
-               EventBus.getDefault().post("floatButClick");
+                /**
+                 * 利用eventBus发送事件到总线   其它自身注册到总线中的活动都可以获取到总线事件
+                 * 根据自定义的业务规则来决定作出什么动作  此处是父级活动回到顶部按钮  点击传递事件到子activity
+                 * 让子级活动或者fragment滚动内部recyclerView 到顶部
+                 */
+                EventBus.getDefault().post("floatButClick");
 //                EventBus
 //                直接使用下面的 UIUtils.MoveToPosition( 方法利用了子级活动传递的元素
 //           由于此元素可能是时刻刷新变动的
@@ -463,21 +458,21 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 //                drawerLayout.closeDrawers();
 
-                if(menuItem.getItemId()==R.id.nav_home){
+                if (menuItem.getItemId() == R.id.nav_home) {
                     drawerLayout.closeDrawers();
-                }else if(menuItem.getItemId()==R.id.nav_history){
-                    startAction(BrvahTestActivity.this,null,DrawerDemoActivity.class);
-                }else if(menuItem.getItemId()==R.id.nav_collect){
-                    if(!ClientConfiguration.getInstance().getLoginState()){
+                } else if (menuItem.getItemId() == R.id.nav_history) {
+                    startAction(BrvahTestActivity.this, null, DrawerDemoActivity.class);
+                } else if (menuItem.getItemId() == R.id.nav_collect) {
+                    if (!ClientConfiguration.getInstance().getLoginState()) {
                         ToastUtils.showDisplay("请先登录！");
 
-                    }else{
-                        startAction(BrvahTestActivity.this,null,TabTestActivity.class);
+                    } else {
+                        startAction(BrvahTestActivity.this, null, TabTestActivity.class);
                     }
-                }else if(menuItem.getItemId()==R.id.nav_login_out){
+                } else if (menuItem.getItemId() == R.id.nav_login_out) {
                     clearLoginStateAndUserInfo();
-                    startAction(BrvahTestActivity.this,null,LoginActivity.class);
-                }else{
+                    startAction(BrvahTestActivity.this, null, LoginActivity.class);
+                } else {
                     ToastUtils.showDisplay(String.valueOf(menuItem.getTitle()));
                 }
                 return true;
@@ -486,7 +481,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void clearLoginStateAndUserInfo() {
-        GlobalSettings.userInfo=null;
+        GlobalSettings.userInfo = null;
         ClientConfiguration.getInstance().setUid("");
         ClientConfiguration.getInstance().setSid("");
         ClientConfiguration.getInstance().setLoginState(false);
@@ -499,19 +494,20 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 //        昵称
         nickName.setText(GlobalSettings.userInfo.getNickName());
         nickName.setVisibility(View.VISIBLE);
+        navNickEditIcon.setVisibility(View.VISIBLE);
 //        手机
         mail.setText(GlobalSettings.userInfo.getPhone());
         mail.setVisibility(View.VISIBLE);
-        String headUrl= GlobalSettings.userInfo.getHeadImage();
-        if(!StringUtils.isEmpty(headUrl)) {
+        String headUrl = GlobalSettings.userInfo.getHeadImage();
+        if (!StringUtils.isEmpty(headUrl)) {
 //        导航头像更换
-            UtilBox.box().picasso.loadUrlResIntoViewWithDefault(navTopLeftCircleImageView,headUrl,
+            UtilBox.box().picasso.loadUrlResIntoViewWithDefault(navTopLeftCircleImageView, headUrl,
                     R.drawable.manga_default);
 //        侧边栏头像更换
             UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
-                    headImageView,headUrl,
+                    headImageView, headUrl,
                     R.drawable.manga_default);
-        }else{
+        } else {
             //        导航头像更换
             UtilBox.box().picasso.loadDrawResIntoView(navTopLeftCircleImageView,
                     R.drawable.manga_default);
@@ -527,20 +523,20 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     private void getUserInfo() {
 
-        RequestParams params=RequestParams.getFormDataParam(2);
-        ClientUtlis.post(true, UrlConfig.GET_USER_INFO,params,
-                this,new JsonCallback<UserInfo>() {
+        RequestParams params = RequestParams.getFormDataParam(2);
+        ClientUtlis.post(true, UrlConfig.GET_USER_INFO, params,
+                this, new JsonCallback<UserInfo>() {
                     @Override
                     public void onSuccess(UserInfo info, String msg) {
-                        if(info!=null){
+                        if (info != null) {
                             GlobalSettings.userInfo = info;
-                            if(!StringUtils.isEmpty(info.getMainBgUrl())){
+                            if (!StringUtils.isEmpty(info.getMainBgUrl())) {
                                 ClientConfiguration.getInstance().setMainBgUrl(info.getMainBgUrl());
                             }
                             initNavHeaderViewValueWithLoginState();
-                        }else{
+                        } else {
                             inValidateLoginState();
-                            Log.d(TAG,"");
+                            Log.d(TAG, "");
                         }
 
                     }
@@ -551,6 +547,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                     }
                 });
     }
+
     private void setToolbarStyle(Toolbar toolbar) {
 
 
@@ -615,6 +612,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         });*/
 
     }
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -689,8 +687,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             popView.findViewById(R.id.ll_item1).setOnClickListener(this);
             popView.findViewById(R.id.ll_item2).setOnClickListener(this);
 
-            popItem1TextView= popView.findViewById(R.id.ll_item1_text);
-            popItem2TextView= popView.findViewById(R.id.ll_item2_text);
+            popItem1TextView = popView.findViewById(R.id.ll_item1_text);
+            popItem2TextView = popView.findViewById(R.id.ll_item2_text);
             popBgChangeText = popView.findViewById(R.id.setting_menu_bg_change_text);
             popBgChangeText.setOnClickListener(this);
 
@@ -704,7 +702,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         Rect frame = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         //状态栏高度+toolbar的高度
-        popMenuYoffset= frame.top + toolbar.getHeight();
+        popMenuYoffset = frame.top + toolbar.getHeight();
     }
 
 
@@ -717,7 +715,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.ll_item2:
                 ToastUtils.showDisplay(String.valueOf(popItem2TextView.getText()));
-                if (CustomProperties.UPDATE.equals( GlobalSettings.settingProperties.getUpdateSign())) {
+                if (CustomProperties.UPDATE.equals(GlobalSettings.settingProperties.getUpdateSign())) {
                     //下载更新
                     Intent startDownload = new Intent(this, DownLoadService.class);
                     startServiceCustom(this, startDownload);
@@ -727,7 +725,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 closePoupWindow();
                 break;
             case R.id.setting_menu_bg_change_text:
-               openAlbum(CHANGE_BACK_OPEN_LOCAL_ALBUM);
+                openAlbum(CHANGE_BACK_OPEN_LOCAL_ALBUM);
                 break;
             case R.id.head_image:
                 clickHeadScopeWork();
@@ -753,10 +751,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void obtainFocus() {
-        searchText .setFocusable(true);
-        searchText .setFocusableInTouchMode(true);
-        searchText .requestFocus();
+        searchText.setFocusable(true);
+        searchText.setFocusableInTouchMode(true);
+        searchText.requestFocus();
+        showSoftInputBoard();
     }
+
 
     private void showNickEditDialog() {
         UtilBox.box().dialog.showInputMaterialDialogSimple(BrvahTestActivity.this,
@@ -779,12 +779,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void clickHeadScopeWork() {
-        if(ClientConfiguration.getInstance().getLoginState()){
+        if (ClientConfiguration.getInstance().getLoginState()) {
 //            登录状态 修改头像
             openAlbum(CHANGE_HEAD_OPEN_LOCAL_ALBUM);
-        }else{
+        } else {
 //            前往登录
-            LoginActivity.actionStart(this,null);
+            LoginActivity.actionStart(this, null);
         }
     }
 
@@ -796,30 +796,30 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     /**
-     *更改昵称
-     *
+     * 更改昵称
      */
     private void changeNickName() {
-        RequestParams params=new RequestParams(RequestParams.PARAM_TYPE_FORM);
-        if(StringUtil.isEmpty(nickNameInput)){
+        RequestParams params = new RequestParams(RequestParams.PARAM_TYPE_FORM);
+        if (StringUtil.isEmpty(nickNameInput)) {
             ToastUtils.showDisplay("昵称不可为空");
         }
 //        校验 非法字符这些
         nickNameCheck();
-        OkGo.getInstance().getCommonHeaders().put("userid",GlobalSettings.userInfo.getUid());
-        params.put("userid",GlobalSettings.userInfo.getUid());
-        params.put("nickName",nickNameInput);
-        ClientUtlis.post(true,UrlConfig.MODIFY_USER_INFO,params,this,new JsonCallback<String>() {
+        OkGo.getInstance().getCommonHeaders().put("userid", GlobalSettings.userInfo.getUid());
+        params.put("userid", GlobalSettings.userInfo.getUid());
+        params.put("nickName", nickNameInput);
+        ClientUtlis.post(true, UrlConfig.MODIFY_USER_INFO, params, this, new JsonCallback<String>() {
             @Override
             public void onSuccess(String info, String msg) {
                 nickName.setText(nickNameInput);
-               ToastUtils.showDisplay("修改成功!");
+                ToastUtils.showDisplay("修改成功!");
             }
+
             @Override
             public void onError(String msg, int code) {
                 ToastUtils.showDisplay("昵称修改失败!");
             }
-            });
+        });
     }
 
     private void nickNameCheck() {
@@ -829,7 +829,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private void openAlbum(int requestCode) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*")
-         .addCategory(Intent.CATEGORY_OPENABLE);
+                .addCategory(Intent.CATEGORY_OPENABLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             String[] mimeTypes = {"image/jpeg", "image/png"};
             intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -991,18 +991,18 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }*/
 
 
-    public  void hideViews() {
+    public void hideViews() {
 //      显示toolbar
-        appBarLayout.setExpanded(true,true);
+        appBarLayout.setExpanded(true, true);
               /*  a.getBoolean(com.google.android.material.R.styleable.AppBarLayout_expanded, false),
                 false, *//* animate *//*
                 false *//* force *//*);*/
 //        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        Log.d(TAG,String.valueOf(toolbar.getTranslationY()));
+        Log.d(TAG, String.valueOf(toolbar.getTranslationY()));
         CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) floatBackToTopBut.getLayoutParams();
         int fabBottomMargin = lp.bottomMargin;
         floatBackToTopBut.setVisibility(View.INVISIBLE);
-        floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+        floatBackToTopBut.animate().translationY(floatBackToTopBut.getHeight() + fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
     }
 
     public void showViews() {
@@ -1015,15 +1015,15 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
-            String  path= resultUri.getPath();
+            String path = resultUri.getPath();
             try {
                 List<File> files = new ArrayList<>();
                 files.add(CompressHelper.getDefault(this).compressToFile(new File(path)));
                 Log.d(TAG, "changeHead: " + files.get(0).length());
-                Uri destUri=data.getExtras().getParcelable(UCrop.EXTRA_OUTPUT_URI);
+                Uri destUri = data.getExtras().getParcelable(UCrop.EXTRA_OUTPUT_URI);
                 doAlterReqByDestUriPath(files, destUri);
             } catch (Exception e) {
-                Log.e(TAG,"修改头像失败",e);
+                Log.e(TAG, "修改头像失败", e);
                 ToastUtils.showLong("修改头像失败!");
 
             }
@@ -1031,37 +1031,36 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
-            Log.e(TAG,"修改头像失败 2 "+cropError.getMessage());
+            Log.e(TAG, "修改头像失败 2 " + cropError.getMessage());
             ToastUtils.showLong("修改头像失败!");
 
-        } else if(resultCode == RESULT_OK &&requestCode==CHANGE_HEAD_OPEN_LOCAL_ALBUM){
-            sourceHeadImageUri= data.getData();
+        } else if (resultCode == RESULT_OK && requestCode == CHANGE_HEAD_OPEN_LOCAL_ALBUM) {
+            sourceHeadImageUri = data.getData();
             try {
                 cropImage();
             } catch (Exception e) {
                 Log.e(TAG, " UCrop.of failed", e);
             }
-        } else if(resultCode == RESULT_OK &&requestCode==CHANGE_BACK_OPEN_LOCAL_ALBUM){
+        } else if (resultCode == RESULT_OK && requestCode == CHANGE_BACK_OPEN_LOCAL_ALBUM) {
             try {
-                cropImage(data.getData(), SET_MENU_BACK_CACHE_FILE_NAME,true);
+                cropImage(data.getData(), SET_MENU_BACK_CACHE_FILE_NAME, true);
             } catch (Exception e) {
                 Log.e(TAG, " UCrop.of failed", e);
             }
         }
     }
-/**
-     * @author  CF
-     * @date   2019/1/16
-     * @description
-     * 根据发起请求的目标Uri包含的path分别来进行不同的请求
+
+    /**
+     * @author CF
+     * @date 2019/1/16
+     * @description 根据发起请求的目标Uri包含的path分别来进行不同的请求
      * 要求每个裁剪图片都需要有不同的临时文件名称
-     *
      */
     private void doAlterReqByDestUriPath(List<File> files, Uri destUri) {
-        if(destUri.getPath().contains(SET_MENU_BACK_CACHE_FILE_NAME)){
+        if (destUri.getPath().contains(SET_MENU_BACK_CACHE_FILE_NAME)) {
 //                    修改背景图片
             modifyBackgroundImage(files);
-        }else  if(destUri.getPath().contains(HEAD_CACHE_FILE_NAME)){
+        } else if (destUri.getPath().contains(HEAD_CACHE_FILE_NAME)) {
 //                    修改头像
             modifyHeadImageReq(files);
         }
@@ -1073,8 +1072,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(String imagePath, String msg) {
                 super.onSuccess(imagePath, msg);
-                Log.i(TAG,"change head succ imagePath="+imagePath);
-                if(!StringUtil.isEmpty(imagePath)&&imagePath.contains("http")){
+                Log.i(TAG, "change head succ imagePath=" + imagePath);
+                if (!StringUtil.isEmpty(imagePath) && imagePath.contains("http")) {
                     refreshBackgroundRelView(imagePath);
                 }
                 ToastUtils.showDisplay("背景修改成功！");
@@ -1084,7 +1083,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onError(String msg, int code) {
                 super.onError(msg, code);
-                Log.i(TAG,"背景修改失败,"+msg);
+                Log.i(TAG, "背景修改失败," + msg);
                 ToastUtils.showDisplay("背景修改失败");
 
             }
@@ -1100,7 +1099,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
 
     private class DownloadImageTask extends AsyncTask<String, Void, Drawable> {
-        View view ;
+        View view;
+
         @Override
         protected Drawable doInBackground(String... urls) {
             return loadImageFromNetwork(urls[0]);
@@ -1113,29 +1113,30 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private Drawable loadImageFromNetwork(String imageUrl) {
-            Drawable drawable = null;
-            try {
-                // 可以在这里通过文件名来判断，是否本地有此图片
-                drawable = Drawable.createFromStream(
-                        new URL(imageUrl).openStream(), "main_bg.jpg");
-            } catch (IOException e) {
-                Log.d("test", e.getMessage());
-            }
-            if (drawable == null) {
-                Log.d("test", "null drawable");
-            } else {
-                Log.d("test", "not null drawable");
-            }
+        Drawable drawable = null;
+        try {
+            // 可以在这里通过文件名来判断，是否本地有此图片
+            drawable = Drawable.createFromStream(
+                    new URL(imageUrl).openStream(), "main_bg.jpg");
+        } catch (IOException e) {
+            Log.d("test", e.getMessage());
+        }
+        if (drawable == null) {
+            Log.d("test", "null drawable");
+        } else {
+            Log.d("test", "not null drawable");
+        }
 
-            return drawable;
+        return drawable;
     }
+
     /**
      *
      *
      */
     private void cropImage() {
-        uCrop= UCrop.of(sourceHeadImageUri, Uri.fromFile(new File(getCacheDir(), HEAD_CACHE_FILE_NAME)));
-        uCrop = UtilBox.box().ui.advancedConfig (uCrop);
+        uCrop = UCrop.of(sourceHeadImageUri, Uri.fromFile(new File(getCacheDir(), HEAD_CACHE_FILE_NAME)));
+        uCrop = UtilBox.box().ui.advancedConfig(uCrop);
         uCrop.start(BrvahTestActivity.this);
 
      /*   if (requestMode == REQUEST_SELECT_PICTURE_FOR_FRAGMENT) {       //if build variant = fragment
@@ -1146,31 +1147,28 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
 
     }
-/**
-     * @author  CF
-     * @date   2019/1/16
+
+    /**
+     * @author CF
+     * @date 2019/1/16
      * @description
-     *
      */
-    private void cropImage(Uri  sourceImageUri,String destCacheFileName,boolean freeStyle) {
-        uCrop= UCrop.of(sourceImageUri, Uri.fromFile(new File(getCacheDir(), destCacheFileName)));
-        if(freeStyle){
-            uCrop = UtilBox.box().ui.advancedConfigWithFreeStyle (uCrop);
-        }else{
-            uCrop = UtilBox.box().ui.advancedConfig (uCrop);
+    private void cropImage(Uri sourceImageUri, String destCacheFileName, boolean freeStyle) {
+        uCrop = UCrop.of(sourceImageUri, Uri.fromFile(new File(getCacheDir(), destCacheFileName)));
+        if (freeStyle) {
+            uCrop = UtilBox.box().ui.advancedConfigWithFreeStyle(uCrop);
+        } else {
+            uCrop = UtilBox.box().ui.advancedConfig(uCrop);
         }
         uCrop.start(BrvahTestActivity.this);
 
     }
 
 
-
-
     /**
-     * @author  CF
-     * @date   2019/1/14
+     * @author CF
+     * @date 2019/1/14
      * @description
-     *
      */
     private void modifyHeadImageReq(List<File> files) {
         RequestParams params = new RequestParams(RequestParams.PARAM_TYPE_FORM);
@@ -1178,8 +1176,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(String imagePath, String msg) {
                 super.onSuccess(imagePath, msg);
-                Log.i(TAG,"change head succ imagePath="+imagePath);
-                if(!StringUtil.isEmpty(imagePath)&&imagePath.contains("http")){
+                Log.i(TAG, "change head succ imagePath=" + imagePath);
+                if (!StringUtil.isEmpty(imagePath) && imagePath.contains("http")) {
                     refreshHeadImageRelView(imagePath);
                 }
 
@@ -1196,27 +1194,29 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         });
 
     }
+
     /**
-         * @author  CF
-         * @date   2019/1/15
-         * @description 更新头像相关的view
-         *
-         */
+     * @author CF
+     * @date 2019/1/15
+     * @description 更新头像相关的view
+     */
     private void refreshHeadImageRelView(String imagePath) {
         UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
-                headImageView,imagePath,R.drawable.default_head);
+                headImageView, imagePath, R.drawable.default_head);
         UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
-                navTopLeftCircleImageView,imagePath,R.drawable.default_head);
+                navTopLeftCircleImageView, imagePath, R.drawable.default_head);
         GlobalSettings.userInfo.setHeadImage(imagePath);
     }
-    public  static void actionStart(Context context, Map<String,String> map){
-        startAction(context, map,BrvahTestActivity.class);
+
+    public static void actionStart(Context context, Map<String, String> map) {
+        startAction(context, map, BrvahTestActivity.class);
     }
+
     public static void main(String[] args) {
-        double transparentRatio=0.85;
-        String  db=String.valueOf(255*(1-transparentRatio));
-        db.subSequence(0,db.indexOf("."));
-        Integer x = Integer.parseInt(db.substring(0,db.indexOf(".")));
+        double transparentRatio = 0.85;
+        String db = String.valueOf(255 * (1 - transparentRatio));
+        db.subSequence(0, db.indexOf("."));
+        Integer x = Integer.parseInt(db.substring(0, db.indexOf(".")));
         String hex = x.toHexString(x);
         System.out.println(hex);
 
@@ -1312,10 +1312,24 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
 //            im.showSoftInput(token, InputMethodManager.SHOW_FORCED);
-
+//            im.showSoftInput();
         }
 
     }
 
+    private void showSoftInputBoard() {
+        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (im!=null){
+//            让软键盘在显示和隐藏之间切换。虽然这个方法，限制很少，
+// 但是我们基本上不会使用它。主要原因在于，它是一个开关的方法，
+// 会根据当前的状态做相反的操作。这就导致很多时候，我们在代码中，
+// 无法直接根据 InputMethodManager 提供的方法判断当前软键盘的显示状态，
+// 这样也就无法确定调用它的时候的效果了
+//            im.toggleSoftInput(0,0);
+            im.showSoftInput(searchText,0);
+
+        }
+        //
+    }
 
 }
