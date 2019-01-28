@@ -350,22 +350,22 @@ public class OperationListFragment extends BaseFragment {
         try {
 
 
-        switch (view.getId()) {
-            case R.id.item_oper_but:
-                if(!ClientConfiguration.getInstance().getLoginState()){
-                    ToastUtils.showDisplay("请先登录！");
-                    return;
-                }
-                String  roleCodes=GlobalSettings.userInfo.getRoleCodes();
-                if(StringUtils.isEmpty(roleCodes)|| !roleCodes.contains(operList.get(position).getRoleCode())){
-                    ToastUtils.showDisplay("暂无此操作权限！");
-                    return;
-                }
-                String content = "确认发起" + operList.get(position).getOperName() +
-                        ", (环境："+ operList.get(position).getEnvType() + ") 请求吗?";
-                requestDialogShow(content, operList.get(position));
-
-        }
+            switch (view.getId()) {
+                case R.id.item_oper_but:
+                    if (!ClientConfiguration.getInstance().getLoginState()) {
+                        ToastUtils.showDisplay("请先登录！");
+                        return;
+                    }
+                    String roleCodes = GlobalSettings.userInfo.getRoleCodes();
+                    if (StringUtils.isEmpty(roleCodes) || !roleCodes.contains(operList.get(position).getRoleCode())) {
+                        ToastUtils.showDisplay("暂无此操作权限！");
+                        return;
+                    }
+                    String content = "确认发起" + operList.get(position).getOperName() +
+                            ", (环境：" + operList.get(position).getEnvType() + ") 请求吗?";
+                    requestDialogShow(content, operList.get(position));
+                    break;
+            }
         } catch (Exception e) {
             Log.e(TAG, "defaultData transfer error", e);
             ToastUtils.showDisplay("操作异常:"+e.getMessage());

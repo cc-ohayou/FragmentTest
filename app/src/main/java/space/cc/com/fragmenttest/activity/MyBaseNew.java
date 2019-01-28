@@ -10,7 +10,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import androidx.annotation.Nullable;
 import butterknife.ButterKnife;
+import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
+import space.cc.com.fragmenttest.domain.util.Utils;
 
 
 public abstract class MyBaseNew extends BasePermissionsActivity implements View.OnClickListener {
@@ -120,6 +122,19 @@ public abstract class MyBaseNew extends BasePermissionsActivity implements View.
             return;
         initViewClick(view.getId());
     }
+
+    public static void inValidateLoginState() {
+        ClientConfiguration.getInstance().setSid("");
+        ClientConfiguration.getInstance().setUid("");
+        ClientConfiguration.getInstance().setLoginState(false);
+//        Intent intent = new Intent(activity, RegisterOrLoginActivity.class);
+        Intent intent = new Intent(Utils.getApp(), LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("backurl","main");
+        intent.putExtras(bundle);
+        Utils.getApp().startActivity(intent);
+    }
+
 
     protected abstract void initViewClick(int id);
 

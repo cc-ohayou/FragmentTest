@@ -13,6 +13,8 @@ public enum UrlConfig {
     GET_USER_INFO(UrlConstants.PREFIX+"v1/cc/user/info","获取用户信息",true),
     MODIFY_BACKGROUND_IMG(UrlConstants.PREFIX+"v1/cc/modify/bgImg", "更改背景图"),
     user_register(UrlConstants.PREFIX+"v1/cc/register", "注册"),
+    FORGET_PWD_REQ_VERIFY_CODE(UrlConstants.PREFIX+"v1/cc/forget/pwd", "忘记密码获取验证码"),
+    PWD_RESET(UrlConstants.PREFIX+"v1/cc/reset/pwd", "重置密码"),
     ;
 
     private String value;

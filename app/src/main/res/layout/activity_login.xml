@@ -9,6 +9,7 @@
     <!-- 通过引入时间编写好的自定义标题布局  （标题布局自我实现布局中的按钮事件
     避免了在引入布局处编写重复代码的问题） -->
     <space.cc.com.fragmenttest.activity.common.TitleLayout
+        app:title_text="登录"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

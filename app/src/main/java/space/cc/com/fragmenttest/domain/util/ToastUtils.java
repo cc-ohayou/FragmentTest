@@ -160,6 +160,18 @@ public class ToastUtils {
 
         showText(Utils.getApp(),errMsg);
     }
+
+/**
+     * @author  CF
+     * @date   2019/1/28
+     * @description  错误提示框
+     *
+     */
+    public static void showErrorDisplay(String errMsg) {
+
+
+        showText(Utils.getApp(),errMsg,false);
+    }
 /**
      * @author  CF
      * @date   2019/1/10

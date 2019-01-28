@@ -22,7 +22,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -147,6 +146,10 @@ public class RegisterActivity extends MyBaseNew {
         }
         if(StringUtils.isEmpty(mail)){
             ToastUtils.showDisplay("邮箱不可为空！");
+            return;
+        }
+        if(!RegexUtils.isEmail(mail)){
+            ToastUtils.showDisplay("邮箱格式非法！");
             return;
         }
        /* if(StringUtils.isEmpty(verifyCode) || verifyCode.length() < 6){

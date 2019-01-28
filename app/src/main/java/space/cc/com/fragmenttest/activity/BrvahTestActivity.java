@@ -460,9 +460,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
                 if (menuItem.getItemId() == R.id.nav_home) {
                     drawerLayout.closeDrawers();
-                } else if (menuItem.getItemId() == R.id.nav_history) {
+                } /*else if (menuItem.getItemId() == R.id.nav_history) {
                     startAction(BrvahTestActivity.this, null, DrawerDemoActivity.class);
-                } else if (menuItem.getItemId() == R.id.nav_collect) {
+                }*/ else if (menuItem.getItemId() == R.id.nav_collect) {
                     if (!ClientConfiguration.getInstance().getLoginState()) {
                         ToastUtils.showDisplay("请先登录！");
 

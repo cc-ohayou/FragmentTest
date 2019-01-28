@@ -95,7 +95,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
             thisActivity= findViewById(R.id.login_layout);
-            TitleLayout.titleText.setText("登录");
+//            TitleLayout.titleText.setText("登录");
             //获取存储对象
             pref = PreferenceManager.getDefaultSharedPreferences(this);
             rememberPass = findViewById(R.id.remember_pass);
@@ -155,8 +155,9 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
          loginForgetPwd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.showDisplay("暂未开放此功能");
+//                ToastUtils.showDisplay("暂未开放此功能");
 //                finish();
+                startAction(getBaseContext(),null,ForgetPwdActivity.class);
             }
         });
 

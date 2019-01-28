@@ -12,5 +12,23 @@
         <attr name="lineNum" format="integer"/>
     </declare-styleable>
 
+    <declare-styleable name="TitleLayout">
+        <attr name="left_visibility">
+            <flag name="visible" value="0" />
+            <flag name="gone" value="4" />
+        </attr>
+        <attr name="right_visibility">
+            <flag name="visible" value="0" />
+            <flag name="gone" value="4" />
+        </attr>
+        <attr name="left_img" format="reference" />
+        <attr name="right_img" format="reference" />
+        <attr name="left_text" format="string" />
+        <attr name="right_text" format="string" />
+        <attr name="title_text" format="string" />
+        <attr name="left_text_color" format="color" />
+        <attr name="right_text_color" format="color" />
+        <attr name="title_text_color" format="color" />
+    </declare-styleable>
 
 </resources>
