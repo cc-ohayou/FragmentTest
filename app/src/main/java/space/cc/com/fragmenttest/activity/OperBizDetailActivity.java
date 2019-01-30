@@ -25,8 +25,8 @@ public class OperBizDetailActivity extends MyBaseNew {
     private TextView operBizCreateTime;
     private TextView operBizUpdateTime;
 
-    @BindView(R.id.operBiz_url)
-    TextView operBiz_url;
+   /* @BindView(R.id.operBiz_url)
+    TextView operBiz_url;*/
     @BindView(R.id.operBiz_env)
     TextView operBiz_env;
     @BindView(R.id.operBiz_pro)
@@ -62,7 +62,7 @@ public class OperBizDetailActivity extends MyBaseNew {
         initCollapseToolBar(operateBiz);
         UtilBox.box().picasso.loadUrlResIntoView(imageView,GlobalSettings.settingProperties.getOperBizDetailBgUrl());
         operBizDesc.setText("描述："+operateBiz.getDesc());
-        operBiz_url.setText("Url："+operateBiz.getUrl());
+//        operBiz_url.setText("Url："+operateBiz.getUrl());
         operBiz_pro.setText("项目："+operateBiz.getProject());
         operBiz_env.setText("环境："+operateBiz.getEnvType());
         operBizCreateTime.setText("创建时间："+operateBiz.getCreateTime());

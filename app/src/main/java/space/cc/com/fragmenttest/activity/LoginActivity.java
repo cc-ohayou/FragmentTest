@@ -51,6 +51,7 @@ import space.cc.com.fragmenttest.domain.callback.JsonCallback;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.task.ChangeViewBackgroundTask;
+import space.cc.com.fragmenttest.view.ClearEditText;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -71,7 +72,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView userNameView;
+    private ClearEditText userNameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -136,6 +137,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 return false;
             }
         });
+
+
 
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -351,7 +354,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+//        addEmailsToAutoComplete(emails);
     }
 
     @Override
@@ -365,7 +368,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        userNameView.setAdapter(adapter);
+//        userNameView.setAdapter(adapter);
     }
 
     @Override

@@ -49,6 +49,7 @@ import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.domain.util.Utils;
 import space.cc.com.fragmenttest.util.UtilBox;
+import space.cc.com.fragmenttest.view.EmptyView;
 
 @SuppressLint("ValidFragment")
 public class OperationListFragment extends BaseFragment {
@@ -335,6 +336,9 @@ public class OperationListFragment extends BaseFragment {
 
         });
 
+        EmptyView emptyView = new EmptyView(parentActivity);
+        emptyView.creatView("(～￣▽￣)～ 没有更多啦 ");
+        adapter.setEmptyView(emptyView);
         //默认动画只是第一次加载 所以设置下每次都加载动画
         adapter.isFirstOnly(false);
 
@@ -380,7 +384,7 @@ public class OperationListFragment extends BaseFragment {
                         if (which == DialogAction.NEUTRAL) {
 //                            Toast.makeText(MainActivity.this, "更多信息", Toast.LENGTH_LONG).show();
                         } else if (which == DialogAction.POSITIVE) {
-                            sendPostByUrl(operateBiz.getUrl());
+                            sendGateWayPostByOperId(operateBiz.getOperId());
                         } else if (which == DialogAction.NEGATIVE) {
                             ToastUtils.showLong("请求已取消");
                         }
@@ -396,9 +400,10 @@ public class OperationListFragment extends BaseFragment {
      * @author CF
      * created at 2019/1/13/013  20:29
      */
-    private void sendPostByUrl(String url) {
+    private void sendGateWayPostByOperId(String operId) {
     RequestParams params = new RequestParams(RequestParams.PARAM_TYPE_FORM);
-    ClientUtlis.post(true, url, params,
+        params.put("operId", operId);
+    ClientUtlis.post(true, UrlConfig.GATEWAY_REQ, params,
             this, new JsonCallback<String>() {
                 @Override
                 public void onSuccess(String returnMsg, String msg) {

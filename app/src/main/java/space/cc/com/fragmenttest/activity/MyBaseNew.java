@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -173,5 +175,28 @@ public abstract class MyBaseNew extends BasePermissionsActivity implements View.
             LogUtils.e("ddj",e.toString());
         }
     }*/
+
+
+    void obtainFocus(EditText editText) {
+        editText.setFocusable(true);
+        editText.setFocusableInTouchMode(true);
+        editText.requestFocus();
+        showSoftInputBoard(editText);
+    }
+
+    private void showSoftInputBoard(EditText editText) {
+        InputMethodManager im = (InputMethodManager) Utils.getApp().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (im!=null){
+//            让软键盘在显示和隐藏之间切换。虽然这个方法，限制很少，
+// 但是我们基本上不会使用它。主要原因在于，它是一个开关的方法，
+// 会根据当前的状态做相反的操作。这就导致很多时候，我们在代码中，
+// 无法直接根据 InputMethodManager 提供的方法判断当前软键盘的显示状态，
+// 这样也就无法确定调用它的时候的效果了
+//            im.toggleSoftInput(0,0);
+            im.showSoftInput(editText,0);
+
+        }
+        //
+    }
 
 }

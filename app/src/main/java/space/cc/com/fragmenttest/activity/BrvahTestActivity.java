@@ -11,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -36,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 import com.nanchen.compresshelper.CompressHelper;
 import com.yalantis.ucrop.UCrop;
 
@@ -82,6 +85,7 @@ import space.cc.com.fragmenttest.litepals.Manga;
 import space.cc.com.fragmenttest.service.DownLoadService;
 import space.cc.com.fragmenttest.util.CustomScrollView;
 import space.cc.com.fragmenttest.util.UtilBox;
+import space.cc.com.fragmenttest.view.ClearEditText;
 
 
 public class BrvahTestActivity extends BaseActivity implements View.OnClickListener, CustomScrollView.OnScrollChangeListener {
@@ -111,7 +115,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     private CircleImageView navTopLeftCircleImageView;
 
     @BindView(R.id.manga_toolbar_search_input)
-    EditText searchText;
+    ClearEditText searchText;
 
     ImageView navNickEditIcon;
 
@@ -196,12 +200,16 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     }
 
+
+
+
+
     private void initSearchinputListener() {
 //        searchText.setFocusable(false);
-        searchText.setOnClickListener(this);
+//        searchText.setOnClickListener(this);
 
         // editText 离开监听
-        searchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*searchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -212,7 +220,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                     searchText.setFocusable(true);
                 }
             }
-        });
+        });*/
 
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -234,6 +242,9 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         });
 
     }
+
+
+
 
     private void initTabLayout() {
         tabLayout = findViewById(R.id.operList__tabs);
@@ -481,10 +492,30 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void clearLoginStateAndUserInfo() {
-        GlobalSettings.userInfo = null;
-        ClientConfiguration.getInstance().setUid("");
-        ClientConfiguration.getInstance().setSid("");
-        ClientConfiguration.getInstance().setLoginState(false);
+        RequestParams params=RequestParams.getFormDataParam(2);
+        ClientUtlis.post(true, UrlConfig.LOGIN_OUT, params, this, new JsonCallback<String>() {
+            @Override
+            public void onSuccess(String o, String msg) {
+                super.onSuccess(o, msg);
+                GlobalSettings.userInfo = null;
+                ClientConfiguration.getInstance().setUid("");
+                ClientConfiguration.getInstance().setSid("");
+                ClientConfiguration.getInstance().setLoginState(false);
+            }
+
+            @Override
+            public void onError(String msg, int code) {
+                super.onError(msg, code);
+                GlobalSettings.userInfo = null;
+                ClientConfiguration.getInstance().setUid("");
+                ClientConfiguration.getInstance().setSid("");
+                ClientConfiguration.getInstance().setLoginState(false);
+            }
+        });
+
+
+
+
     }
 
     private void initNavHeaderViewValueWithLoginState() {
@@ -725,14 +756,14 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 closePoupWindow();
                 break;
             case R.id.setting_menu_bg_change_text:
-                openAlbum(CHANGE_BACK_OPEN_LOCAL_ALBUM);
+                if(ClientConfiguration.getInstance().getLoginState()){
+                    openAlbum(CHANGE_BACK_OPEN_LOCAL_ALBUM);
+                }else{
+                    ToastUtils.showDisplay("请先登录！");
+                }
                 break;
             case R.id.head_image:
                 clickHeadScopeWork();
-                break;
-            case R.id.manga_toolbar_search_input:
-                obtainFocus();
-                //获取焦点需要此三句代码
                 break;
 
             case R.id.nav_login_text:
@@ -750,12 +781,12 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-    private void obtainFocus() {
+   /* private void obtainFocus() {
         searchText.setFocusable(true);
         searchText.setFocusableInTouchMode(true);
         searchText.requestFocus();
         showSoftInputBoard();
-    }
+    }*/
 
 
     private void showNickEditDialog() {
@@ -1317,19 +1348,6 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-    private void showSoftInputBoard() {
-        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (im!=null){
-//            让软键盘在显示和隐藏之间切换。虽然这个方法，限制很少，
-// 但是我们基本上不会使用它。主要原因在于，它是一个开关的方法，
-// 会根据当前的状态做相反的操作。这就导致很多时候，我们在代码中，
-// 无法直接根据 InputMethodManager 提供的方法判断当前软键盘的显示状态，
-// 这样也就无法确定调用它的时候的效果了
-//            im.toggleSoftInput(0,0);
-            im.showSoftInput(searchText,0);
 
-        }
-        //
-    }
 
 }

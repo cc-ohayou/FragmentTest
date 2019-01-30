@@ -32,10 +32,20 @@ android {
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
 
     }
+
+    signingConfigs {
+        config {
+            storeFile file(KEY_PATH)
+            storePassword KEY_PASS
+            keyAlias ALIAS_NAME
+            keyPassword ALIAS_PASS
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
         debug {
 //            取消混肴  以免debug安装到手机失败
@@ -44,7 +54,6 @@ android {
             minifyEnabled false
         }
     }
-
 //百度sdk lib扫描 同时要手动的将jar包 add进来
     sourceSets {
         main {

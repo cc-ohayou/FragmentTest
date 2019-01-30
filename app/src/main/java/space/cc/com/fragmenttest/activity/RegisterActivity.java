@@ -13,6 +13,7 @@ import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.util.SecurityUtil;
 import space.cc.com.fragmenttest.util.UtilVerifyCode;
+import space.cc.com.fragmenttest.view.ClearEditText;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,10 +29,10 @@ import android.widget.ToggleButton;
 public class RegisterActivity extends MyBaseNew {
     private static final String TAG = "RegisterActivity";
     @BindView(R.id.reg_phone)
-    EditText regPhone;
+    ClearEditText regPhone;
 
     @BindView(R.id.reg_nickName)
-    EditText regNickName;
+    ClearEditText regNickName;
 
     @BindView(R.id.reg_pwd)
     EditText regPwd;
@@ -43,7 +44,7 @@ public class RegisterActivity extends MyBaseNew {
     @BindView(R.id.reg_verifyCode)
     EditText regVerifyCode;
     @BindView(R.id.reg_mail)
-    EditText regMail;
+    ClearEditText regMail;
 
     @BindView(R.id.reg_sub_btn)
     Button regSubBtn;
@@ -90,6 +91,13 @@ public class RegisterActivity extends MyBaseNew {
                case R.id.reg_sub_btn:
                    register();
                    break;
+               case R.id.reg_phone:
+                   obtainFocus(regPhone);
+                   break;
+               case R.id.reg_nickName:
+                   obtainFocus(regNickName);
+                   break;
+
            }
     }
 

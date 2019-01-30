@@ -43,7 +43,7 @@
                 style="@style/singleText"
                 android:textStyle="bold"
                 android:text="操作描述" />
-            <TextView
+         <!--   <TextView
                 android:id="@+id/item_oper_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 style="@style/singleText"
                 android:textColor="@color/colorAccent"
                 android:text="目标url" />
-
+-->
             <TextView
                 android:id="@+id/item_oper_pro"
                 android:layout_width="match_parent"

@@ -15,7 +15,8 @@ public enum UrlConfig {
     user_register(UrlConstants.PREFIX+"v1/cc/register", "注册"),
     FORGET_PWD_REQ_VERIFY_CODE(UrlConstants.PREFIX+"v1/cc/forget/pwd", "忘记密码获取验证码"),
     PWD_RESET(UrlConstants.PREFIX+"v1/cc/reset/pwd", "重置密码"),
-    ;
+    GATEWAY_REQ(UrlConstants.PREFIX+"v1/support/gateWay/req", "网关请求"),
+    LOGIN_OUT(UrlConstants.PREFIX+"v1/cc/user/loginOut","退出" );
 
     private String value;
     private String label;

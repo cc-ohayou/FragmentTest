@@ -35,7 +35,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/phone" />
 
-            <EditText
+            <space.cc.com.fragmenttest.view.ClearEditText
                 android:id="@+id/reg_phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -63,7 +63,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/reg_mail" />
 
-            <EditText
+            <space.cc.com.fragmenttest.view.ClearEditText
                 android:id="@+id/reg_mail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -90,7 +90,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/nickname" />
 
-            <EditText
+            <space.cc.com.fragmenttest.view.ClearEditText
                 android:id="@+id/reg_nickName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
