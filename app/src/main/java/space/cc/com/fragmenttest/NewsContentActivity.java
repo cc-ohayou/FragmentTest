@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import space.cc.com.fragmenttest.domain.util.ActivityUtils;
 
 
 public class NewsContentActivity extends AppCompatActivity {
@@ -15,7 +16,7 @@ public class NewsContentActivity extends AppCompatActivity {
         Intent intent=new Intent(context,NewsContentActivity.class);
         intent.putExtra("news_title",title );
         intent.putExtra("news_content",content );
-        context.startActivity(intent);
+        ActivityUtils.startActivity(intent);
     }
 
     @Override

@@ -41,6 +41,7 @@ import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.RequestParams;
 import space.cc.com.fragmenttest.domain.bizobject.CustomProperties;
 import space.cc.com.fragmenttest.domain.util.ActivityCollector;
+import space.cc.com.fragmenttest.domain.util.ActivityUtils;
 import space.cc.com.fragmenttest.domain.util.CloseUtils;
 import space.cc.com.fragmenttest.domain.util.EncryptUtils;
 import space.cc.com.fragmenttest.domain.util.NotificationUtil;
@@ -153,7 +154,8 @@ public  abstract class BaseActivity extends AppCompatActivity {
 
             }
         }
-        context.startActivity(intent);
+        ActivityUtils.startActivity(intent);
+
     }
 
     static boolean isNotEmpty(Map map) {
@@ -167,7 +169,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
     public void startAction(Context context, String bundlKkey, Bundle bundle) {
         Intent intent = new Intent(context, this.getClass());
         intent.putExtra(bundlKkey, bundle);
-        context.startActivity(intent);
+        ActivityUtils.startActivity(intent);
     }
 
     void save(String inputText, String file) {
@@ -332,7 +334,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("backurl","main");
         intent.putExtras(bundle);
-        Utils.getApp().startActivity(intent);
+        ActivityUtils.startActivity(intent);
     }
 
 

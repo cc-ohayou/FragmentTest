@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import androidx.annotation.Nullable;
 import butterknife.ButterKnife;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
+import space.cc.com.fragmenttest.domain.util.ActivityUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.domain.util.Utils;
 
@@ -92,13 +93,13 @@ public abstract class MyBaseNew extends BasePermissionsActivity implements View.
 
     public void intentStart(Class<? extends Activity> ativity) {
         Intent intent = new Intent(this, ativity);
-        startActivity(intent);
+        ActivityUtils.startActivity(intent);
     }
 
     public void intentStart(Class<? extends Activity> ativity, Bundle bundle) {
         Intent intent = new Intent(this, ativity);
         intent.putExtras(bundle);
-        startActivity(intent);
+        ActivityUtils.startActivity(intent);
     }
 
     /************************************************ 防止连续点击 开始**********************************************************/
@@ -134,7 +135,7 @@ public abstract class MyBaseNew extends BasePermissionsActivity implements View.
         Bundle bundle = new Bundle();
         bundle.putString("backurl","main");
         intent.putExtras(bundle);
-        Utils.getApp().startActivity(intent);
+        ActivityUtils.startActivity(intent);
     }
 
 

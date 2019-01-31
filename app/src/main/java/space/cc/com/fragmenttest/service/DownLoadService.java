@@ -35,6 +35,7 @@ import space.cc.com.fragmenttest.activity.MyServiceActivity;
 import space.cc.com.fragmenttest.broadcast.MyBroadcastReceiver;
 import space.cc.com.fragmenttest.domain.GlobalSettings;
 import space.cc.com.fragmenttest.domain.UrlConfig;
+import space.cc.com.fragmenttest.domain.util.ActivityUtils;
 import space.cc.com.fragmenttest.domain.util.StringUtils;
 import space.cc.com.fragmenttest.domain.util.ToastUtils;
 import space.cc.com.fragmenttest.domain.util.Utils;
@@ -375,7 +376,7 @@ public class DownLoadService extends Service {
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        mContext.startActivity(intent);
+        ActivityUtils.startActivity(intent);
         android.os.Process.killProcess(android.os.Process.myPid());//如果不加，最后不会提示完成、打开。
     }
 

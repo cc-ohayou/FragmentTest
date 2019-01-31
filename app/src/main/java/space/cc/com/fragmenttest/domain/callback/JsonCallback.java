@@ -34,6 +34,7 @@ import space.cc.com.fragmenttest.activity.LoginActivity;
 import space.cc.com.fragmenttest.domain.BaseResponse;
 import space.cc.com.fragmenttest.domain.ClientConfiguration;
 import space.cc.com.fragmenttest.domain.MyPublicParams;
+import space.cc.com.fragmenttest.domain.util.ActivityUtils;
 import space.cc.com.fragmenttest.domain.util.EncryptUtils;
 import space.cc.com.fragmenttest.domain.util.TimeUtils;
 import space.cc.com.fragmenttest.domain.util.Utils;
@@ -240,7 +241,7 @@ public abstract class JsonCallback<T> extends AbsCallback<T> {
         Bundle bundle = new Bundle();
         bundle.putString("backurl","main");
         intent.putExtras(bundle);
-        Utils.getApp().startActivity(intent);
+        ActivityUtils.startActivity(intent);
     }
 
     public void onVersionControl(String msg, String data) {

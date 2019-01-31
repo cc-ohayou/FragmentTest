@@ -11,6 +11,7 @@ android.applicationVariants.all {
 
 
 android {
+    //执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。
 
     lintOptions {
         checkReleaseBuilds false
@@ -21,17 +22,31 @@ android {
 
     compileSdkVersion 28
     defaultConfig {
+
+        vectorDrawables.useSupportLibrary = true
         applicationId "space.cc.com.fragmenttest"
-        minSdkVersion 26
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //        为避免AndroidStudio3.0 Canary 8注解报错
-// Annotation processors must be explicitly declared now 添加如下配置
+       // Annotation processors must be explicitly declared now 添加如下配置
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
 
     }
+    compileOptions {
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+
+        targetCompatibility JavaVersion.VERSION_1_8
+
+    }
+    // Java虚拟机堆内存大小
+    /*dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }*/
 
     signingConfigs {
         config {

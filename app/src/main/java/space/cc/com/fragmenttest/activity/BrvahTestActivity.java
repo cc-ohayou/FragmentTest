@@ -908,7 +908,7 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 //                Intent intent = new Intent(HomeActivity.this, ACTIVITY[position]);
-//                startActivity(intent);
+//                ActivityUtils.startActivity(intent);
                 ToastUtils.showDisplay("ItemClick:" + mangaList.get(position).getTitle());
             }
         });
@@ -1227,15 +1227,15 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     /**
-     * @author CF
+     * @author CFn
      * @date 2019/1/15
      * @description 更新头像相关的view
      */
     private void refreshHeadImageRelView(String imagePath) {
         UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
-                headImageView, imagePath, R.drawable.default_head);
+                headImageView, imagePath, R.drawable.manga_default);
         UtilBox.box().picasso.loadUrlResIntoViewWithDefault(
-                navTopLeftCircleImageView, imagePath, R.drawable.default_head);
+                navTopLeftCircleImageView, imagePath, R.drawable.manga_default);
         GlobalSettings.userInfo.setHeadImage(imagePath);
     }
 

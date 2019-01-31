@@ -40,7 +40,9 @@ public class TabTestActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_tab_test);
             toolbar = findViewById(R.id.tab_toolbar);
+            toolbar.setTitle("");
             setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
             intiViewPagerAndAdapter();
 //            mViewPager.setOffscreenPageLimit(mViewPager.getAdapter().getCount());
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import space.cc.com.fragmenttest.R;
+import space.cc.com.fragmenttest.domain.util.ActivityUtils;
 
 public class RuntimePermmissionTestActivity extends BaseActivity {
 

@@ -43,6 +43,7 @@ import space.cc.com.fragmenttest.domain.bizobject.IntentExtraKey;
 import space.cc.com.fragmenttest.domain.bizobject.OperateBiz;
 import space.cc.com.fragmenttest.domain.bizobject.PsPage;
 import space.cc.com.fragmenttest.domain.callback.JsonCallback;
+import space.cc.com.fragmenttest.domain.util.ActivityUtils;
 import space.cc.com.fragmenttest.domain.util.ClientUtlis;
 import space.cc.com.fragmenttest.domain.util.StringUtil;
 import space.cc.com.fragmenttest.domain.util.StringUtils;
@@ -307,14 +308,14 @@ public class OperationListFragment extends BaseFragment {
     }
 
     private void initAdapter() {
-        adapter = new OperationBizAdapter(R.layout.item_operation,operList,0,UtilBox.box().ui.getViewIemHeight(4));
+        adapter = new OperationBizAdapter(R.layout.item_operation,operList,0,UtilBox.box().ui.getViewIemHeight(5));
         adapter.openLoadAnimation();
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getContext(),OperBizDetailActivity.class);
                 intent.putExtra(IntentExtraKey.OPER_BIZ_DETAIL.getValue(),operList.get(position));
-                startActivity(intent);
+                ActivityUtils.startActivity(intent);
 //                ToastUtils.showDisplay("ItemClick:" + operList.get(position).getOperId());
             }
         });
@@ -386,7 +387,7 @@ public class OperationListFragment extends BaseFragment {
                         } else if (which == DialogAction.POSITIVE) {
                             sendGateWayPostByOperId(operateBiz.getOperId());
                         } else if (which == DialogAction.NEGATIVE) {
-                            ToastUtils.showLong("请求已取消");
+//                            ToastUtils.showLong("请求已取消");
                         }
 
                     }
