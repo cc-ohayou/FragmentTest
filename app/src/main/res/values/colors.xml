@@ -90,4 +90,22 @@
     <color name="refreshHeaderBack">#FF86B0</color>
     <color name="verifyCodeBg">#FDBBCC</color>
 
+<!--ARCLayout -->
+    <color name="path_primary">#FF4081</color>
+    <color name="path_orange">#FF9500</color>
+    <color name="path_blue">#1774E6</color>
+    <color name="path_black">#403B36</color>
+    <color name="path_green">#5FB336</color>
+    <color name="path_purple">#49098A</color>
+
+    <color name="scrim">#42000000</color>
+
+    <color name="arc_pressed">#33000000</color>
+
+    <color name="light_blue_500">#03A9F4</color>
+    <color name="cyan_500">#00BCD4</color>
+    <color name="teal_500">#009688</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="light_green_500">#8BC34A</color>
+
 </resources>

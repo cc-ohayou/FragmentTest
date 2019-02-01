@@ -202,7 +202,7 @@ public class UtilUI {
 //         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
          options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
 //        设置压缩质量 0-100 可用一个进度条控制
-//        options.setCompressionQuality(mSeekBarQuality.getProgress());
+        options.setCompressionQuality(90);
 //        隐藏底部选项只有一个选择框 简洁
 //        options.setHideBottomControls(mCheckBoxHideBottomControls.isChecked());
 //        自由模式 选择框大小自由可调节 地步选项全有
@@ -227,13 +227,23 @@ public class UtilUI {
        /*
 
         Tune everything (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
-
+//设置最多缩放的比例尺
         options.setMaxScaleMultiplier(5);
+        //动画时间
         options.setImageToCropBoundsAnimDuration(666);
+        //设置图片压缩最大值
+12 void setMaxBitmapSize(@IntRange(from = 100) int maxBitmapSize)
         options.setDimmedLayerColor(Color.CYAN);
         options.setCircleDimmedLayer(true);
+         //是否显示裁剪框
         options.setShowCropFrame(false);
+        19 //设置裁剪框边的宽度
+ void setCropFrameStrokeWidth(@IntRange(from = 0) int width)
+//是否显示裁剪框网格
+ void setShowCropGrid(boolean show)
+ //设置裁剪框网格宽
         options.setCropGridStrokeWidth(20);
+        //设置裁剪框网格颜色
         options.setCropGridColor(Color.GREEN);
         options.setCropGridColumnCount(2);
         options.setCropGridRowCount(1);
@@ -269,14 +279,11 @@ public class UtilUI {
 //         options.setCompressionFormat(Bitmap.CompressFormat.PNG);
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
 //        设置压缩质量 0-100 可用一个进度条控制
-//        options.setCompressionQuality(mSeekBarQuality.getProgress());
+        options.setCompressionQuality(90);
 //        隐藏底部选项只有一个选择框 简洁
 //        options.setHideBottomControls(mCheckBoxHideBottomControls.isChecked());
 //        自由模式 选择框大小自由可调节 地步选项全有
         options.setFreeStyleCropEnabled(true);
-//         设置这个参数 则裁剪区域为16:9长方形  其它选项不再显示 一般不用设置
-
-
         return uCrop.withOptions(options);
     }
 }

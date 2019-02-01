@@ -26,6 +26,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -90,6 +91,11 @@ import space.cc.com.fragmenttest.view.ClearEditText;
 
 public class BrvahTestActivity extends BaseActivity implements View.OnClickListener, CustomScrollView.OnScrollChangeListener {
 
+
+    private View view;
+    private GridView project, environment;
+    private String[] projectList = {"华为", "小米", "三星", "OPPO", "苹果", "VIVO", "魅族"};
+    private String[] envList = {"0-1000", "1001-1499", "1500-1999", "2000-2999", "3000-3999", "4000-4999", "5000以上"};
 
     private static final String TAG = "BrvahTestActivity";
     private static final String HEAD_CACHE_FILE_NAME = "cc_head_cache";
@@ -483,6 +489,8 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
                 } else if (menuItem.getItemId() == R.id.nav_login_out) {
                     clearLoginStateAndUserInfo();
                     startAction(BrvahTestActivity.this, null, LoginActivity.class);
+                }else if (menuItem.getItemId() == R.id.nav_location) {
+                    startAction(BrvahTestActivity.this, null, ArcLayoutMenuDemo.class);
                 } else {
                     ToastUtils.showDisplay(String.valueOf(menuItem.getTitle()));
                 }
@@ -726,6 +734,11 @@ public class BrvahTestActivity extends BaseActivity implements View.OnClickListe
         } else {
             mPopupWindow.showAtLocation(toolbar, Gravity.RIGHT | Gravity.TOP, 0, popMenuYoffset);
         }
+
+    }
+
+
+    void showSelectPopupWindow(){
 
     }
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+<FrameLayout
+    android:id="@+id/menu_layout"
+
+    android:background="@color/scrim"
+    android:visibility="invisible"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+  <com.ogaclejapan.arclayout.ArcLayout
+      android:id="@id/arc_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:arc_axisRadius="@dimen/layout_child_offset_large"
+      app:arc_origin="center"
+      app:arc_radius="@dimen/layout_radius_large"
+      >
+
+    <Button
+        style="@style/Item.Small"
+        android:background="@drawable/light_blue_oval_selector"
+        android:text="A"
+        />
+
+    <Button
+        style="@style/Item.Small"
+        android:background="@drawable/cyan_oval_selector"
+        android:text="B"
+        />
+
+    <Button
+        style="@style/Item.Small"
+        android:background="@drawable/teal_oval_selector"
+        android:text="C"
+        />
+
+    <Button
+        style="@style/Item.Small"
+        android:background="@drawable/green_oval_selector"
+        android:text="D"
+        />
+
+    <Button
+        style="@style/Item.Small"
+        android:background="@drawable/light_green_oval_selector"
+        android:text="E"
+        />
+
+  </com.ogaclejapan.arclayout.ArcLayout>
+</FrameLayout>
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/arc_fab"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentRight="true"
+      android:foregroundGravity="center"
+      android:layout_marginRight="10dp"
+      android:layout_marginBottom="16dp"
+      android:background="@drawable/path_fab"
+      app:srcCompat="@drawable/add"
+      />
+
+</RelativeLayout>

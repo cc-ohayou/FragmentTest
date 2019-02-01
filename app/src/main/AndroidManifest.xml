@@ -198,9 +198,10 @@
           参考博客 https://www.cnblogs.com/xj626852095/p/3647969.html
         -->
 
-        <activity android:name=".activity.ForgetPwdActivity"
-            android:screenOrientation="portrait"
-            ></activity>
+        <activity
+            android:name=".activity.ForgetPwdActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.ArcLayoutMenuDemo"></activity>
     </application>
 
 </manifest>

@@ -31,7 +31,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //        为避免AndroidStudio3.0 Canary 8注解报错
-       // Annotation processors must be explicitly declared now 添加如下配置
+        // Annotation processors must be explicitly declared now 添加如下配置
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
 
     }
@@ -137,8 +137,10 @@ dependencies {
     implementation 'com.github.nanchen2251:CompressHelper:1.0.5'
 
     implementation 'com.facebook.conceal:conceal:2.0.1@aar'//conceal加密
-
+//    总线依赖
     implementation 'org.greenrobot:eventbus:3.0.0'
     //eventbus
+   //弧形菜单 三方组件
+    implementation 'com.ogaclejapan.arclayout:library:1.1.0@aar'
 
 }
