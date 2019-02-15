@@ -68,8 +68,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/path_fab"
         app:srcCompat="@drawable/add"
         />
+    <!--/        android:background="@drawable/path_fab"-->
+
 
 </RelativeLayout>

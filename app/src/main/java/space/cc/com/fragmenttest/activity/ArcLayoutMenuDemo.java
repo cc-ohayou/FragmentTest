@@ -10,6 +10,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
@@ -30,6 +31,7 @@ public class ArcLayoutMenuDemo extends MyBaseNew {
     View fab;
     View menuLayout;
     ArcLayout arcLayout;
+    private static final String TAG = "ArcLayoutMenuDemo";
 
     @Override
     protected int setContentLayout() {
@@ -57,11 +59,23 @@ public class ArcLayoutMenuDemo extends MyBaseNew {
             return;
         }
 
-        showToast( findViewById(id));
+
 
     }
-    private void showToast(Button btn) {
-        ToastUtils.showDisplay("Clicked: " + btn.getText());
+
+    @Override
+    protected void initViewClick(View view) {
+        try {
+            if (view instanceof Button) {
+                ToastUtils.showDisplay("Clicked: " + ((Button)view).getText());
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "defaultData transfer error", e);
+        }
+    }
+
+    private void showToast(CharSequence btn) {
+        ToastUtils.showDisplay("Clicked: " + btn);
 
     }
     private void onFabClick(View v) {

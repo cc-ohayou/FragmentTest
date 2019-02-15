@@ -20,6 +20,7 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -101,6 +102,10 @@ public class RegisterActivity extends MyBaseNew {
            }
     }
 
+    @Override
+    protected void initViewClick(View view) {
+
+    }
 
 
     //密码可见切换

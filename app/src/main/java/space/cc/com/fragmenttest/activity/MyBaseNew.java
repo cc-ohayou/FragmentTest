@@ -124,6 +124,7 @@ public abstract class MyBaseNew extends BasePermissionsActivity implements View.
         if (isFastDoubleClick())
             return;
         initViewClick(view.getId());
+        initViewClick(view);
     }
 
     public static void inValidateLoginState() {
@@ -140,6 +141,7 @@ public abstract class MyBaseNew extends BasePermissionsActivity implements View.
 
 
     protected abstract void initViewClick(int id);
+    protected abstract void initViewClick(View view);
 
     /************************************************ 防止连续点击 结束**********************************************************/
 

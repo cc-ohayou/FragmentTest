@@ -124,7 +124,13 @@ public class ForgetPwdActivity extends MyBaseNew {
          }
 
     }
-/**
+
+    @Override
+    protected void initViewClick(View view) {
+
+    }
+
+    /**
      * @author  CF
      * @date   2019/1/28
      * @description

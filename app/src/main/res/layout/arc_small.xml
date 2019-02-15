@@ -43,7 +43,7 @@
         android:text="C"
         />
 
-    <Button
+    <!--<Button
         style="@style/Item.Small"
         android:background="@drawable/green_oval_selector"
         android:text="D"
@@ -53,22 +53,22 @@
         style="@style/Item.Small"
         android:background="@drawable/light_green_oval_selector"
         android:text="E"
-        />
+        />-->
 
   </com.ogaclejapan.arclayout.ArcLayout>
 </FrameLayout>
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/arc_fab"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
       android:layout_alignParentRight="true"
-      android:foregroundGravity="center"
+      android:layout_gravity="center"
       android:layout_marginRight="10dp"
       android:layout_marginBottom="16dp"
-      android:background="@drawable/path_fab"
       app:srcCompat="@drawable/add"
       />
+  <!--android:background="@drawable/path_fab"-->
 
 </RelativeLayout>

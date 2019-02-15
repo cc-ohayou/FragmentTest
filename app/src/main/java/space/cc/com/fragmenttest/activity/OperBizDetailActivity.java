@@ -102,6 +102,11 @@ public class OperBizDetailActivity extends MyBaseNew {
           }
     }
 
+    @Override
+    protected void initViewClick(View view) {
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
